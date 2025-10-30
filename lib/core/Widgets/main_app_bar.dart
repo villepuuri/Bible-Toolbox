@@ -22,6 +22,7 @@ class _MainAppBarState extends State<MainAppBar> {
     return AppBar(
       title: Text(widget.title),
       centerTitle: true,
+      scrolledUnderElevation: 0,
       actions: [
         IconButton(
           onPressed: () {

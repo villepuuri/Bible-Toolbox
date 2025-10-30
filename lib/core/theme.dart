@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppThemeData {
   // Colors
@@ -16,46 +17,55 @@ class AppThemeData {
   );
 
   // Text themes
+  // todo: Change text themes to local from Google fonts
   static final textTheme = TextTheme(
     // Titles are titles of pages
-    titleLarge: TextStyle(
+    titleLarge: GoogleFonts.tienne(
       fontSize: 32,
-      fontFamily: 'Tienne',
       fontWeight: FontWeight.bold,
       color: black,
+      height: 1.2,
+      letterSpacing: -1,
     ),
-    titleMedium: TextStyle(
+    titleMedium: GoogleFonts.tienne(
       fontSize: 24,
-      fontFamily: 'Tienne',
       fontWeight: FontWeight.bold,
       color: black,
+      height: 1.2,
+      letterSpacing: -0.6,
     ),
 
     // Headlines are in text chapters
-    headlineLarge: TextStyle(fontSize: 24, fontFamily: 'Raleway', color: black),
-    headlineMedium: TextStyle(
+    headlineLarge: GoogleFonts.raleway(fontSize: 24, color: black),
+    headlineMedium: GoogleFonts.raleway(
       fontSize: 20,
-      fontFamily: 'Raleway',
+      fontWeight: FontWeight.w500,
       color: black,
     ),
 
     // Body texts
-    bodyMedium: TextStyle(fontSize: 16, fontFamily: 'Tienne', color: black),
-    bodySmall: TextStyle(fontSize: 12, fontFamily: 'Tienne', color: black),
+    bodyMedium: GoogleFonts.tienne(
+      fontSize: 16,
+      color: black,
+      height: 1.4,
+    ),
+    bodySmall: GoogleFonts.tienne(
+      fontSize: 12,
+      color: black,
+      height: 1.4,
+    ),
 
     // Labels are used as links
-    labelLarge: TextStyle(
+    labelMedium: GoogleFonts.tienne(
       fontSize: 16,
-      fontFamily: 'Tienne',
+      height: 1.4,
       color: black,
       fontStyle: FontStyle.italic,
-      decoration: TextDecoration.underline,
-      decorationColor: lightGreen,
     ),
   );
 
   // Icon themes
-  static final iconTheme = IconThemeData(color: lightGreen, size: 24);
+  static final iconTheme = IconThemeData(color: lightGreen, size: 28);
 
   // App themes
   static final lightTheme = ThemeData(
@@ -64,10 +74,30 @@ class AppThemeData {
     colorScheme: lightColorScheme,
     textTheme: textTheme,
     iconTheme: iconTheme,
+    listTileTheme: ListTileThemeData(
+      iconColor: lightGreen,
+    ),
     appBarTheme: AppBarTheme(
       backgroundColor: white,
       elevation: 0,
+      scrolledUnderElevation: 0,
       titleTextStyle: textTheme.titleLarge,
+    ),
+    filledButtonTheme: FilledButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: WidgetStateProperty.all(lightGreen),
+        foregroundColor: WidgetStateProperty.all(white),
+        overlayColor: WidgetStateProperty.all(darkGreen.withAlpha(25)),
+        textStyle: WidgetStateProperty.all(
+          textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.w900),
+        ),
+        shape: WidgetStateProperty.all(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
+        padding: WidgetStateProperty.all(
+          EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        ),
+      ),
     ),
   );
 }
