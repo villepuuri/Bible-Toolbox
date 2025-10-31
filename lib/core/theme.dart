@@ -12,6 +12,7 @@ class AppThemeData {
   // Color schemes
   static final lightColorScheme = ColorScheme.light(
     primary: lightGreen,
+    primaryContainer: opaqueGreen,
     secondary: darkGreen,
     surface: white,
   );
@@ -76,6 +77,14 @@ class AppThemeData {
     iconTheme: iconTheme,
     listTileTheme: ListTileThemeData(
       iconColor: lightGreen,
+      titleTextStyle: textTheme.bodyMedium,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(18))
+      ),
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: lightGreen,
+      foregroundColor: white
     ),
     appBarTheme: AppBarTheme(
       backgroundColor: white,

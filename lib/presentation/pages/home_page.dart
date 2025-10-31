@@ -14,13 +14,13 @@ class HomePage extends StatelessWidget {
       leading: Image.asset(imageURL),
       minLeadingWidth: 50,
       title: Text(title),
-      titleTextStyle: Theme.of(context).textTheme.bodyMedium,
+      // titleTextStyle: Theme.of(context).textTheme.bodyMedium,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       splashColor: AppThemeData.opaqueGreen,
       tileColor: AppThemeData.opaqueGreen,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(18))
-      ),
+      // shape: RoundedRectangleBorder(
+      //   borderRadius: BorderRadius.all(Radius.circular(18))
+      // ),
       onTap: () {
         debugPrint('Pressed a tile: $title');
       },
