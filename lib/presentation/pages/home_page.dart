@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     // Tile widget to display the content tiles
-    Widget myTile(String title, String imageURL) => ListTile(
+    Widget myTile(String title, String imageURL, String routeName) => ListTile(
       leading: Image.asset(imageURL),
       minLeadingWidth: 50,
       title: Text(title),
@@ -23,6 +23,7 @@ class HomePage extends StatelessWidget {
       // ),
       onTap: () {
         debugPrint('Pressed a tile: $title');
+        Navigator.pushNamed(context, routeName);
       },
     );
 
@@ -33,18 +34,22 @@ class HomePage extends StatelessWidget {
         myTile(
           "Vastauksia elämän suuriin kysymyksiin",
           'assets/btb_images/kysymysmerkki.png',
+          '/answers'
         ),
         myTile(
           "Opetuksia Raamatusta teemoittain ja kirjoittain",
           'assets/btb_images/raamattu.png',
+          '/answers',
         ),
         myTile(
           "Katekismus - Kristinusko pähkinänkuoressa",
           'assets/btb_images/katekismus.png',
+          '/answers',
         ),
         myTile(
           "Luterilaiset Tunnustuskirjat",
           'assets/btb_images/tunnustuskirjat.png',
+          '/answers',
         ),
       ],
     );

@@ -33,12 +33,12 @@ class _WelcomePageState extends State<WelcomePage> {
           LanguageClass element = entry.value;
           return Card(
             key: ValueKey(element.abbreviation),
-            margin: const EdgeInsets.symmetric(vertical: 8),
+            margin: const EdgeInsets.symmetric(vertical: 6),
             shape: RoundedRectangleBorder(
               side: BorderSide(color: Theme.of(context).primaryColor, width: 2),
               borderRadius: BorderRadius.all(Radius.circular(18)),
             ),
-            elevation: 2,
+            elevation: 1,
             child: ListTile(
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

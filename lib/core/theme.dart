@@ -40,13 +40,14 @@ class AppThemeData {
     headlineLarge: GoogleFonts.raleway(fontSize: 24, color: black),
     headlineMedium: GoogleFonts.raleway(
       fontSize: 20,
-      fontWeight: FontWeight.w500,
+      fontWeight: FontWeight.w400,
       color: black,
     ),
 
     // Body texts
     bodyMedium: GoogleFonts.tienne(
       fontSize: 16,
+      fontWeight: FontWeight.w400,
       color: black,
       height: 1.4,
     ),

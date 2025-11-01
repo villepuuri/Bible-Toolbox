@@ -6,7 +6,7 @@ class MainDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget drawerListTile(String title, {String? imageURL, IconData? icon}) =>
+    Widget drawerListTile(String title, {String? imageURL, IconData? icon, String? routeName}) =>
         ListTile(
           leading: imageURL != null
               ? SizedBox(height: 40, child: Image.asset(imageURL))
@@ -24,6 +24,11 @@ class MainDrawer extends StatelessWidget {
           ),
           onTap: () {
             debugPrint('Pressed a tile: $title');
+            if (routeName != null){
+              Navigator.pop(context);
+              Navigator.pushNamed(context, routeName);
+            }
+            // todo: Think how the navigation should go
           },
         );
 
@@ -70,11 +75,13 @@ class MainDrawer extends StatelessWidget {
             drawerListTile(
               "Etusivu",
               imageURL: "assets/btb_images/laatikko.png",
+              routeName: '/home'
             ),
             drawLine(),
             drawerListTile(
               "Vastaukset",
               imageURL: "assets/btb_images/kysymysmerkki.png",
+              routeName: '/answers'
             ),
             drawerListTile(
               "Raamattu",

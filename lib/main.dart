@@ -1,4 +1,5 @@
 import 'package:bible_toolbox/presentation/pages/home_page.dart';
+import 'package:bible_toolbox/presentation/pages/answers_page.dart';
 import 'package:bible_toolbox/presentation/pages/loading_page.dart';
 import 'package:bible_toolbox/presentation/pages/welcome_page.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const LoadingPage(),
         '/welcome': (context) => const WelcomePage(),
         '/home': (context) => const HomePage(),
-        // '/answers': (context) => const AnswerPage(),
+        '/answers': (context) => const AnswersPage(),
         // '/bible': (context) => const BiblePage(),
         // '/catechism': (context) => const CatechismPage(),
         // '/concord': (context) => const ConcordPage(),
