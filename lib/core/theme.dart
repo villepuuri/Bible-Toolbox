@@ -35,6 +35,12 @@ class AppThemeData {
       height: 1.2,
       letterSpacing: -0.6,
     ),
+    titleSmall: GoogleFonts.tienne(
+      fontSize: 20,
+      color: black,
+      height: 1.2,
+      letterSpacing: -0.6,
+    ),
 
     // Headlines are in text chapters
     headlineLarge: GoogleFonts.raleway(fontSize: 24, color: black),
