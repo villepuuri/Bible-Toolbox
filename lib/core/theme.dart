@@ -57,11 +57,7 @@ class AppThemeData {
       color: black,
       height: 1.4,
     ),
-    bodySmall: GoogleFonts.tienne(
-      fontSize: 12,
-      color: black,
-      height: 1.4,
-    ),
+    bodySmall: GoogleFonts.tienne(fontSize: 12, color: black, height: 1.4),
 
     // Labels are used as links
     labelMedium: GoogleFonts.tienne(
@@ -69,6 +65,41 @@ class AppThemeData {
       height: 1.4,
       color: black,
       fontStyle: FontStyle.italic,
+    ),
+  );
+
+  // Button themes
+  static final elevatedButtonTheme = ElevatedButtonThemeData(
+    style: ButtonStyle(
+      backgroundColor: WidgetStateProperty.all(lightGreen),
+      foregroundColor: WidgetStateProperty.all(white),
+      overlayColor: WidgetStateProperty.all(darkGreen.withAlpha(25)),
+      textStyle: WidgetStateProperty.all(
+        textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.w900),
+      ),
+      shape: WidgetStateProperty.all(
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+      padding: WidgetStateProperty.all(
+        EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      ),
+    ),
+  );
+
+  static final outlinedButtonTheme = OutlinedButtonThemeData(
+    style: ButtonStyle(
+      backgroundColor: WidgetStateProperty.all(white),
+      padding: WidgetStateProperty.all(
+        EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      ),
+      side: WidgetStateProperty.all(
+        BorderSide(color: lightColorScheme.primary, width: 2),
+      ),
+      shape: WidgetStateProperty.all(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+      ),
     ),
   );
 
@@ -82,16 +113,21 @@ class AppThemeData {
     colorScheme: lightColorScheme,
     textTheme: textTheme,
     iconTheme: iconTheme,
+    dividerTheme: DividerThemeData(
+      color: lightColorScheme.primary,
+      thickness: 1,
+      space: 3
+    ),
     listTileTheme: ListTileThemeData(
       iconColor: lightGreen,
       titleTextStyle: textTheme.bodyMedium,
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(18))
+        borderRadius: BorderRadius.all(Radius.circular(18)),
       ),
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: lightGreen,
-      foregroundColor: white
+      foregroundColor: white,
     ),
     appBarTheme: AppBarTheme(
       backgroundColor: white,
@@ -99,21 +135,7 @@ class AppThemeData {
       scrolledUnderElevation: 0,
       titleTextStyle: textTheme.titleLarge,
     ),
-    filledButtonTheme: FilledButtonThemeData(
-      style: ButtonStyle(
-        backgroundColor: WidgetStateProperty.all(lightGreen),
-        foregroundColor: WidgetStateProperty.all(white),
-        overlayColor: WidgetStateProperty.all(darkGreen.withAlpha(25)),
-        textStyle: WidgetStateProperty.all(
-          textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.w900),
-        ),
-        shape: WidgetStateProperty.all(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        ),
-        padding: WidgetStateProperty.all(
-          EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-        ),
-      ),
-    ),
+    elevatedButtonTheme: elevatedButtonTheme,
+    outlinedButtonTheme: outlinedButtonTheme,
   );
 }

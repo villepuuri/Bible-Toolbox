@@ -30,13 +30,16 @@ class LanguageHelper {
   static LanguageClass selectedLanguage = languages.first;
   static int languageCount = languages.length;
 
+  static List<LanguageClass> testLoadedLanguages = [];
+
   static set setUsedLanguage(LanguageClass language) {
     UnimplementedError("Setting the language has not yet been implemented");
   }
 
   static List<LanguageClass> get loadedLanguages {
     UnimplementedError("Getting the languages has not yet been implemented");
-    return [];
+    // todo: fix this function
+    return testLoadedLanguages;
   }
 
   static set loadedLanguages(List<LanguageClass> languages) {

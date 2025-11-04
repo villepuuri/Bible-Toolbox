@@ -80,6 +80,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 for (int i = 0; i < LanguageHelper.languageCount; i++) {
                   if (selectedLanguages[i]) {
                     debugPrint(' - ${LanguageHelper.languages[i]}');
+                    LanguageHelper.testLoadedLanguages.add(LanguageHelper.languages[i]);
                   }
                 }
                 // todo: implement loading the languages

@@ -33,9 +33,9 @@ class MainDrawer extends StatelessWidget {
       },
     );
 
-    Widget drawLine({double width = 1, double padding = 10}) => Container(
-      height: width,
-      margin: EdgeInsets.symmetric(vertical: padding),
+    Widget drawLine({double width = 1, double padding = 10}) => Divider(
+      height: padding,
+      thickness: width,
       color: Theme.of(context).primaryColor,
     );
 
@@ -81,12 +81,12 @@ class MainDrawer extends StatelessWidget {
             SizedBox(height: kToolbarHeight),
             Image.asset('assets/btb_images/logo.png'),
             Spacer(),
-            drawerListTile(
-              "Etusivu",
-              imageURL: "assets/btb_images/laatikko.png",
-              routeName: '/home',
-            ),
-            drawLine(),
+            // drawerListTile(
+            //   "Etusivu",
+            //   imageURL: "assets/btb_images/laatikko.png",
+            //   routeName: '/home',
+            // ),
+            // drawLine(),
             drawerListTile(
               "Vastaukset",
               imageURL: "assets/btb_images/kysymysmerkki.png",

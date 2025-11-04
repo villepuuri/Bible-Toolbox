@@ -61,7 +61,7 @@ class HomePage extends StatelessWidget {
           "Löydä vastauksia:",
           style: Theme.of(context).textTheme.headlineMedium,
         ),
-        FilledButton(onPressed: () {
+        ElevatedButton(onPressed: () {
           debugPrint('QuestionButton pressed');
         }, child: Text((DateTime.now().second % 2 == 0) ? "Miten voin seurata Jeesusta?" : "Miten pääsisin kärryille siitä, minkälainen on Jumalan luonne?"),
         ),
