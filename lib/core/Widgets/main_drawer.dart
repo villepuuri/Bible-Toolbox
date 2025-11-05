@@ -105,7 +105,11 @@ class MainDrawer extends StatelessWidget {
               imageURL: "assets/btb_images/tunnustuskirjat.png",
             ),
             drawLine(),
-            drawerListTile("Ladatut kielet", icon: Icons.language),
+            drawerListTile(
+              "Ladatut kielet",
+              icon: Icons.language,
+              routeName: '/languages',
+            ),
             drawerListTile(
               "Kirjanmerkit",
               icon: Icons.bookmark,

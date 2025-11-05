@@ -133,7 +133,6 @@ class AppThemeData {
       backgroundColor: white,
       elevation: 0,
       scrolledUnderElevation: 0,
-      titleTextStyle: textTheme.titleLarge,
     ),
     elevatedButtonTheme: elevatedButtonTheme,
     outlinedButtonTheme: outlinedButtonTheme,

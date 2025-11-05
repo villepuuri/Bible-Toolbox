@@ -86,10 +86,10 @@ class _ExtendableHeadlineState extends State<ExtendableHeadline>
           SizeChangingWidget(
             controller: _controller,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.fromLTRB(8,0,8,10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: widget.children + [SizedBox(height: 10,)],
+                children: widget.children,
               ),
             ),
           ),

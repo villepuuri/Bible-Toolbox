@@ -99,7 +99,6 @@ class _BookmarksPageState extends State<BookmarksPage> {
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(b.type.name, style: Theme.of(context).textTheme.bodySmall),
                 Text(b.path, style: Theme.of(context).textTheme.bodySmall),
                 const SizedBox(height: 4),
                 Text(b.name, style: Theme.of(context).textTheme.bodyMedium),
