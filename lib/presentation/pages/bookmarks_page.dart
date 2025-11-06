@@ -67,8 +67,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
     for (var b in boxBookmarks.values) {
       if (typeIndex == 0) {
         list.add(b);
-      }
-      else if (typeIndex-1 == b.type.index) {
+      } else if (typeIndex - 1 == b.type.index) {
         list.add(b);
       }
     }
@@ -91,7 +90,8 @@ class _BookmarksPageState extends State<BookmarksPage> {
     }
 
     Widget bookmarkTile(Bookmark b) {
-      return Material( // Material-widget is required to build the bg well
+      return Material(
+        // Material-widget is required to build the bg well
         child: Padding(
           key: ValueKey(b.id),
           padding: const EdgeInsets.symmetric(vertical: 6),
@@ -166,8 +166,13 @@ class _BookmarksPageState extends State<BookmarksPage> {
     }
 
     return Scaffold(
-      appBar: MainAppBar(title: "Kirjanmerkit"),
+      appBar: MainAppBar(
+        title: "Kirjanmerkit",
+        useSmallAppBar: true,
+        showActionButtons: false,
+      ),
       floatingActionButton: FloatingActionButton(
+        // todo: Remove this button
         child: Icon(Icons.add),
         onPressed: () {
           Bookmark bookmark = Bookmark(

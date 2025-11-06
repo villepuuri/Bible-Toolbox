@@ -1,3 +1,4 @@
+import 'package:bible_toolbox/core/Widgets/list_card.dart';
 import 'package:bible_toolbox/core/helpers/language_helper.dart';
 import 'package:flutter/material.dart';
 
@@ -31,41 +32,20 @@ class _WelcomePageState extends State<WelcomePage> {
         .map((entry) {
           int index = entry.key;
           LanguageClass element = entry.value;
-          return Card(
+          return ListCard(
             key: ValueKey(element.abbreviation),
-            margin: const EdgeInsets.symmetric(vertical: 6),
-            shape: RoundedRectangleBorder(
-              side: BorderSide(color: Theme.of(context).primaryColor, width: 2),
-              borderRadius: BorderRadius.all(Radius.circular(18)),
-            ),
-            elevation: 1,
-            child: ListTile(
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    element.displayName,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  Text(
-                    element.languagePacketSize,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ],
-              ),
-              splashColor: Theme.of(context).colorScheme.primaryContainer,
-              onTap: () {
-                // Change the value if the box is pressed
-                changeSelection(index, !selectedLanguages[index]);
+            title: element.displayName,
+            smallInfoText: element.languagePacketSize,
+            trailing: Checkbox(
+              value: selectedLanguages[index],
+              onChanged: (bool? value) {
+                changeSelection(index, value ?? false);
               },
-              trailing: Checkbox(
-                value: selectedLanguages[index],
-
-                onChanged: (bool? value) {
-                  changeSelection(index, value ?? false);
-                },
-              ),
             ),
+            onTap: () {
+              // Change the value if the box is pressed
+              changeSelection(index, !selectedLanguages[index]);
+            },
           );
         })
         .toList();
@@ -80,7 +60,9 @@ class _WelcomePageState extends State<WelcomePage> {
                 for (int i = 0; i < LanguageHelper.languageCount; i++) {
                   if (selectedLanguages[i]) {
                     debugPrint(' - ${LanguageHelper.languages[i]}');
-                    LanguageHelper.testLoadedLanguages.add(LanguageHelper.languages[i]);
+                    LanguageHelper.testLoadedLanguages.add(
+                      LanguageHelper.languages[i],
+                    );
                   }
                 }
                 // todo: implement loading the languages
