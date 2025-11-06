@@ -26,7 +26,7 @@ class _AnswersPageState extends State<AnswersPage> {
     final String response = await rootBundle.loadString(
       'assets/test_data/answersTest.json',
     );
-    final data = await json.decode(response);
+    final data = json.decode(response);
     setState(() {
       openHeadlines = List.filled(data['answers'].length, false);
       answers = data['answers'];

@@ -110,6 +110,14 @@ class _LanguagePageState extends State<LanguagePage> {
         padding: const EdgeInsets.all(16),
         child: CustomScrollView(
           slivers: [
+            SliverPadding(
+              padding: EdgeInsets.fromLTRB(0,5,0,20),
+              sliver: SliverToBoxAdapter(
+                child: Text(
+                  "Voit valita, mitkä kielet on ladattuna laitteelle. Huomioithan, että eri kielillä voi olla eri määrä materiaalia saatavilla.",
+                style: Theme.of(context).textTheme.bodySmall,),
+              ),
+            ),
             SliverToBoxAdapter(
               child: Text(
                 "Ladatut kielet",
