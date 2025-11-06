@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class ExtendableHeadline extends StatefulWidget {
   final String title;
   final List<Widget> children;
+  final GestureTapCallback? onTap;
 
   const ExtendableHeadline({
     super.key,
     required this.title,
     required this.children,
+    this.onTap
   });
 
   @override
@@ -51,7 +53,7 @@ class _ExtendableHeadlineState extends State<ExtendableHeadline>
         children: [
           /* The Headline */
           InkWell(
-            onTap: changeState,
+            onTap: widget.onTap ?? changeState,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -80,7 +82,7 @@ class _ExtendableHeadlineState extends State<ExtendableHeadline>
             ),
           ),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 5),
 
           /* The question titles */
           SizeChangingWidget(

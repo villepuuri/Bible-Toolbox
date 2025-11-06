@@ -4,6 +4,7 @@ import 'package:bible_toolbox/presentation/pages/home_page.dart';
 import 'package:bible_toolbox/presentation/pages/answers_page.dart';
 import 'package:bible_toolbox/presentation/pages/language_page.dart';
 import 'package:bible_toolbox/presentation/pages/loading_page.dart';
+import 'package:bible_toolbox/presentation/pages/text_page.dart';
 import 'package:bible_toolbox/presentation/pages/welcome_page.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
         // '/bible': (context) => const BiblePage(),
         // '/catechism': (context) => const CatechismPage(),
         // '/concord': (context) => const ConcordPage(),
+        '/showText': (context) => const TextPage(),
         '/bookmarks': (context) => const BookmarksPage(),
         '/languages': (context) => const LanguagePage(),
       },

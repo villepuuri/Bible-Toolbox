@@ -43,6 +43,7 @@ class _MainAppBarState extends State<MainAppBar> {
         );
         boxBookmarks.put(bookmark.id, bookmark);
       }
+      setState(() {});
     }
 
     List<PopupMenuEntry> getLanguageChangingButtons() {
@@ -87,12 +88,14 @@ class _MainAppBarState extends State<MainAppBar> {
     return AppBar(
       title: Text(
         widget.title,
+        maxLines: 3, // Todo: Can all the texts fit here?
         style: widget.useSmallAppBar
-            ? Theme.of(context).textTheme.titleMedium
+            ? Theme.of(context).textTheme.titleSmall
             : Theme.of(context).textTheme.titleLarge,
       ),
       centerTitle: true,
       scrolledUnderElevation: 0,
+
       actions: widget.showActionButtons
           ? [
               widget.useSmallAppBar

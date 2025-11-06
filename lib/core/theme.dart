@@ -59,16 +59,19 @@ class AppThemeData {
     ),
     bodySmall: GoogleFonts.tienne(fontSize: 12, color: black, height: 1.4),
 
-    // Labels are used as links
+    /* Labels */
+
+    // Internal links
     labelMedium: GoogleFonts.tienne(
       fontSize: 16,
       height: 1.4,
-      color: black,
+      color: lightGreen,
       fontStyle: FontStyle.italic,
     ),
   );
 
-  // Button themes
+  /* Button themes */
+
   static final elevatedButtonTheme = ElevatedButtonThemeData(
     style: ButtonStyle(
       backgroundColor: WidgetStateProperty.all(lightGreen),
@@ -96,9 +99,21 @@ class AppThemeData {
         BorderSide(color: lightColorScheme.primary, width: 2),
       ),
       shape: WidgetStateProperty.all(
-        RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      ),
+    ),
+  );
+
+  static final textButtonTheme = TextButtonThemeData(
+    style: ButtonStyle(
+      elevation: WidgetStateProperty.all(1),
+      minimumSize: WidgetStateProperty.all(Size(0, 0)),
+      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      textStyle: WidgetStateProperty.all(textTheme.labelMedium),
+      foregroundColor: WidgetStateProperty.all(lightColorScheme.primary),
+      padding: WidgetStateProperty.all(
+        EdgeInsets.zero
+        // EdgeInsets.symmetric(horizontal: 0, vertical: 4),
       ),
     ),
   );
@@ -116,7 +131,7 @@ class AppThemeData {
     dividerTheme: DividerThemeData(
       color: lightColorScheme.primary,
       thickness: 1,
-      space: 3
+      space: 3,
     ),
     listTileTheme: ListTileThemeData(
       iconColor: lightGreen,
@@ -132,9 +147,11 @@ class AppThemeData {
     appBarTheme: AppBarTheme(
       backgroundColor: white,
       elevation: 0,
+      titleTextStyle: textTheme.titleMedium,
       scrolledUnderElevation: 0,
     ),
     elevatedButtonTheme: elevatedButtonTheme,
     outlinedButtonTheme: outlinedButtonTheme,
+    textButtonTheme: textButtonTheme,
   );
 }

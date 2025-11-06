@@ -58,14 +58,12 @@ class _AnswersPageState extends State<AnswersPage> {
     ];
 
     // The line that is used to divide elements in the page
-    Widget spacerLine({double width = 1, double paddingHeight = 12}) {
-      return SliverPadding(
-        padding: EdgeInsets.symmetric(vertical: paddingHeight),
-        sliver: SliverToBoxAdapter(
-          child: Container(
-            height: width,
-            color: Theme.of(context).primaryColor,
-          ),
+    Widget spacerLine({double width = 1, double paddingHeight = 24}) {
+      return SliverToBoxAdapter(
+        child: Divider(
+          thickness: width,
+          height: paddingHeight,
+          color: Theme.of(context).primaryColor,
         ),
       );
     }
@@ -76,11 +74,38 @@ class _AnswersPageState extends State<AnswersPage> {
         var answer = entry.value;
         return ExtendableHeadline(
           title: answer["title"],
+          onTap: () {
+            debugPrint('User wants to open: ${answer["title"]} with top');
+            Navigator.pushNamed(context, '/showText',
+                arguments: {
+                  'id': entry.key,
+                }
+            );
+          },
           children: (answer["items"] as List<dynamic>)
               .map(
-                (question) => Text(
-                  "> $question",
-                  style: Theme.of(context).textTheme.bodyMedium,
+                (question) => Container(
+                  margin: EdgeInsets.symmetric(vertical: 6),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 1,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      debugPrint('User wants to open: $question');
+                      Navigator.pushNamed(context, '/showText',
+                          arguments: {
+                        'id': entry.key,
+                        'clicked': question
+                      }
+                      );
+                    },
+                    child: Text("> $question"),
+                  ),
                 ),
               )
               .toList(),
