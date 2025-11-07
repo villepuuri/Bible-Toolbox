@@ -95,14 +95,17 @@ class MainDrawer extends StatelessWidget {
             drawerListTile(
               "Raamattu",
               imageURL: "assets/btb_images/raamattu.png",
+              routeName: '/bible',
             ),
             drawerListTile(
               "Katekismus",
               imageURL: "assets/btb_images/katekismus.png",
+              routeName: '/catechism',
             ),
             drawerListTile(
               "Tunnustuskirjat",
               imageURL: "assets/btb_images/tunnustuskirjat.png",
+              routeName: '/concord',
             ),
             drawLine(),
             drawerListTile(

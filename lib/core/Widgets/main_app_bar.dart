@@ -1,3 +1,5 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:bible_toolbox/core/constants.dart';
 import 'package:bible_toolbox/core/helpers/bookmark.dart';
 import 'package:bible_toolbox/core/helpers/boxes.dart';
 import 'package:bible_toolbox/core/helpers/language_helper.dart';
@@ -7,12 +9,14 @@ import 'package:flutter/material.dart';
 class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
   final bool useSmallAppBar;
-  final bool showActionButtons;
+  final bool showLanguageButton;
+  final bool showBookmarkButton;
 
   const MainAppBar({
     required this.title,
     this.useSmallAppBar = false,
-    this.showActionButtons = true,
+    this.showLanguageButton = true,
+    this.showBookmarkButton = true,
     super.key,
   });
 
@@ -86,9 +90,11 @@ class _MainAppBarState extends State<MainAppBar> {
     }
 
     return AppBar(
-      title: Text(
+      title: AutoSizeText(
         widget.title,
-        maxLines: 3, // Todo: Can all the texts fit here?
+        maxLines: widget.useSmallAppBar ? 2 : 1,
+        minFontSize: 14,
+        overflow: TextOverflow.ellipsis,
         style: widget.useSmallAppBar
             ? Theme.of(context).textTheme.titleSmall
             : Theme.of(context).textTheme.titleLarge,
@@ -96,20 +102,22 @@ class _MainAppBarState extends State<MainAppBar> {
       centerTitle: true,
       scrolledUnderElevation: 0,
 
-      actions: widget.showActionButtons
-          ? [
-              widget.useSmallAppBar
+      actions: [
+              widget.useSmallAppBar && widget.showBookmarkButton
                   ? IconButton(
                       onPressed: onBookmarkPressed,
-                      icon: Icon(
-                        // todo: fix this expression
-                        (boxBookmarks.values.any((b) => b.name == widget.title))
-                            ? Icons.bookmark
-                            : Icons.bookmark_add_outlined,
+                      icon: BookmarkHelper.isPageBookmarked(widget.title)
+                          ? Icon(
+                        Constants.iconAddBookmark,
+                        color: Theme.of(context).colorScheme.outline,
+                      )
+                          : Icon(
+                        Constants.iconSelectedBookmark,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     )
                   : const SizedBox(),
-              PopupMenuButton(
+              widget.showLanguageButton ? PopupMenuButton(
                 icon: Icon(Icons.language),
                 itemBuilder: (BuildContext popUpContext) {
                   return getLanguageChangingButtons();
@@ -133,9 +141,8 @@ class _MainAppBarState extends State<MainAppBar> {
                     setState(() {});
                   }
                 },
-              ),
-            ]
-          : null,
+              ) : const SizedBox(),
+            ],
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(2.0),
         child: Container(

@@ -104,7 +104,8 @@ class _LanguagePageState extends State<LanguagePage> {
       appBar: MainAppBar(
         title: "Kieliasetukset",
         useSmallAppBar: true,
-        showActionButtons: false,
+        showLanguageButton: false,
+        showBookmarkButton: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),

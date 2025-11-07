@@ -39,17 +39,17 @@ class HomePage extends StatelessWidget {
         myTile(
           "Opetuksia Raamatusta teemoittain ja kirjoittain",
           'assets/btb_images/raamattu.png',
-          '/answers',
+          '/bible',
         ),
         myTile(
           "Katekismus - Kristinusko pähkinänkuoressa",
           'assets/btb_images/katekismus.png',
-          '/answers',
+          '/catechism',
         ),
         myTile(
           "Luterilaiset Tunnustuskirjat",
           'assets/btb_images/tunnustuskirjat.png',
-          '/answers',
+          '/concord',
         ),
       ],
     );
@@ -63,7 +63,7 @@ class HomePage extends StatelessWidget {
         ),
         ElevatedButton(onPressed: () {
           debugPrint('QuestionButton pressed');
-        }, child: Text((DateTime.now().second % 2 == 0) ? "Miten voin seurata Jeesusta?" : "Miten pääsisin kärryille siitä, minkälainen on Jumalan luonne?"),
+        }, child: Text("Miten voin seurata Jeesusta?"),
         ),
       ],
     );

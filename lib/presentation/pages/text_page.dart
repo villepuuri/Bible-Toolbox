@@ -1,6 +1,9 @@
 import 'dart:convert';
 
 import 'package:bible_toolbox/core/Widgets/main_app_bar.dart';
+import 'package:bible_toolbox/core/constants.dart';
+import 'package:bible_toolbox/core/helpers/bookmark.dart';
+import 'package:bible_toolbox/core/helpers/boxes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -58,9 +61,9 @@ class _TextPageState extends State<TextPage> {
           debugPrint('len of items: ${answers[id]["items"].length}');
           int indexToJump = answers[id]["items"].indexWhere(
             (item) => item == selectedHeadline,
-          ) ;
+          );
           debugPrint('itemToJump: $indexToJump');
-          itemScrollController.jumpTo(index: indexToJump+1);
+          itemScrollController.jumpTo(index: indexToJump + 1);
         });
       }
     }
@@ -91,22 +94,56 @@ class _TextPageState extends State<TextPage> {
       );
     }
 
-    Widget titleBox(String title) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        child: Text(title, style: Theme.of(context).textTheme.titleSmall),
+    Widget authorBox(String author) {
+      return Text(
+        "Kirjoittanut: $author",
+        style: Theme.of(context).textTheme.bodySmall,
       );
     }
 
-    Widget authorBox(String author) {
+    Widget titleBox(String title, String path) {
+      bool isBookmarked = BookmarkHelper.isPageBookmarked(title);
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 0),
-        child: Text(
-          "Kirjoittanut: $author",
-          style: Theme.of(context).textTheme.bodySmall,
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: Theme.of(context).textTheme.titleSmall),
+                const SizedBox(height: 4,),
+                authorBox("Erkki Koskenniemi"),
+              ],
+            ),
+            IconButton(
+              onPressed: () {
+                if (!isBookmarked) {
+                  debugPrint('- User wants to add a new bookmark: $title');
+                  boxBookmarks.add(Bookmark(name: title, path: path));
+                }
+                else {
+                  BookmarkHelper.deleteBookmark(title: title);
+                }
+                setState(() {});
+              },
+              icon: isBookmarked
+                  ? Icon(
+                      Constants.iconSelectedBookmark,
+                      color: Theme.of(context).colorScheme.primary,
+                    )
+                  : Icon(
+                      Constants.iconAddBookmark,
+                      color: Theme.of(context).colorScheme.outline,
+                    ),
+            ),
+          ],
         ),
       );
     }
+
+
 
     return Scaffold(
       appBar: MainAppBar(
@@ -129,8 +166,11 @@ class _TextPageState extends State<TextPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        titleBox(answers[id]["items"][itemIndex] ?? ""),
-                        authorBox("Erkki Koskenniemi"),
+                        titleBox(
+                          answers[id]["items"][itemIndex] ?? "",
+                          "Etusivu/Vastaukset/${answers[id]["title"]}",
+                        ),
+
                         Divider(),
                       ],
                     ),

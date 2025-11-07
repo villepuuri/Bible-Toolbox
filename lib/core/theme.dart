@@ -15,6 +15,7 @@ class AppThemeData {
     primaryContainer: opaqueGreen,
     secondary: darkGreen,
     surface: white,
+    outline: black
   );
 
   // Text themes

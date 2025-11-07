@@ -1,23 +1,15 @@
-import 'dart:math';
+import 'package:bible_toolbox/core/helpers/boxes.dart';
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 part 'bookmark.g.dart';
 
-enum BookmarkType {
-  answer,
-  bible,
-  catechism,
-  concord,
-  other
-}
+enum BookmarkType { answer, bible, catechism, concord, other }
 
 @HiveType(typeId: 1)
 class Bookmark {
   @HiveField(0)
-  String id = DateTime
-      .now()
-      .millisecondsSinceEpoch
-      .toString();
+  String id = DateTime.now().millisecondsSinceEpoch.toString();
 
   @HiveField(1)
   String name;
@@ -32,7 +24,7 @@ class Bookmark {
   // todo: Maybe add type?
 
   Bookmark({required this.name, required this.path, DateTime? creationTime})
-      : creationTime = creationTime ?? DateTime.now();
+    : creationTime = creationTime ?? DateTime.now();
 
   @override
   String toString() {
@@ -43,11 +35,40 @@ class Bookmark {
     // todo: Fix this after getting the correct path
     if (creationTime.second % 2 == 0) {
       return BookmarkType.answer;
-    }
-    else if (creationTime.second % 3 == 0) {
+    } else if (creationTime.second % 3 == 0) {
       return BookmarkType.concord;
     }
     return BookmarkType.bible;
     // return BookmarkType.values[Random().nextInt(BookmarkType.values.length)];
+  }
+}
+
+class BookmarkHelper {
+  /*
+  * Function returns true/false depending if the page is in bookmarks
+  * */
+  static bool isPageBookmarked(String title) =>
+      boxBookmarks.values.any((b) => b.name == title);
+
+  /*
+  * Function to delete a bookmark based on a title or id
+  * */
+  static Future<void> deleteBookmark({String? title, String? id}) async {
+    assert(title == null && id == null, "Either title or id needs to be given");
+    Bookmark? bookmarkToDelete;
+    if (title != null) {
+      bookmarkToDelete = boxBookmarks.values.firstWhere(
+            (b) => b.name == title,
+      );
+    }
+    else if (id != null) {
+      bookmarkToDelete = boxBookmarks.values.firstWhere(
+            (b) => b.id == id,
+      );
+    }
+    assert(bookmarkToDelete== null, "No bookmark found");
+
+    debugPrint('Page: ${bookmarkToDelete?.name} is to be removed from bookmarks');
+    await boxBookmarks.delete(bookmarkToDelete?.id);
   }
 }

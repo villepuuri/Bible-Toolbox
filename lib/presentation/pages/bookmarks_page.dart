@@ -169,7 +169,8 @@ class _BookmarksPageState extends State<BookmarksPage> {
       appBar: MainAppBar(
         title: "Kirjanmerkit",
         useSmallAppBar: true,
-        showActionButtons: false,
+        showBookmarkButton: false,
+        showLanguageButton: false,
       ),
       floatingActionButton: FloatingActionButton(
         // todo: Remove this button

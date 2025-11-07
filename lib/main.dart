@@ -1,5 +1,8 @@
 import 'package:bible_toolbox/core/helpers/bookmark.dart';
+import 'package:bible_toolbox/presentation/pages/bible_page.dart';
 import 'package:bible_toolbox/presentation/pages/bookmarks_page.dart';
+import 'package:bible_toolbox/presentation/pages/catechism_page.dart';
+import 'package:bible_toolbox/presentation/pages/concord_page.dart';
 import 'package:bible_toolbox/presentation/pages/home_page.dart';
 import 'package:bible_toolbox/presentation/pages/answers_page.dart';
 import 'package:bible_toolbox/presentation/pages/language_page.dart';
@@ -36,9 +39,9 @@ class MyApp extends StatelessWidget {
         '/welcome': (context) => const WelcomePage(),
         '/home': (context) => const HomePage(),
         '/answers': (context) => const AnswersPage(),
-        // '/bible': (context) => const BiblePage(),
-        // '/catechism': (context) => const CatechismPage(),
-        // '/concord': (context) => const ConcordPage(),
+        '/bible': (context) => const BiblePage(),
+        '/catechism': (context) => const CatechismPage(),
+        '/concord': (context) => const ConcordPage(),
         '/showText': (context) => const TextPage(),
         '/bookmarks': (context) => const BookmarksPage(),
         '/languages': (context) => const LanguagePage(),
