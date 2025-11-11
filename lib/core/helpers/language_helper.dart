@@ -19,7 +19,7 @@ class LanguageClass {
 }
 
 class LanguageHelper {
-  static const languages = [
+  static const List<LanguageClass> languages = [
     LanguageClass(
       displayName: "English",
       abbreviation: "en",
@@ -72,16 +72,9 @@ class LanguageHelper {
     ),
   ];
 
-  static LanguageClass selectedLanguage =
-      languages.first; // todo: fix also this one
   static int languageCount = languages.length;
 
   static List<LanguageClass> testLoadedLanguages = [];
-
-  static setUsedLanguage(LanguageClass language) {
-    selectedLanguage = language;
-    UnimplementedError("Setting the language has not yet been implemented");
-  }
 
   static List<LanguageClass> get loadedLanguages {
     UnimplementedError("Getting the languages has not yet been implemented");
@@ -115,10 +108,7 @@ class LanguageHelper {
       "The language to be removed is not in the loaded languages",
     );
     testLoadedLanguages.remove(language);
-    if (selectedLanguage == language) {
-      // Set new selected language
-      setUsedLanguage(loadedLanguages.first);
-    }
+    // todo: fix the case where removing the selected language
     return true;
   }
 

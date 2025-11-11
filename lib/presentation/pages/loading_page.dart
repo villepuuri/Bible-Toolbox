@@ -1,6 +1,9 @@
 import 'package:bible_toolbox/core/helpers/shared_preferences_keys.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../core/helpers/language_helper.dart';
 
 class LoadingPage extends StatelessWidget {
   const LoadingPage({super.key});

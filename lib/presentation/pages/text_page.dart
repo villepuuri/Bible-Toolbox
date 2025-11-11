@@ -125,6 +125,7 @@ class _TextPageState extends State<TextPage> {
                 }
                 else {
                   BookmarkHelper.deleteBookmark(title: title);
+                  // todo: not working
                 }
                 setState(() {});
               },

@@ -1,7 +1,9 @@
 import 'package:bible_toolbox/core/Widgets/list_card.dart';
 import 'package:bible_toolbox/core/Widgets/main_app_bar.dart';
 import 'package:bible_toolbox/core/helpers/language_helper.dart';
+import 'package:bible_toolbox/providers/language_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LanguagePage extends StatefulWidget {
   const LanguagePage({super.key});
@@ -14,7 +16,8 @@ class _LanguagePageState extends State<LanguagePage> {
   Widget loadedButton(LanguageClass language) {
     // todo: for some reason the menu with 2 widgets is extra wide
     bool isSelectedLanguage =
-        language.abbreviation == LanguageHelper.selectedLanguage.abbreviation;
+        language.abbreviation ==
+        context.read<LanguageProvider>().locale.languageCode;
     return LanguageHelper.loadedLanguages.length > 1
         ? PopupMenuButton(
             itemBuilder: (menuContext) {
@@ -54,7 +57,7 @@ class _LanguagePageState extends State<LanguagePage> {
               // if value 1 show dialog
               if (value == 1) {
                 // Select this language
-                LanguageHelper.setUsedLanguage(language);
+                context.read<LanguageProvider>().setLocale(language.code);
                 setState(() {});
               }
               // if value 2 show dialog
@@ -90,9 +93,13 @@ class _LanguagePageState extends State<LanguagePage> {
     return ListCard(
       title: language.displayName,
       smallInfoText: language.languagePacketSize,
+      onTap: () async {
+        await context.read<LanguageProvider>().changeLanguage(language.code);
+      },
       trailing: isLoaded ? loadedButton(language) : loadButton(language),
       tileColor:
-          LanguageHelper.selectedLanguage.abbreviation == language.abbreviation
+          context.read<LanguageProvider>().locale.languageCode ==
+              language.abbreviation
           ? Theme.of(context).colorScheme.primaryContainer
           : Theme.of(context).colorScheme.surface,
     );
@@ -112,11 +119,12 @@ class _LanguagePageState extends State<LanguagePage> {
         child: CustomScrollView(
           slivers: [
             SliverPadding(
-              padding: EdgeInsets.fromLTRB(0,5,0,20),
+              padding: EdgeInsets.fromLTRB(0, 5, 0, 30),
               sliver: SliverToBoxAdapter(
                 child: Text(
                   "Voit valita, mitkä kielet on ladattuna laitteelle. Huomioithan, että eri kielillä voi olla eri määrä materiaalia saatavilla.",
-                style: Theme.of(context).textTheme.bodySmall,),
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
               ),
             ),
             SliverToBoxAdapter(
@@ -141,6 +149,7 @@ class _LanguagePageState extends State<LanguagePage> {
             // SliverToBoxAdapter(child: Divider(height: 50, thickness: 1)),
             SliverToBoxAdapter(child: SizedBox(height: 30)),
 
+            // todo: What about if all languages have been downloaded? Should this be hidden?
             SliverToBoxAdapter(
               child: Text(
                 "Ladattavat kielet",

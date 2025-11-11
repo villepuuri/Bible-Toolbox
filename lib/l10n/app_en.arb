@@ -1,0 +1,6 @@
+{
+  "test": "Hello World!",
+  "@test": {
+    "description": "A test string"
+  }
+}

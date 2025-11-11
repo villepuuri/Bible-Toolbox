@@ -4,7 +4,9 @@ import 'package:bible_toolbox/core/helpers/bookmark.dart';
 import 'package:bible_toolbox/core/helpers/boxes.dart';
 import 'package:bible_toolbox/core/helpers/language_helper.dart';
 import 'package:bible_toolbox/core/theme.dart';
+import 'package:bible_toolbox/providers/language_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
@@ -51,7 +53,8 @@ class _MainAppBarState extends State<MainAppBar> {
     }
 
     List<PopupMenuEntry> getLanguageChangingButtons() {
-      List<PopupMenuEntry> buttons = LanguageHelper.loadedLanguages
+      List<PopupMenuEntry> buttons = LanguageHelper
+          .loadedLanguages
           .map<PopupMenuEntry<dynamic>>(
             (language) => PopupMenuItem(
               enabled: true,
@@ -66,7 +69,9 @@ class _MainAppBarState extends State<MainAppBar> {
                   language.displayName,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                tileColor: language == LanguageHelper.selectedLanguage
+                tileColor:
+                    language.code ==
+                        context.read<LanguageProvider>().locale.languageCode
                     ? Theme.of(context).colorScheme.primaryContainer
                     : Theme.of(context).colorScheme.surface,
               ),
@@ -103,46 +108,43 @@ class _MainAppBarState extends State<MainAppBar> {
       scrolledUnderElevation: 0,
 
       actions: [
-              widget.useSmallAppBar && widget.showBookmarkButton
-                  ? IconButton(
-                      onPressed: onBookmarkPressed,
-                      icon: BookmarkHelper.isPageBookmarked(widget.title)
-                          ? Icon(
+        widget.useSmallAppBar && widget.showBookmarkButton
+            ? IconButton(
+                onPressed: onBookmarkPressed,
+                icon: BookmarkHelper.isPageBookmarked(widget.title)
+                    ? Icon(
                         Constants.iconAddBookmark,
                         color: Theme.of(context).colorScheme.outline,
                       )
-                          : Icon(
+                    : Icon(
                         Constants.iconSelectedBookmark,
                         color: Theme.of(context).colorScheme.primary,
                       ),
-                    )
-                  : const SizedBox(),
-              widget.showLanguageButton ? PopupMenuButton(
+              )
+            : const SizedBox(),
+        widget.showLanguageButton
+            ? PopupMenuButton(
                 icon: Icon(Icons.language),
                 itemBuilder: (BuildContext popUpContext) {
                   return getLanguageChangingButtons();
                 },
-                onSelected: (dynamic value) {
+                onSelected: (dynamic value) async {
                   debugPrint('User selected: $value');
                   if (value == "settings") {
                     // Open language page
                     Navigator.pushNamed(context, "/languages");
                   } else {
                     // Change language
-                    LanguageHelper.setUsedLanguage(
+                    await context.read<LanguageProvider>().changeLanguage(
                       LanguageHelper.languages.firstWhere(
                         (LanguageClass l) => l.abbreviation == value,
-                        orElse: () {
-                          // todo: set an error
-                          return LanguageHelper.selectedLanguage;
-                        },
-                      ),
+                      ).code,
                     );
-                    setState(() {});
                   }
                 },
-              ) : const SizedBox(),
-            ],
+              )
+            : const SizedBox(),
+      ],
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(2.0),
         child: Container(

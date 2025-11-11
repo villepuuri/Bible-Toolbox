@@ -1,7 +1,10 @@
 import 'package:bible_toolbox/core/Widgets/main_app_bar.dart';
 import 'package:bible_toolbox/core/Widgets/main_drawer.dart';
 import 'package:bible_toolbox/core/theme.dart';
+import 'package:bible_toolbox/l10n/app_localizations.dart';
+import 'package:bible_toolbox/providers/language_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -43,7 +46,7 @@ class HomePage extends StatelessWidget {
         ),
         myTile(
           "Katekismus - Kristinusko pähkinänkuoressa",
-          'assets/btb_images/katekismus.png',
+          'assets/btb_images/katekismus.png' ,
           '/catechism',
         ),
         myTile(
@@ -70,8 +73,11 @@ class HomePage extends StatelessWidget {
 
     Widget emptySpace = const SizedBox(height: 40,);
 
+    final lang = context.watch<LanguageProvider>();
+    debugPrint('Current locale: ${lang.locale.languageCode}');
+
     return Scaffold(
-      appBar: MainAppBar(title: "Hei!"),
+      appBar: MainAppBar(title: AppLocalizations.of(context)!.test),
       drawer: MainDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
