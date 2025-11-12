@@ -50,11 +50,17 @@ class BookmarkHelper {
   static bool isPageBookmarked(String title) =>
       boxBookmarks.values.any((b) => b.name == title);
 
+  static Future<void> addBookmark(String title, String path) async {
+    Bookmark bookmark = Bookmark(name: title, path: path);
+    debugPrint('Adding a new bookmark: $bookmark');
+    await boxBookmarks.put(bookmark.id, bookmark);
+  }
+
   /*
   * Function to delete a bookmark based on a title or id
   * */
   static Future<void> deleteBookmark({String? title, String? id}) async {
-    assert(title == null && id == null, "Either title or id needs to be given");
+    assert(title == null || id == null, "Either title or id needs to be given");
     Bookmark? bookmarkToDelete;
     if (title != null) {
       bookmarkToDelete = boxBookmarks.values.firstWhere(
@@ -66,9 +72,16 @@ class BookmarkHelper {
             (b) => b.id == id,
       );
     }
-    assert(bookmarkToDelete== null, "No bookmark found");
+    assert(bookmarkToDelete != null, "No bookmark found");
 
-    debugPrint('Page: ${bookmarkToDelete?.name} is to be removed from bookmarks');
+    debugPrint('Page: ${bookmarkToDelete?.name} is to be removed from bookmarks ${bookmarkToDelete?.id}');
     await boxBookmarks.delete(bookmarkToDelete?.id);
+  }
+
+  static void printBookmarks() {
+    debugPrint('\n Bookmarks:');
+    for (var b in boxBookmarks.keys) {
+      debugPrint('  ${b.toString()}');
+    }
   }
 }

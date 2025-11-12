@@ -33,29 +33,21 @@ class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
 class _MainAppBarState extends State<MainAppBar> {
   @override
   Widget build(BuildContext context) {
-    void onBookmarkPressed() {
-      // todo: fix this expression
-      if (boxBookmarks.values.any((b) => b.name == widget.title)) {
+    void onBookmarkPressed() async {
+      if (BookmarkHelper.isPageBookmarked(widget.title)) {
         // The page is in bookmarks
-        debugPrint('Page: ${widget.title} is to be removed from bookmarks');
-        Bookmark bookmark = boxBookmarks.values.firstWhere(
-          (b) => b.name == widget.title,
-        );
-        boxBookmarks.delete(bookmark.id);
+        await BookmarkHelper.deleteBookmark(title: widget.title);
       } else {
-        debugPrint('Page: ${widget.title} is to be set as a bookmark');
-        Bookmark bookmark = Bookmark(
-          name: widget.title,
-          path: "Etusivu/Raamattu/${widget.title}", // todo: fix this path
-        );
-        boxBookmarks.put(bookmark.id, bookmark);
+        BookmarkHelper.addBookmark(
+          widget.title,
+          "Etusivu/Raamattu/${widget.title}",
+        ); // todo: fix this path
       }
       setState(() {});
     }
 
     List<PopupMenuEntry> getLanguageChangingButtons() {
-      List<PopupMenuEntry> buttons = LanguageHelper
-          .loadedLanguages
+      List<PopupMenuEntry> buttons = LanguageHelper.loadedLanguages
           .map<PopupMenuEntry<dynamic>>(
             (language) => PopupMenuItem(
               enabled: true,
@@ -114,12 +106,12 @@ class _MainAppBarState extends State<MainAppBar> {
                 onPressed: onBookmarkPressed,
                 icon: BookmarkHelper.isPageBookmarked(widget.title)
                     ? Icon(
-                        Constants.iconAddBookmark,
-                        color: Theme.of(context).colorScheme.outline,
-                      )
-                    : Icon(
                         Constants.iconSelectedBookmark,
                         color: Theme.of(context).colorScheme.primary,
+                      )
+                    : Icon(
+                        Constants.iconAddBookmark,
+                        color: Theme.of(context).colorScheme.outline,
                       ),
               )
             : const SizedBox(),
@@ -137,9 +129,11 @@ class _MainAppBarState extends State<MainAppBar> {
                   } else {
                     // Change language
                     await context.read<LanguageProvider>().changeLanguage(
-                      LanguageHelper.languages.firstWhere(
-                        (LanguageClass l) => l.abbreviation == value,
-                      ).code,
+                      LanguageHelper.languages
+                          .firstWhere(
+                            (LanguageClass l) => l.abbreviation == value,
+                          )
+                          .code,
                     );
                   }
                 },

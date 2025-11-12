@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:bible_toolbox/core/Widgets/main_app_bar.dart';
 import 'package:bible_toolbox/core/constants.dart';
 import 'package:bible_toolbox/core/helpers/bookmark.dart';
-import 'package:bible_toolbox/core/helpers/boxes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -113,19 +112,16 @@ class _TextPageState extends State<TextPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(title, style: Theme.of(context).textTheme.titleSmall),
-                const SizedBox(height: 4,),
+                const SizedBox(height: 4),
                 authorBox("Erkki Koskenniemi"),
               ],
             ),
             IconButton(
-              onPressed: () {
+              onPressed: () async {
                 if (!isBookmarked) {
-                  debugPrint('- User wants to add a new bookmark: $title');
-                  boxBookmarks.add(Bookmark(name: title, path: path));
-                }
-                else {
-                  BookmarkHelper.deleteBookmark(title: title);
-                  // todo: not working
+                  await BookmarkHelper.addBookmark(title, path);
+                } else {
+                  await BookmarkHelper.deleteBookmark(title: title);
                 }
                 setState(() {});
               },
@@ -143,8 +139,6 @@ class _TextPageState extends State<TextPage> {
         ),
       );
     }
-
-
 
     return Scaffold(
       appBar: MainAppBar(

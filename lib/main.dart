@@ -1,4 +1,3 @@
-import 'package:bible_toolbox/core/constants.dart';
 import 'package:bible_toolbox/core/helpers/bookmark.dart';
 import 'package:bible_toolbox/presentation/pages/bible_page.dart';
 import 'package:bible_toolbox/presentation/pages/bookmarks_page.dart';
@@ -57,20 +56,7 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: [
-        // todo: swap this after setting the language files
-        Locale('ar'),
-        Locale('en'),
-        Locale('et'),
-        Locale('fa'),
-        Locale('fi'),
-        Locale('ja'),
-        Locale('my'),
-        Locale('ru'),
-        Locale('sv'),
-        Locale('sw'),
-      ],
-      // AppLocalizations.supportedLocales
+      supportedLocales: AppLocalizations.supportedLocales,
       locale: languageProvider.locale,
       routes: {
         '/': (context) => const LoadingPage(),
