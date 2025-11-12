@@ -1,6 +1,7 @@
 {
   "titleWelcome": "Tere tulemast!",
   "textWelcome": "Vali allpool allalaaditavad keeled. Sa saad hiljem veel lisada.",
+  "titleLoadLanguages": "Laadi keeled",
   "titleHomePage": "Tere!",
   "titleLanguageSettings": "Keele seaded",
   "textLanguageSettings": "Sa saad valida, millised keeled on seadmesse alla laaditud. Pange tähele, et eri keeltes võib olla erinev hulk materjale.",

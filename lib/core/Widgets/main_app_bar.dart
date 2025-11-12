@@ -4,6 +4,7 @@ import 'package:bible_toolbox/core/helpers/bookmark.dart';
 import 'package:bible_toolbox/core/helpers/boxes.dart';
 import 'package:bible_toolbox/core/helpers/language_helper.dart';
 import 'package:bible_toolbox/core/theme.dart';
+import 'package:bible_toolbox/l10n/app_localizations.dart';
 import 'package:bible_toolbox/providers/language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -85,7 +86,7 @@ class _MainAppBarState extends State<MainAppBar> {
           value: "settings",
           child: ListTile(
             title: Text(
-              "Kieliasetukset",
+              AppLocalizations.of(context)!.titleLanguageSettings,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),

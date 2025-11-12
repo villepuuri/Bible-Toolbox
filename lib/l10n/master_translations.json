@@ -25,6 +25,19 @@
     "fa": "زبان‌هایی را که می‌خواهید دانلود کنید در زیر انتخاب کنید. بعداً می‌توانید زبان‌های بیشتری اضافه کنید.",
     "my": "အောက်မှာ ဒေါင်းလုဒ်လုပ်ချင်တဲ့ ဘာသာစကားတွေကို ရွေးချယ်ပါ။ နောက်ပိုင်းမှာ ပိုထည့်လို့ရပါတယ်။"
   },
+  "titleLoadLanguages": {
+    "description": "Teksti kielien lataamiseen",
+    "en": "Load Languages",
+    "fi": "Lataa kielet",
+    "ja": "言語を読み込む",
+    "et": "Laadi keeled",
+    "sv": "Ladda språk",
+    "ru": "Загрузить языки",
+    "sw": "Pakia Lugha",
+    "ar": "تحميل اللغات",
+    "fa": "بارگذاری زبان‌ها",
+    "my": "ဘာသာစကားများအားဖွင့်ပါ"
+  },
   "titleHomePage": {
     "description": "Aloitussivun otsikko ylhäällä.",
     "en": "Hi!",

@@ -3,6 +3,7 @@ import 'package:bible_toolbox/core/Widgets/main_app_bar.dart';
 import 'package:bible_toolbox/core/helpers/bookmark.dart';
 import 'package:bible_toolbox/core/helpers/boxes.dart';
 import 'package:bible_toolbox/core/theme.dart';
+import 'package:bible_toolbox/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class BookmarksPage extends StatefulWidget {
@@ -167,26 +168,10 @@ class _BookmarksPageState extends State<BookmarksPage> {
 
     return Scaffold(
       appBar: MainAppBar(
-        title: "Kirjanmerkit",
+        title: AppLocalizations.of(context)!.titleBookmarks,
         useSmallAppBar: true,
         showBookmarkButton: false,
         showLanguageButton: false,
-      ),
-      floatingActionButton: FloatingActionButton(
-        // todo: Remove this button
-        child: Icon(Icons.add),
-        onPressed: () {
-          Bookmark bookmark = Bookmark(
-            name: "Kirjanmerkki ${boxBookmarks.length + 1}",
-            path: "/testi/kirjan/merkki",
-          );
-          boxBookmarks.put(bookmark.id, bookmark);
-          debugPrint('Test bookmark added, box size: ${boxBookmarks.length}');
-          setState(() {});
-          for (Bookmark value in boxBookmarks.values) {
-            debugPrint(" - $value");
-          }
-        },
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -194,7 +179,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
           slivers: [
             SliverToBoxAdapter(
               child: ExtendableHeadline(
-                title: "Rajaa",
+                title: AppLocalizations.of(context)!.titleSort,
                 children: [
                   Wrap(
                     spacing: 8,

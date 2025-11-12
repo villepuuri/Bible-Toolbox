@@ -114,11 +114,71 @@ abstract class AppLocalizations {
     Locale('sw'),
   ];
 
-  /// A test string
+  /// Tervetulotoivotus ensimmäisellä sivulla
   ///
   /// In en, this message translates to:
-  /// **'Hello World!'**
-  String get test;
+  /// **'Welcome!'**
+  String get titleWelcome;
+
+  /// Infoteksti ensimmäisellä sivulla
+  ///
+  /// In en, this message translates to:
+  /// **'Select the languages to download below. You can add more later.'**
+  String get textWelcome;
+
+  /// Teksti kielien lataamiseen
+  ///
+  /// In en, this message translates to:
+  /// **'Load Languages'**
+  String get titleLoadLanguages;
+
+  /// Aloitussivun otsikko ylhäällä.
+  ///
+  /// In en, this message translates to:
+  /// **'Hi!'**
+  String get titleHomePage;
+
+  /// Otsikko kieliasetuksiin
+  ///
+  /// In en, this message translates to:
+  /// **'Language Settings'**
+  String get titleLanguageSettings;
+
+  /// Infoteksti kieliasetuksiin
+  ///
+  /// In en, this message translates to:
+  /// **'You can choose which languages are downloaded to your device. Note that different languages may have varying amounts of available material.'**
+  String get textLanguageSettings;
+
+  /// Otsikko ladattuihin kieliin
+  ///
+  /// In en, this message translates to:
+  /// **'Downloaded Languages'**
+  String get titleLoadedLanguages;
+
+  /// Otsikko kieliin, joita ei vielä ole ladattu
+  ///
+  /// In en, this message translates to:
+  /// **'Languages to Download'**
+  String get titleUnloadedLanguages;
+
+  /// Otsikko kirjanmerkkeihin
+  ///
+  /// In en, this message translates to:
+  /// **'Bookmarks'**
+  String get titleBookmarks;
+
+  /// Otsikko kirjanmerkkien rajaamiseen
+  ///
+  /// In en, this message translates to:
+  /// **'Filter'**
+  String get titleSort;
+
+  /// Virheteksti, kun tekstiä ei löytynyt.
+  ///
+  /// In en, this message translates to:
+  /// **'Text not found'**
+  String get errorTextNotFound;
 }
 
 class _AppLocalizationsDelegate

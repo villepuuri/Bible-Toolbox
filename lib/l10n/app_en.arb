@@ -7,6 +7,10 @@
   "@textWelcome": {
     "description": "Infoteksti ensimmäisellä sivulla"
   },
+  "titleLoadLanguages": "Load Languages",
+  "@titleLoadLanguages": {
+    "description": "Teksti kielien lataamiseen"
+  },
   "titleHomePage": "Hi!",
   "@titleHomePage": {
     "description": "Aloitussivun otsikko ylhäällä."

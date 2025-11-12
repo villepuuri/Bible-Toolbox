@@ -1,4 +1,5 @@
 import 'package:bible_toolbox/core/theme.dart';
+import 'package:bible_toolbox/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class MainDrawer extends StatelessWidget {
@@ -109,12 +110,12 @@ class MainDrawer extends StatelessWidget {
             ),
             drawLine(),
             drawerListTile(
-              "Ladatut kielet",
+              AppLocalizations.of(context)!.titleLanguageSettings,
               icon: Icons.language,
               routeName: '/languages',
             ),
             drawerListTile(
-              "Kirjanmerkit",
+              AppLocalizations.of(context)!.titleBookmarks,
               icon: Icons.bookmark,
               routeName: '/bookmarks',
             ),

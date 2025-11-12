@@ -9,5 +9,37 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
-  String get test => 'مرحباً بالعالم!';
+  String get titleWelcome => 'أهلاً وسهلاً!';
+
+  @override
+  String get textWelcome =>
+      'اختر اللغات التي تريد تنزيلها أدناه. يمكنك إضافة المزيد لاحقًا.';
+
+  @override
+  String get titleLoadLanguages => 'تحميل اللغات';
+
+  @override
+  String get titleHomePage => 'مرحباً!';
+
+  @override
+  String get titleLanguageSettings => 'إعدادات اللغة';
+
+  @override
+  String get textLanguageSettings =>
+      'يمكنك اختيار اللغات التي يتم تنزيلها على جهازك. لاحظ أن كمية المواد المتاحة قد تختلف بين اللغات.';
+
+  @override
+  String get titleLoadedLanguages => 'اللغات التي تم تنزيلها';
+
+  @override
+  String get titleUnloadedLanguages => 'اللغات المتاحة للتنزيل';
+
+  @override
+  String get titleBookmarks => 'الإشارات المرجعية';
+
+  @override
+  String get titleSort => 'تصفية';
+
+  @override
+  String get errorTextNotFound => 'لم يتم العثور على النص';
 }

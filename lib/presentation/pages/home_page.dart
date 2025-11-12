@@ -77,7 +77,7 @@ class HomePage extends StatelessWidget {
     debugPrint('Current locale: ${lang.locale.languageCode}');
 
     return Scaffold(
-      appBar: MainAppBar(title: AppLocalizations.of(context)!.test),
+      appBar: MainAppBar(title: AppLocalizations.of(context)!.titleHomePage),
       drawer: MainDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

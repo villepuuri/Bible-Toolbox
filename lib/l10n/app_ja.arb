@@ -1,6 +1,7 @@
 {
   "titleWelcome": "ようこそ！",
   "textWelcome": "下からダウンロードする言語を選択してください。後で追加することもできます。",
+  "titleLoadLanguages": "言語を読み込む",
   "titleHomePage": "こんにちは！",
   "titleLanguageSettings": "言語設定",
   "textLanguageSettings": "デバイスにダウンロードする言語を選択できます。言語によって利用可能なコンテンツの量が異なる場合があります。",

@@ -1,5 +1,6 @@
 import 'package:bible_toolbox/core/Widgets/list_card.dart';
 import 'package:bible_toolbox/core/helpers/language_helper.dart';
+import 'package:bible_toolbox/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -71,7 +72,7 @@ class _WelcomePageState extends State<WelcomePage> {
               label: Row(
                 children: [
                   Text(
-                    "Lataa kielet",
+                    AppLocalizations.of(context)!.titleLoadedLanguages,
                     style: Theme.of(context).textTheme.headlineMedium!.apply(
                       color: Theme.of(context).colorScheme.surface,
                     ),
@@ -86,12 +87,12 @@ class _WelcomePageState extends State<WelcomePage> {
         children:
             [
               Text(
-                "Tervetuloa!",
+                AppLocalizations.of(context)!.titleWelcome,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 10),
               Text(
-                "Valitse alta ladattavat kielet. Voit myöhemmin ladata lisää kieliä.",
+                AppLocalizations.of(context)!.textWelcome,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(height: 70),

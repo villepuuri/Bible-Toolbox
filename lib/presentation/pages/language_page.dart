@@ -1,6 +1,7 @@
 import 'package:bible_toolbox/core/Widgets/list_card.dart';
 import 'package:bible_toolbox/core/Widgets/main_app_bar.dart';
 import 'package:bible_toolbox/core/helpers/language_helper.dart';
+import 'package:bible_toolbox/l10n/app_localizations.dart';
 import 'package:bible_toolbox/providers/language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -94,7 +95,9 @@ class _LanguagePageState extends State<LanguagePage> {
       title: language.displayName,
       smallInfoText: language.languagePacketSize,
       onTap: () async {
-        await context.read<LanguageProvider>().changeLanguage(language.code);
+        if (isLoaded) {
+          await context.read<LanguageProvider>().changeLanguage(language.code);
+        }
       },
       trailing: isLoaded ? loadedButton(language) : loadButton(language),
       tileColor:
@@ -109,7 +112,7 @@ class _LanguagePageState extends State<LanguagePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainAppBar(
-        title: "Kieliasetukset",
+        title: AppLocalizations.of(context)!.titleLanguageSettings,
         useSmallAppBar: true,
         showLanguageButton: false,
         showBookmarkButton: false,
@@ -122,14 +125,14 @@ class _LanguagePageState extends State<LanguagePage> {
               padding: EdgeInsets.fromLTRB(0, 5, 0, 30),
               sliver: SliverToBoxAdapter(
                 child: Text(
-                  "Voit valita, mitkä kielet on ladattuna laitteelle. Huomioithan, että eri kielillä voi olla eri määrä materiaalia saatavilla.",
+                  AppLocalizations.of(context)!.textLanguageSettings,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
             ),
             SliverToBoxAdapter(
               child: Text(
-                "Ladatut kielet",
+                AppLocalizations.of(context)!.titleLoadedLanguages,
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
             ),
@@ -152,7 +155,7 @@ class _LanguagePageState extends State<LanguagePage> {
             // todo: What about if all languages have been downloaded? Should this be hidden?
             SliverToBoxAdapter(
               child: Text(
-                "Ladattavat kielet",
+                AppLocalizations.of(context)!.titleUnloadedLanguages,
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
             ),

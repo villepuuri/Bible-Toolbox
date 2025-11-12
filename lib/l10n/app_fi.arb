@@ -1,6 +1,7 @@
 {
   "titleWelcome": "Tervetuloa!",
   "textWelcome": "Valitse alta ladattavat kielet. Voit myöhemmin ladata lisää kieliä.",
+  "titleLoadLanguages": "Lataa kielet",
   "titleHomePage": "Hei!",
   "titleLanguageSettings": "Kieliasetukset",
   "textLanguageSettings": "Voit valita, mitkä kielet on ladattuna laitteelle. Huomioithan, että eri kielillä voi olla eri määrä materiaalia saatavilla.",

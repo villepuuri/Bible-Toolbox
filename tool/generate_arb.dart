@@ -3,7 +3,7 @@ import 'dart:io';
 
 /*
 * This file generates the .arb files based on the master_translations.json
-*
+* Code to run this file: dart run tool/generate_arb.dart
 * */
 
 void main() async {

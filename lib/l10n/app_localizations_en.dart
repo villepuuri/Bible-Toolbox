@@ -9,5 +9,37 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get test => 'Hello World!';
+  String get titleWelcome => 'Welcome!';
+
+  @override
+  String get textWelcome =>
+      'Select the languages to download below. You can add more later.';
+
+  @override
+  String get titleLoadLanguages => 'Load Languages';
+
+  @override
+  String get titleHomePage => 'Hi!';
+
+  @override
+  String get titleLanguageSettings => 'Language Settings';
+
+  @override
+  String get textLanguageSettings =>
+      'You can choose which languages are downloaded to your device. Note that different languages may have varying amounts of available material.';
+
+  @override
+  String get titleLoadedLanguages => 'Downloaded Languages';
+
+  @override
+  String get titleUnloadedLanguages => 'Languages to Download';
+
+  @override
+  String get titleBookmarks => 'Bookmarks';
+
+  @override
+  String get titleSort => 'Filter';
+
+  @override
+  String get errorTextNotFound => 'Text not found';
 }
