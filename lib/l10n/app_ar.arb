@@ -1,3 +1,12 @@
 {
-  "test": "مرحباً بالعالم!"
+  "titleWelcome": "أهلاً وسهلاً!",
+  "textWelcome": "اختر اللغات التي تريد تنزيلها أدناه. يمكنك إضافة المزيد لاحقًا.",
+  "titleHomePage": "مرحباً!",
+  "titleLanguageSettings": "إعدادات اللغة",
+  "textLanguageSettings": "يمكنك اختيار اللغات التي يتم تنزيلها على جهازك. لاحظ أن كمية المواد المتاحة قد تختلف بين اللغات.",
+  "titleLoadedLanguages": "اللغات التي تم تنزيلها",
+  "titleUnloadedLanguages": "اللغات المتاحة للتنزيل",
+  "titleBookmarks": "الإشارات المرجعية",
+  "titleSort": "تصفية",
+  "errorTextNotFound": "لم يتم العثور على النص"
 }

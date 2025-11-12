@@ -1,3 +1,12 @@
 {
-  "test": "Привет, мир!"
+  "titleWelcome": "Добро пожаловать!",
+  "textWelcome": "Выберите языки для загрузки ниже. Позже вы сможете добавить другие.",
+  "titleHomePage": "Привет!",
+  "titleLanguageSettings": "Языковые настройки",
+  "textLanguageSettings": "Вы можете выбрать, какие языки будут загружены на устройство. Учтите, что для разных языков доступно разное количество материалов.",
+  "titleLoadedLanguages": "Загруженные языки",
+  "titleUnloadedLanguages": "Языки для загрузки",
+  "titleBookmarks": "Закладки",
+  "titleSort": "Фильтр",
+  "errorTextNotFound": "Текст не найден"
 }

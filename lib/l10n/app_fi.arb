@@ -1,3 +1,12 @@
 {
-  "test": "Hei maailma!"
+  "titleWelcome": "Tervetuloa!",
+  "textWelcome": "Valitse alta ladattavat kielet. Voit myöhemmin ladata lisää kieliä.",
+  "titleHomePage": "Hei!",
+  "titleLanguageSettings": "Kieliasetukset",
+  "textLanguageSettings": "Voit valita, mitkä kielet on ladattuna laitteelle. Huomioithan, että eri kielillä voi olla eri määrä materiaalia saatavilla.",
+  "titleLoadedLanguages": "Ladatut kielet",
+  "titleUnloadedLanguages": "Ladattavat kielet",
+  "titleBookmarks": "Kirjanmerkit",
+  "titleSort": "Rajaa",
+  "errorTextNotFound": "Tekstiä ei löytynyt"
 }

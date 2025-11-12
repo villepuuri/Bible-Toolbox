@@ -1,6 +1,42 @@
 {
-  "test": "Hello World!",
-  "@test": {
-    "description": "A test string"
+  "titleWelcome": "Welcome!",
+  "@titleWelcome": {
+    "description": "Tervetulotoivotus ensimmäisellä sivulla"
+  },
+  "textWelcome": "Select the languages to download below. You can add more later.",
+  "@textWelcome": {
+    "description": "Infoteksti ensimmäisellä sivulla"
+  },
+  "titleHomePage": "Hi!",
+  "@titleHomePage": {
+    "description": "Aloitussivun otsikko ylhäällä."
+  },
+  "titleLanguageSettings": "Language Settings",
+  "@titleLanguageSettings": {
+    "description": "Otsikko kieliasetuksiin"
+  },
+  "textLanguageSettings": "You can choose which languages are downloaded to your device. Note that different languages may have varying amounts of available material.",
+  "@textLanguageSettings": {
+    "description": "Infoteksti kieliasetuksiin"
+  },
+  "titleLoadedLanguages": "Downloaded Languages",
+  "@titleLoadedLanguages": {
+    "description": "Otsikko ladattuihin kieliin"
+  },
+  "titleUnloadedLanguages": "Languages to Download",
+  "@titleUnloadedLanguages": {
+    "description": "Otsikko kieliin, joita ei vielä ole ladattu"
+  },
+  "titleBookmarks": "Bookmarks",
+  "@titleBookmarks": {
+    "description": "Otsikko kirjanmerkkeihin"
+  },
+  "titleSort": "Filter",
+  "@titleSort": {
+    "description": "Otsikko kirjanmerkkien rajaamiseen"
+  },
+  "errorTextNotFound": "Text not found",
+  "@errorTextNotFound": {
+    "description": "Virheteksti, kun tekstiä ei löytynyt."
   }
 }

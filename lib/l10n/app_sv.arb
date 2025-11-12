@@ -1,3 +1,12 @@
 {
-  "test": "Hej världen!"
+  "titleWelcome": "Välkommen!",
+  "textWelcome": "Välj de språk du vill ladda ner nedan. Du kan lägga till fler senare.",
+  "titleHomePage": "Hej!",
+  "titleLanguageSettings": "Språkinställningar",
+  "textLanguageSettings": "Du kan välja vilka språk som ska laddas ner till enheten. Observera att tillgängligt material kan variera mellan språk.",
+  "titleLoadedLanguages": "Nedladdade språk",
+  "titleUnloadedLanguages": "Språk att ladda ner",
+  "titleBookmarks": "Bokmärken",
+  "titleSort": "Filtrera",
+  "errorTextNotFound": "Texten hittades inte"
 }

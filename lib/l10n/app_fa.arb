@@ -1,3 +1,12 @@
 {
-  "test": "سلام دنیا!"
+  "titleWelcome": "خوش آمدید!",
+  "textWelcome": "زبان‌هایی را که می‌خواهید دانلود کنید در زیر انتخاب کنید. بعداً می‌توانید زبان‌های بیشتری اضافه کنید.",
+  "titleHomePage": "سلام!",
+  "titleLanguageSettings": "تنظیمات زبان",
+  "textLanguageSettings": "می‌توانید انتخاب کنید کدام زبان‌ها در دستگاه شما بارگیری شوند. توجه کنید که مقدار مطالب در زبان‌های مختلف متفاوت است.",
+  "titleLoadedLanguages": "زبان‌های دانلودشده",
+  "titleUnloadedLanguages": "زبان‌های قابل دانلود",
+  "titleBookmarks": "نشانک‌ها",
+  "titleSort": "فیلتر",
+  "errorTextNotFound": "متن یافت نشد"
 }

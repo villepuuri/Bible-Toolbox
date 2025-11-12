@@ -1,3 +1,12 @@
 {
-  "test": "Tere, maailm!"
+  "titleWelcome": "Tere tulemast!",
+  "textWelcome": "Vali allpool allalaaditavad keeled. Sa saad hiljem veel lisada.",
+  "titleHomePage": "Tere!",
+  "titleLanguageSettings": "Keele seaded",
+  "textLanguageSettings": "Sa saad valida, millised keeled on seadmesse alla laaditud. Pange tähele, et eri keeltes võib olla erinev hulk materjale.",
+  "titleLoadedLanguages": "Allalaaditud keeled",
+  "titleUnloadedLanguages": "Allalaaditavad keeled",
+  "titleBookmarks": "Järjehoidjad",
+  "titleSort": "Filtreeri",
+  "errorTextNotFound": "Teksti ei leitud"
 }
