@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bible_toolbox/core/Widgets/extendable_headline.dart';
+import 'package:bible_toolbox/core/Widgets/link_headline.dart';
 import 'package:bible_toolbox/core/Widgets/main_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -84,29 +85,15 @@ class _AnswersPageState extends State<AnswersPage> {
           },
           children: (answer["items"] as List<dynamic>)
               .map(
-                (question) => Container(
-                  margin: EdgeInsets.symmetric(vertical: 6),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        width: 1,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                  ),
-                  child: TextButton(
-                    onPressed: () {
-                      debugPrint('User wants to open: $question');
-                      Navigator.pushNamed(context, '/showText',
-                          arguments: {
+                (question) => LinkHeadline(text: question, onTap: () {
+                  debugPrint('User wants to open: $question');
+                  Navigator.pushNamed(context, '/showText',
+                      arguments: {
                         'id': entry.key,
                         'clicked': question
                       }
-                      );
-                    },
-                    child: Text("> $question"),
-                  ),
-                ),
+                  );
+                },)
               )
               .toList(),
         );

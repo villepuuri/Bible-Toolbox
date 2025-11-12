@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bible_toolbox/core/Widgets/link_headline.dart';
 import 'package:bible_toolbox/core/Widgets/main_app_bar.dart';
 import 'package:bible_toolbox/core/constants.dart';
 import 'package:bible_toolbox/core/helpers/bookmark.dart';
@@ -74,18 +75,15 @@ class _TextPageState extends State<TextPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: contentList
               .map(
-                (item) => TextButton(
-                  onPressed: () {
+                (item) => LinkHeadline(
+                  text: item,
+                  onTap: () {
                     debugPrint('Pressed: $item');
                     itemScrollController.scrollTo(
                       index: contentList.indexOf(item) + 1,
                       duration: const Duration(milliseconds: 100),
                     );
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 2),
-                    child: Text("> $item"),
-                  ),
                 ),
               )
               .toList(),
