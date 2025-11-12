@@ -9,5 +9,8 @@
   "titleUnloadedLanguages": "Språk att ladda ner",
   "titleBookmarks": "Bokmärken",
   "titleSort": "Filtrera",
+  "titleGo": "Gå",
+  "titleSelect": "Välj",
+  "titleRemove": "Ta bort",
   "errorTextNotFound": "Texten hittades inte"
 }

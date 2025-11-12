@@ -9,5 +9,8 @@
   "titleUnloadedLanguages": "Языки для загрузки",
   "titleBookmarks": "Закладки",
   "titleSort": "Фильтр",
+  "titleGo": "Перейти",
+  "titleSelect": "Выбрать",
+  "titleRemove": "Удалить",
   "errorTextNotFound": "Текст не найден"
 }

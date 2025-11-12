@@ -40,5 +40,14 @@ class AppLocalizationsJa extends AppLocalizations {
   String get titleSort => '絞り込み';
 
   @override
+  String get titleGo => '移動';
+
+  @override
+  String get titleSelect => '選択';
+
+  @override
+  String get titleRemove => '削除';
+
+  @override
   String get errorTextNotFound => 'テキストが見つかりません';
 }

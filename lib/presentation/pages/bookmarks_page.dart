@@ -111,9 +111,10 @@ class _BookmarksPageState extends State<BookmarksPage> {
                   PopupMenuItem(
                     value: 1,
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Siirry",
+                          AppLocalizations.of(context)!.titleGo,
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                         const SizedBox(width: 8),
@@ -124,9 +125,10 @@ class _BookmarksPageState extends State<BookmarksPage> {
                   PopupMenuItem(
                     value: 2,
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Poista",
+                          AppLocalizations.of(context)!.titleRemove,
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                         const SizedBox(width: 8),

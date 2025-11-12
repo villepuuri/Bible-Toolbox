@@ -9,5 +9,8 @@
   "titleUnloadedLanguages": "ダウンロード可能な言語",
   "titleBookmarks": "ブックマーク",
   "titleSort": "絞り込み",
+  "titleGo": "移動",
+  "titleSelect": "選択",
+  "titleRemove": "削除",
   "errorTextNotFound": "テキストが見つかりません"
 }

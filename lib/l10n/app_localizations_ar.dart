@@ -41,5 +41,14 @@ class AppLocalizationsAr extends AppLocalizations {
   String get titleSort => 'تصفية';
 
   @override
+  String get titleGo => 'انتقل';
+
+  @override
+  String get titleSelect => 'اختر';
+
+  @override
+  String get titleRemove => 'إزالة';
+
+  @override
   String get errorTextNotFound => 'لم يتم العثور على النص';
 }

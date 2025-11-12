@@ -129,6 +129,46 @@
     "fa": "فیلتر",
     "my": "စစ်ထုတ်ရန်"
   },
+  "titleGo": {
+    "description": "Napissa oleva teksti kirjanmerkkiin siirtymiseen",
+    "en": "Go",
+    "fi": "Siirry",
+    "ja": "移動",
+    "et": "Mine",
+    "sv": "Gå",
+    "ru": "Перейти",
+    "sw": "Nenda",
+    "ar": "انتقل",
+    "fa": "برو",
+    "my": "သွားရန်"
+  },
+  "titleSelect": {
+    "description": "Napissa oleva teksti valitsemiseen",
+    "en": "Select",
+    "fi": "Valitse",
+    "ja": "選択",
+    "et": "Vali",
+    "sv": "Välj",
+    "ru": "Выбрать",
+    "sw": "Chagua",
+    "ar": "اختر",
+    "fa": "انتخاب",
+    "my": "ရွေးချယ်ရန်"
+  },
+  "titleRemove": {
+    "description": "Napissa oleva teksti poistamiseen",
+    "en": "Remove",
+    "fi": "Poista",
+    "ja": "削除",
+    "et": "Eemalda",
+    "sv": "Ta bort",
+    "ru": "Удалить",
+    "sw": "Ondoa",
+    "ar": "إزالة",
+    "fa": "حذف کردن",
+    "my": "ဖယ်ရှားပါ"
+  },
+
   "errorTextNotFound": {
     "description": "Virheteksti, kun tekstiä ei löytynyt.",
     "en": "Text not found",

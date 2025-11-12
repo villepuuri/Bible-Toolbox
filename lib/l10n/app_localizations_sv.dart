@@ -41,5 +41,14 @@ class AppLocalizationsSv extends AppLocalizations {
   String get titleSort => 'Filtrera';
 
   @override
+  String get titleGo => 'Gå';
+
+  @override
+  String get titleSelect => 'Välj';
+
+  @override
+  String get titleRemove => 'Ta bort';
+
+  @override
   String get errorTextNotFound => 'Texten hittades inte';
 }

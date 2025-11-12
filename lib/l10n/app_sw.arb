@@ -9,5 +9,8 @@
   "titleUnloadedLanguages": "Lugha za kupakua",
   "titleBookmarks": "Alamisho",
   "titleSort": "Chuja",
+  "titleGo": "Nenda",
+  "titleSelect": "Chagua",
+  "titleRemove": "Ondoa",
   "errorTextNotFound": "Maandishi hayajapatikana"
 }

@@ -41,5 +41,14 @@ class AppLocalizationsFi extends AppLocalizations {
   String get titleSort => 'Rajaa';
 
   @override
+  String get titleGo => 'Siirry';
+
+  @override
+  String get titleSelect => 'Valitse';
+
+  @override
+  String get titleRemove => 'Poista';
+
+  @override
   String get errorTextNotFound => 'Tekstiä ei löytynyt';
 }

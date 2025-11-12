@@ -9,5 +9,8 @@
   "titleUnloadedLanguages": "Ladattavat kielet",
   "titleBookmarks": "Kirjanmerkit",
   "titleSort": "Rajaa",
+  "titleGo": "Siirry",
+  "titleSelect": "Valitse",
+  "titleRemove": "Poista",
   "errorTextNotFound": "Tekstiä ei löytynyt"
 }

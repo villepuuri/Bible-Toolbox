@@ -41,5 +41,14 @@ class AppLocalizationsFa extends AppLocalizations {
   String get titleSort => 'فیلتر';
 
   @override
+  String get titleGo => 'برو';
+
+  @override
+  String get titleSelect => 'انتخاب';
+
+  @override
+  String get titleRemove => 'حذف کردن';
+
+  @override
   String get errorTextNotFound => 'متن یافت نشد';
 }

@@ -41,5 +41,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get titleSort => 'Filter';
 
   @override
+  String get titleGo => 'Go';
+
+  @override
+  String get titleSelect => 'Select';
+
+  @override
+  String get titleRemove => 'Remove';
+
+  @override
   String get errorTextNotFound => 'Text not found';
 }

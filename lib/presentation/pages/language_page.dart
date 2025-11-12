@@ -25,12 +25,13 @@ class _LanguagePageState extends State<LanguagePage> {
               return [
                 if (!isSelectedLanguage)
                   PopupMenuItem(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     value: 1,
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Valitse",
+                          AppLocalizations.of(context)!.titleSelect,
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                         const SizedBox(width: 8),
@@ -42,9 +43,10 @@ class _LanguagePageState extends State<LanguagePage> {
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   value: 2,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Poista",
+                        AppLocalizations.of(context)!.titleRemove,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       const SizedBox(width: 8),
@@ -54,12 +56,13 @@ class _LanguagePageState extends State<LanguagePage> {
                 ),
               ];
             },
-            onSelected: (value) {
+            onSelected: (value) async {
               // if value 1 show dialog
               if (value == 1) {
                 // Select this language
-                context.read<LanguageProvider>().setLocale(language.code);
-                setState(() {});
+                await context.read<LanguageProvider>().changeLanguage(
+                  language.code,
+                );
               }
               // if value 2 show dialog
               else if (value == 2) {

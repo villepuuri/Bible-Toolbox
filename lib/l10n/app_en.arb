@@ -39,6 +39,18 @@
   "@titleSort": {
     "description": "Otsikko kirjanmerkkien rajaamiseen"
   },
+  "titleGo": "Go",
+  "@titleGo": {
+    "description": "Napissa oleva teksti kirjanmerkkiin siirtymiseen"
+  },
+  "titleSelect": "Select",
+  "@titleSelect": {
+    "description": "Napissa oleva teksti valitsemiseen"
+  },
+  "titleRemove": "Remove",
+  "@titleRemove": {
+    "description": "Napissa oleva teksti poistamiseen"
+  },
   "errorTextNotFound": "Text not found",
   "@errorTextNotFound": {
     "description": "Virheteksti, kun tekstiä ei löytynyt."

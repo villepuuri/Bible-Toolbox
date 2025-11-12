@@ -174,6 +174,24 @@ abstract class AppLocalizations {
   /// **'Filter'**
   String get titleSort;
 
+  /// Napissa oleva teksti kirjanmerkkiin siirtymiseen
+  ///
+  /// In en, this message translates to:
+  /// **'Go'**
+  String get titleGo;
+
+  /// Napissa oleva teksti valitsemiseen
+  ///
+  /// In en, this message translates to:
+  /// **'Select'**
+  String get titleSelect;
+
+  /// Napissa oleva teksti poistamiseen
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get titleRemove;
+
   /// Virheteksti, kun tekstiä ei löytynyt.
   ///
   /// In en, this message translates to:

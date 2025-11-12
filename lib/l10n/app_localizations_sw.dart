@@ -41,5 +41,14 @@ class AppLocalizationsSw extends AppLocalizations {
   String get titleSort => 'Chuja';
 
   @override
+  String get titleGo => 'Nenda';
+
+  @override
+  String get titleSelect => 'Chagua';
+
+  @override
+  String get titleRemove => 'Ondoa';
+
+  @override
   String get errorTextNotFound => 'Maandishi hayajapatikana';
 }

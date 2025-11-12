@@ -9,5 +9,8 @@
   "titleUnloadedLanguages": "ဒေါင်းလုဒ်လုပ်ရန် ဘာသာစကားများ",
   "titleBookmarks": "စာမျက်နှာမှတ်များ",
   "titleSort": "စစ်ထုတ်ရန်",
+  "titleGo": "သွားရန်",
+  "titleSelect": "ရွေးချယ်ရန်",
+  "titleRemove": "ဖယ်ရှားပါ",
   "errorTextNotFound": "စာသားမတွေ့ပါ။"
 }

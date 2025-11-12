@@ -41,5 +41,14 @@ class AppLocalizationsEt extends AppLocalizations {
   String get titleSort => 'Filtreeri';
 
   @override
+  String get titleGo => 'Mine';
+
+  @override
+  String get titleSelect => 'Vali';
+
+  @override
+  String get titleRemove => 'Eemalda';
+
+  @override
   String get errorTextNotFound => 'Teksti ei leitud';
 }

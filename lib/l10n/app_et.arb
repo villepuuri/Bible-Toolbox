@@ -9,5 +9,8 @@
   "titleUnloadedLanguages": "Allalaaditavad keeled",
   "titleBookmarks": "Järjehoidjad",
   "titleSort": "Filtreeri",
+  "titleGo": "Mine",
+  "titleSelect": "Vali",
+  "titleRemove": "Eemalda",
   "errorTextNotFound": "Teksti ei leitud"
 }

@@ -41,5 +41,14 @@ class AppLocalizationsRu extends AppLocalizations {
   String get titleSort => 'Фильтр';
 
   @override
+  String get titleGo => 'Перейти';
+
+  @override
+  String get titleSelect => 'Выбрать';
+
+  @override
+  String get titleRemove => 'Удалить';
+
+  @override
   String get errorTextNotFound => 'Текст не найден';
 }

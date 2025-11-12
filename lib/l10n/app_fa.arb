@@ -9,5 +9,8 @@
   "titleUnloadedLanguages": "زبان‌های قابل دانلود",
   "titleBookmarks": "نشانک‌ها",
   "titleSort": "فیلتر",
+  "titleGo": "برو",
+  "titleSelect": "انتخاب",
+  "titleRemove": "حذف کردن",
   "errorTextNotFound": "متن یافت نشد"
 }

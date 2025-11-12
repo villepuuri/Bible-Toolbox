@@ -9,5 +9,8 @@
   "titleUnloadedLanguages": "اللغات المتاحة للتنزيل",
   "titleBookmarks": "الإشارات المرجعية",
   "titleSort": "تصفية",
+  "titleGo": "انتقل",
+  "titleSelect": "اختر",
+  "titleRemove": "إزالة",
   "errorTextNotFound": "لم يتم العثور على النص"
 }

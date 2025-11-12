@@ -41,5 +41,14 @@ class AppLocalizationsMy extends AppLocalizations {
   String get titleSort => 'စစ်ထုတ်ရန်';
 
   @override
+  String get titleGo => 'သွားရန်';
+
+  @override
+  String get titleSelect => 'ရွေးချယ်ရန်';
+
+  @override
+  String get titleRemove => 'ဖယ်ရှားပါ';
+
+  @override
   String get errorTextNotFound => 'စာသားမတွေ့ပါ။';
 }
