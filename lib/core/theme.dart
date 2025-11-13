@@ -52,6 +52,12 @@ class AppThemeData {
     ),
 
     // Body texts
+    bodyLarge: GoogleFonts.tienne(
+      fontSize: 18,
+      fontWeight: FontWeight.w400,
+      color: black,
+      height: 1.4,
+    ),
     bodyMedium: GoogleFonts.tienne(
       fontSize: 16,
       fontWeight: FontWeight.w400,

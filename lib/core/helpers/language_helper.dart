@@ -1,15 +1,19 @@
-import 'package:flutter/cupertino.dart';
 
 class LanguageClass {
   final String displayName;
+  final String? englishName;
   final String abbreviation;
   final String languagePacketSize;
 
   const LanguageClass({
     required this.displayName,
+    this.englishName,
     required this.abbreviation,
     required this.languagePacketSize,
   });
+
+  String get fullName =>
+      englishName != null ? '$displayName ($englishName)' : displayName;
 
   // An easier way to get the language code
   String get code => abbreviation;
@@ -21,18 +25,48 @@ class LanguageClass {
 class LanguageHelper {
   static const List<LanguageClass> languages = [
     LanguageClass(
+      displayName: "العربية",
+      englishName: "Arabic",
+      abbreviation: "ar",
+      languagePacketSize: "14 Mb",
+    ),
+    LanguageClass(
+      displayName: "မြန်မာဘာသာ",
+      englishName: "Burmese",
+      abbreviation: "my",
+      languagePacketSize: "14 Mb",
+    ),
+    LanguageClass(
+      displayName: "Eesti",
+      abbreviation: "et",
+      languagePacketSize: "14 Mb",
+    ),
+    LanguageClass(
       displayName: "English",
       abbreviation: "en",
       languagePacketSize: "14 Mb",
     ),
     LanguageClass(
       displayName: "日本語",
+      englishName: "Japanese",
       abbreviation: "ja",
       languagePacketSize: "14 Mb",
     ),
     LanguageClass(
-      displayName: "Eesti",
-      abbreviation: "et",
+      displayName: "Kiswahili",
+      abbreviation: "sw",
+      languagePacketSize: "14 Mb",
+    ),
+    LanguageClass(
+      displayName: "فارسی",
+      englishName: "Persian",
+      abbreviation: "fa",
+      languagePacketSize: "14 Mb",
+    ),
+    LanguageClass(
+      displayName: "Русский",
+      englishName: "Russian",
+      abbreviation: "ru",
       languagePacketSize: "14 Mb",
     ),
     LanguageClass(
@@ -43,31 +77,6 @@ class LanguageHelper {
     LanguageClass(
       displayName: "Svenska",
       abbreviation: "sv",
-      languagePacketSize: "14 Mb",
-    ),
-    LanguageClass(
-      displayName: "Русский",
-      abbreviation: "ru",
-      languagePacketSize: "14 Mb",
-    ),
-    LanguageClass(
-      displayName: "Kiswahili",
-      abbreviation: "sw",
-      languagePacketSize: "14 Mb",
-    ),
-    LanguageClass(
-      displayName: "العربية",
-      abbreviation: "ar",
-      languagePacketSize: "14 Mb",
-    ),
-    LanguageClass(
-      displayName: "فارسی",
-      abbreviation: "fa",
-      languagePacketSize: "14 Mb",
-    ),
-    LanguageClass(
-      displayName: "မြန်မာဘာသာ",
-      abbreviation: "my",
       languagePacketSize: "14 Mb",
     ),
   ];

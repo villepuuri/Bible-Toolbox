@@ -35,7 +35,7 @@ class _WelcomePageState extends State<WelcomePage> {
           LanguageClass element = entry.value;
           return ListCard(
             key: ValueKey(element.abbreviation),
-            title: element.displayName,
+            title: element.fullName,
             smallInfoText: element.languagePacketSize,
             trailing: Checkbox(
               value: selectedLanguages[index],
@@ -72,7 +72,7 @@ class _WelcomePageState extends State<WelcomePage> {
               label: Row(
                 children: [
                   Text(
-                    AppLocalizations.of(context)!.titleLoadedLanguages,
+                    AppLocalizations.of(context)!.titleLoadLanguages,
                     style: Theme.of(context).textTheme.headlineMedium!.apply(
                       color: Theme.of(context).colorScheme.surface,
                     ),

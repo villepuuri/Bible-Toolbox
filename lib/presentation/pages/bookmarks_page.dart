@@ -97,13 +97,10 @@ class _BookmarksPageState extends State<BookmarksPage> {
           key: ValueKey(b.id),
           padding: const EdgeInsets.symmetric(vertical: 6),
           child: ListTile(
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(b.path, style: Theme.of(context).textTheme.bodySmall),
-                const SizedBox(height: 4),
-                Text(b.name, style: Theme.of(context).textTheme.bodyMedium),
-              ],
+            title: Text(b.name, style: Theme.of(context).textTheme.bodyLarge),
+            subtitle: Text(
+              b.path,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
             trailing: PopupMenuButton(
               itemBuilder: (menuContext) {

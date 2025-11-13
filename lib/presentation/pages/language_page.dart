@@ -95,7 +95,7 @@ class _LanguagePageState extends State<LanguagePage> {
 
   Widget languageTile(LanguageClass language, {bool isLoaded = false}) {
     return ListCard(
-      title: language.displayName,
+      title: language.fullName,
       smallInfoText: language.languagePacketSize,
       onTap: () async {
         if (isLoaded) {
