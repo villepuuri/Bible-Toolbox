@@ -40,6 +40,9 @@ dependencies:
 
   scrollable_positioned_list: ^0.3.8
 
+  # For updating the launcher icon
+  flutter_launcher_icons: ^0.14.4
+
   # Hive
   hive: ^2.2.3
   hive_flutter: ^1.1.0
