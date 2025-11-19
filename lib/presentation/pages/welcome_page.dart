@@ -66,6 +66,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     );
                   }
                 }
+                // todo: What if the user does not choose the default language?
                 // todo: implement loading the languages
                 Navigator.pushReplacementNamed(context, '/home');
               },

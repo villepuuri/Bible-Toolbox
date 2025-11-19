@@ -81,6 +81,8 @@ class LanguageHelper {
     ),
   ];
 
+  static final defaultLanguageCode = "en";
+
   static int languageCount = languages.length;
 
   static List<LanguageClass> testLoadedLanguages = [];

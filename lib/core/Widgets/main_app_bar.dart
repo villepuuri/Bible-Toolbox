@@ -59,7 +59,7 @@ class _MainAppBarState extends State<MainAppBar> {
                 contentPadding: EdgeInsets.symmetric(horizontal: 4),
                 title: Text(
                   language.displayName,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 tileColor:
                     language.code ==
@@ -78,7 +78,7 @@ class _MainAppBarState extends State<MainAppBar> {
           child: ListTile(
             title: Text(
               AppLocalizations.of(context)!.titleLanguageSettings,
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),
         ),

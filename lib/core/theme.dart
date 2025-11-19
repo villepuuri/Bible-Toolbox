@@ -50,6 +50,11 @@ class AppThemeData {
       fontWeight: FontWeight.w400,
       color: black,
     ),
+    headlineSmall: GoogleFonts.raleway(
+      fontSize: 16,
+      fontWeight: FontWeight.w500,
+      color: black,
+    ),
 
     // Body texts
     bodyLarge: GoogleFonts.tienne(
@@ -75,6 +80,14 @@ class AppThemeData {
       color: lightGreen,
       fontStyle: FontStyle.italic,
     ),
+
+    // Small info texts
+    labelSmall: GoogleFonts.raleway(
+      fontSize: 14,
+      height: 1.4,
+      fontWeight: FontWeight.w500,
+      color: black,
+    ),
   );
 
   /* Button themes */
@@ -85,7 +98,7 @@ class AppThemeData {
       foregroundColor: WidgetStateProperty.all(white),
       overlayColor: WidgetStateProperty.all(darkGreen.withAlpha(25)),
       textStyle: WidgetStateProperty.all(
-        textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.w900),
+        textTheme.titleSmall!.copyWith(fontWeight: FontWeight.w700),
       ),
       shape: WidgetStateProperty.all(
         RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

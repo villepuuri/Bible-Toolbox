@@ -37,10 +37,10 @@ class _ListCardState extends State<ListCard> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(widget.title, style: Theme.of(context).textTheme.bodyMedium),
+            Text(widget.title, style: Theme.of(context).textTheme.headlineSmall),
             widget.smallInfoText != null ? Text(
               widget.smallInfoText!,
-              style: Theme.of(context).textTheme.bodySmall,
+              style: Theme.of(context).textTheme.headlineSmall!.apply(fontSizeDelta: -4),
             ) : const SizedBox(),
           ],
         ),

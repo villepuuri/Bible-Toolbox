@@ -43,7 +43,7 @@ class _AnswersPageState extends State<AnswersPage> {
         sliver: SliverToBoxAdapter(
           child: Text(
             "Suuret kysymykset",
-            style: Theme.of(context).textTheme.headlineLarge,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
       ),

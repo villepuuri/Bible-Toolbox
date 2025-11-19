@@ -51,11 +51,11 @@ class _BookmarksPageState extends State<BookmarksPage> {
           Text(
             name,
             style: selected
-                ? Theme.of(context).textTheme.bodySmall?.apply(
+                ? Theme.of(context).textTheme.labelSmall?.apply(
                     color: Colors.white,
                     fontWeightDelta: 2,
                   )
-                : Theme.of(context).textTheme.bodySmall,
+                : Theme.of(context).textTheme.labelSmall,
           ),
         ],
       ),

@@ -1,5 +1,6 @@
 
 
+import 'package:bible_toolbox/core/helpers/language_helper.dart';
 import 'package:bible_toolbox/core/helpers/shared_preferences_keys.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LanguageProvider extends ChangeNotifier {
 
   Locale _locale = const Locale('en');
-  Map<String, dynamic> _localizedTexts = {};
+  final Map<String, dynamic> _localizedTexts = {};
 
   Locale get locale => _locale;
   Map<String, dynamic> get localizedTexts => _localizedTexts;
@@ -27,7 +28,14 @@ class LanguageProvider extends ChangeNotifier {
     final code = prefs.getString(SharedPreferencesKeys.localeCode);
 
     if (code != null) {
-      _locale = Locale(code);
+      // Use the phone's language, if the app supports it
+      if (LanguageHelper.languages.any((e) => e.code == code)) {
+        _locale = Locale(code);
+      }
+      // Default to English, if user's language is not supported
+      else {
+        _locale = Locale(LanguageHelper.defaultLanguageCode);
+      }
     } else {
       // Default to device locale
       final systemLocale = WidgetsBinding.instance.platformDispatcher.locale;
