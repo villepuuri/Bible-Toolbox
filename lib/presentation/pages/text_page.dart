@@ -91,9 +91,10 @@ class _TextPageState extends State<TextPage> {
       );
     }
 
-    Widget authorBox(String author) {
+    Widget authorBox({String? author, String? translator}) {
+      assert(!(author == null && translator == null), "You must give at least one");
       return Text(
-        "Kirjoittanut: $author",
+        author != null ? "Kirjoittanut: $author" : "Kääntänyt: $translator",
         style: Theme.of(context).textTheme.bodySmall,
       );
     }
@@ -101,19 +102,25 @@ class _TextPageState extends State<TextPage> {
     Widget titleBox(String title, String path) {
       bool isBookmarked = BookmarkHelper.isPageBookmarked(title);
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
+        padding: const EdgeInsets.symmetric(vertical: 16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, style: Theme.of(context).textTheme.titleSmall),
-                const SizedBox(height: 4),
-                authorBox("Erkki Koskenniemi"),
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: Theme.of(context).textTheme.titleSmall),
+                  const SizedBox(height: 4),
+                  authorBox(author: "Erkki Koskenniemi"),
+                  authorBox(translator: "Erkki Kääntäjä"),
+                ],
+              ),
             ),
+            IconButton(onPressed: () {
+              debugPrint('User wants to share $title');
+            }, icon: Constants.iconShare),
             IconButton(
               onPressed: () async {
                 if (!isBookmarked) {
@@ -142,6 +149,7 @@ class _TextPageState extends State<TextPage> {
       appBar: MainAppBar(
         title: isDataReady ? answers[id]["title"] : "",
         useSmallAppBar: true,
+        showBookmarkButton: false,
       ),
       body: isDataReady
           ? ScrollablePositionedList.builder(
@@ -159,12 +167,13 @@ class _TextPageState extends State<TextPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Divider(),
                         titleBox(
                           answers[id]["items"][itemIndex] ?? "",
                           "Etusivu/Vastaukset/${answers[id]["title"]}",
                         ),
 
-                        Divider(),
+
                       ],
                     ),
                   );
