@@ -44,9 +44,7 @@ class Bookmark {
 }
 
 class BookmarkHelper {
-  /*
-  * Function returns true/false depending if the page is in bookmarks
-  * */
+  /// Function returns true/false depending if the page is in bookmarks
   static bool isPageBookmarked(String title) =>
       boxBookmarks.values.any((b) => b.name == title);
 
@@ -56,25 +54,20 @@ class BookmarkHelper {
     await boxBookmarks.put(bookmark.id, bookmark);
   }
 
-  /*
-  * Function to delete a bookmark based on a title or id
-  * */
+  /// Deletes a bookmark based on a title or id
   static Future<void> deleteBookmark({String? title, String? id}) async {
     assert(title == null || id == null, "Either title or id needs to be given");
     Bookmark? bookmarkToDelete;
     if (title != null) {
-      bookmarkToDelete = boxBookmarks.values.firstWhere(
-            (b) => b.name == title,
-      );
-    }
-    else if (id != null) {
-      bookmarkToDelete = boxBookmarks.values.firstWhere(
-            (b) => b.id == id,
-      );
+      bookmarkToDelete = boxBookmarks.values.firstWhere((b) => b.name == title);
+    } else if (id != null) {
+      bookmarkToDelete = boxBookmarks.values.firstWhere((b) => b.id == id);
     }
     assert(bookmarkToDelete != null, "No bookmark found");
 
-    debugPrint('Page: ${bookmarkToDelete?.name} is to be removed from bookmarks ${bookmarkToDelete?.id}');
+    debugPrint(
+      'Page: ${bookmarkToDelete?.name} is to be removed from bookmarks ${bookmarkToDelete?.id}',
+    );
     await boxBookmarks.delete(bookmarkToDelete?.id);
   }
 

@@ -5,15 +5,19 @@ import 'package:bible_toolbox/core/helpers/shared_preferences_keys.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// A provider to handle the selected language data
 class LanguageProvider extends ChangeNotifier {
 
+  /// Selected locale
   Locale _locale = const Locale('en');
+
+  /// The texts based on the [_locale]
   final Map<String, dynamic> _localizedTexts = {};
 
   Locale get locale => _locale;
   Map<String, dynamic> get localizedTexts => _localizedTexts;
 
-  // Initialize with system locale
+  /// Initialize the provider by loading the locale and the language data
   Future<void> init() async {
     // Get the correct locale
     await loadLocale();
@@ -21,9 +25,11 @@ class LanguageProvider extends ChangeNotifier {
     // await loadLanguage(systemLocale.languageCode);
   }
 
+  /// Get locale from memory or on the first run from system.
+  ///
+  /// Updates the [_locale] parameter
   Future<void> loadLocale() async {
-    /* Get locale from memory or on the first run from system
-    * */
+
     final prefs = await SharedPreferences.getInstance();
     final code = prefs.getString(SharedPreferencesKeys.localeCode);
 
@@ -44,9 +50,8 @@ class LanguageProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Set a locale and save it to memory
   Future<void> setLocale(String code) async {
-    /* Set the locale and save it to memory
-    * */
     _locale = Locale(code);
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(
@@ -56,15 +61,14 @@ class LanguageProvider extends ChangeNotifier {
   }
 
 
-  // Change language manually
+  /// Call this function to change the language based on the languageCode
   Future<void> changeLanguage(String languageCode) async {
-    /* Call this function to change the language based on the languageCode */
     await setLocale(languageCode);
     notifyListeners();
     // await loadLanguage(newLocale.languageCode);
   }
 
-  // Helper to get text by key
+  /// Helper to get text by key
   String getText(String key) => _localizedTexts[key] ?? key;
 
 }

@@ -12,6 +12,9 @@ class LanguageClass {
     required this.languagePacketSize,
   });
 
+  /// Get a text to display for the language
+  ///
+  /// For non-Latin alphabet, this adds an English name of the language as well.
   String get fullName =>
       englishName != null ? '$displayName ($englishName)' : displayName;
 
@@ -23,6 +26,8 @@ class LanguageClass {
 }
 
 class LanguageHelper {
+
+  /// List of all available languages
   static const List<LanguageClass> languages = [
     LanguageClass(
       displayName: "العربية",
@@ -81,6 +86,7 @@ class LanguageHelper {
     ),
   ];
 
+  /// The language, which is defaulted when starting the app for the first time.
   static final defaultLanguageCode = "en";
 
   static int languageCount = languages.length;
@@ -93,11 +99,8 @@ class LanguageHelper {
     return testLoadedLanguages;
   }
 
+  /// Returns the languages, which have not been loaded on the device
   static List<LanguageClass> get loadableLanguages {
-    /* Return the languages, that has not been loaded to the device
-    * */
-    UnimplementedError("Getting the languages has not yet been implemented");
-    // todo: fix this function
     List<LanguageClass> loadableLanguages = [];
     for (LanguageClass l in languages) {
       if (!loadedLanguages.contains(l)) {

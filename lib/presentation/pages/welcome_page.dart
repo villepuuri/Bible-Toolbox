@@ -1,7 +1,11 @@
 import 'package:bible_toolbox/core/Widgets/list_card.dart';
 import 'package:bible_toolbox/core/helpers/language_helper.dart';
+import 'package:bible_toolbox/data/services/internet_connection.dart';
 import 'package:bible_toolbox/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../providers/language_provider.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -12,6 +16,7 @@ class WelcomePage extends StatefulWidget {
 
 class _WelcomePageState extends State<WelcomePage> {
   late List<bool> selectedLanguages;
+  bool isLoadingLanguages = false;
 
   @override
   void initState() {
@@ -56,7 +61,11 @@ class _WelcomePageState extends State<WelcomePage> {
       floatingActionButton: !selectedLanguages.contains(true)
           ? null
           : FloatingActionButton.extended(
-              onPressed: () {
+              onPressed: () async {
+                // Update the state of the loading flag
+                isLoadingLanguages = true;
+                setState(() {});
+
                 debugPrint('The user wants to load the Following languages:');
                 for (int i = 0; i < LanguageHelper.languageCount; i++) {
                   if (selectedLanguages[i]) {
@@ -68,7 +77,30 @@ class _WelcomePageState extends State<WelcomePage> {
                 }
                 // todo: What if the user does not choose the default language?
                 // todo: implement loading the languages
-                Navigator.pushReplacementNamed(context, '/home');
+
+                if (!(await InternetConnection.isConnected)) {
+                  debugPrint('No internet connection!');
+                  // todo: Create an error message
+                }
+                // If the default language has not been selected, select the first selected language
+                if (!LanguageHelper.loadedLanguages.any(
+                  (l) =>
+                      l.code ==
+                      context.read<LanguageProvider>().locale.languageCode,
+                )) {
+                  if (context.mounted) {
+                    debugPrint(
+                      'The default language is not selected, selecting ${LanguageHelper.loadedLanguages.first}',
+                    );
+                    await context.read<LanguageProvider>().changeLanguage(
+                      LanguageHelper.loadedLanguages.first.code,
+                    );
+                  }
+                }
+
+                if (context.mounted) {
+                  Navigator.pushReplacementNamed(context, '/home');
+                }
               },
               label: Row(
                 children: [
@@ -79,7 +111,11 @@ class _WelcomePageState extends State<WelcomePage> {
                     ),
                   ),
                   const SizedBox(width: 15),
-                  Icon(Icons.download_rounded),
+                  !isLoadingLanguages
+                      ? Icon(Icons.download_rounded)
+                      : CircularProgressIndicator(
+                          color: Theme.of(context).colorScheme.surface,
+                        ),
                 ],
               ),
             ),

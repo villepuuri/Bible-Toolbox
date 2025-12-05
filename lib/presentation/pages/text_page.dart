@@ -92,7 +92,10 @@ class _TextPageState extends State<TextPage> {
     }
 
     Widget authorBox({String? author, String? translator}) {
-      assert(!(author == null && translator == null), "You must give at least one");
+      assert(
+        !(author == null && translator == null),
+        "You must give at least one",
+      );
       return Text(
         author != null ? "Kirjoittanut: $author" : "Kääntänyt: $translator",
         style: Theme.of(context).textTheme.bodySmall,
@@ -111,16 +114,22 @@ class _TextPageState extends State<TextPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: Theme.of(context).textTheme.titleSmall),
+                  Text(
+                    "> $title",
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
                   const SizedBox(height: 4),
                   authorBox(author: "Erkki Koskenniemi"),
                   authorBox(translator: "Erkki Kääntäjä"),
                 ],
               ),
             ),
-            IconButton(onPressed: () {
-              debugPrint('User wants to share $title');
-            }, icon: Constants.iconShare),
+            IconButton(
+              onPressed: () {
+                debugPrint('User wants to share $title');
+              },
+              icon: Constants.iconShare,
+            ),
             IconButton(
               onPressed: () async {
                 if (!isBookmarked) {
@@ -145,12 +154,88 @@ class _TextPageState extends State<TextPage> {
       );
     }
 
+    Widget bodyText(String text) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Text(text, style: Theme.of(context).textTheme.bodyMedium),
+      );
+    }
+
+    Widget quoteText(String text) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(Icons.format_quote_rounded, size: 35),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                text,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium!.copyWith(fontStyle: FontStyle.italic),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget highLightText(String text) {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(20, 12, 0, 12),
+        child: Text(
+          text,
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+            color: Theme.of(context).primaryColor,
+            fontStyle: FontStyle.italic,
+          ),
+        ),
+      );
+    }
+
+    Widget listBlock(List<String> texts, {bool useIndexes = false}) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: texts.asMap().entries.map((entry) {
+          String text = entry.value;
+          int index = entry.key;
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(5, 2, 0, 2),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                !useIndexes
+                    ? Icon(Icons.arrow_right, size: 20)
+                    : Container(
+                        alignment: Alignment.centerRight,
+                        width: 30,
+                        child: Text(
+                          "${index + 1}. ",
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ),
+                Expanded(
+                  child: Text(
+                    text,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
+      );
+    }
+
     return Scaffold(
       appBar: MainAppBar(
         title: isDataReady ? answers[id]["title"] : "",
         useSmallAppBar: true,
         showBookmarkButton: false,
       ),
+
       body: isDataReady
           ? ScrollablePositionedList.builder(
               itemScrollController: itemScrollController,
@@ -163,7 +248,6 @@ class _TextPageState extends State<TextPage> {
                   return Container(
                     margin: EdgeInsets.all(16),
                     // color: Colors.greenAccent,
-                    height: 700,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -172,8 +256,23 @@ class _TextPageState extends State<TextPage> {
                           answers[id]["items"][itemIndex] ?? "",
                           "Etusivu/Vastaukset/${answers[id]["title"]}",
                         ),
-
-
+                        bodyText(
+                          "Yksi ihmisen perustavimmista tarpeista on löytää elämälle merkitys. Voimme etsiä elämän tarkoitusta hyvän tekemisestä, rakkaista ihmisistä, työstä, elämän jatkamisesta, viisauden etsimisestä jne., mutta mikään niistä ei voi täysin rauhoittaa sielun syvimpiä kysymyksiä. \n\nElämän tarkoituksen voi löytää siitä lähtökohdasta käsin, että meidät on luotu elämään Jumalan yhteydessä. Niin kauan kuin elämme erossa Jumalasta, elämästämme puuttuu jotain täysin olennaista. Meidän tärkein päämäärämme on saada elää sillä paikalla, jolle meidät on luotu – eli Jumalan luona, ilman mitään syntiä ja pahuutta, joka erottaisi meitä hänestä. Niinpä tärkeintä elämässämme on oppia tuntemaan Jeesus, joka itse on ainoa todellinen elämä. Häneen uskoen pääsemme kerran perille Taivaallisen Isämme kotiin taivaaseen.\n\nVaikka lopullinen päämäärämme on taivaassa, ei elämämme täällä maan päälläkään ole merkityksetöntä. Me saamme elää Jumalan rakastamina, rakastaen Häntä ja levittäen Hänen rakkauttaan ympärillemme.",
+                        ),
+                        quoteText(
+                          "Juoksen kohti maalia saavuttaakseni voittajan palkinnon, pääsyn taivaaseen. Sinne Jumala kutsuu Kristuksen Jeesuksen omat.\n(Fil. 3:14).",
+                        ),
+                        highLightText(
+                          "Jumala, kun minä en tiedä enkä ymmärrä, näytä minulle tie, jota kulkea.",
+                        ),
+                        bodyText("Esimerkki listasta:"),
+                        listBlock([
+                          "Kirkko ja Jumalan Pyhä Henki",
+                          "Paavali, joka julisti evankeliumia.",
+                          "Se, ettei evankeliumia oltu vielä julistettu kaikille kansoille (Matt 24:14, Mark 13:10)",
+                          "Rooman valtakunta, joka piti yllä lakia ja järjestystä.",
+                        ], useIndexes: true),
+                        const SizedBox(height: 40),
                       ],
                     ),
                   );
