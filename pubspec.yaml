@@ -60,6 +60,8 @@ dependencies:
   http: ^1.6.0
   # Handling the markdown text
   flutter_markdown_plus: ^1.0.5
+  # Opening links
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:

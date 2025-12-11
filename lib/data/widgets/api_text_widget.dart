@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ApiTextWidget extends StatefulWidget {
   /// Body text in markdown format
@@ -37,8 +38,11 @@ class _ApiTextWidgetState extends State<ApiTextWidget> {
           ),
         ),
       ),
-      onTapLink: (title, url, _) {
+      onTapLink: (title, url, _) async {
         debugPrint('User wants to open: $url');
+        if (url != null && !await launchUrl(Uri.parse(url))) {
+          throw Exception('Could not launch $url');
+        }
       },
     );
   }
