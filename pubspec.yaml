@@ -56,6 +56,11 @@ dependencies:
   # Checking the internet connection
   connectivity_plus: ^7.0.0
 
+  # Getting the api data
+  http: ^1.6.0
+  # Handling the markdown text
+  flutter_markdown_plus: ^1.0.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

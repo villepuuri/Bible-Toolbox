@@ -1,6 +1,7 @@
 import 'package:bible_toolbox/core/Widgets/main_app_bar.dart';
 import 'package:bible_toolbox/core/Widgets/main_drawer.dart';
 import 'package:bible_toolbox/core/theme.dart';
+import 'package:bible_toolbox/data/services/api_service.dart';
 import 'package:bible_toolbox/l10n/app_localizations.dart';
 import 'package:bible_toolbox/providers/language_provider.dart';
 import 'package:flutter/material.dart';
@@ -78,6 +79,9 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: MainAppBar(title: AppLocalizations.of(context)!.titleHomePage),
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        ApiService.fetchData();
+      }),
       drawer: MainDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

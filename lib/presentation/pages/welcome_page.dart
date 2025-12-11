@@ -62,6 +62,13 @@ class _WelcomePageState extends State<WelcomePage> {
           ? null
           : FloatingActionButton.extended(
               onPressed: () async {
+
+                if (!(await InternetConnection.isConnected)) {
+                  debugPrint('No internet connection!');
+                  // todo: Create an error message
+                  return;
+                }
+
                 // Update the state of the loading flag
                 isLoadingLanguages = true;
                 setState(() {});
@@ -78,10 +85,8 @@ class _WelcomePageState extends State<WelcomePage> {
                 // todo: What if the user does not choose the default language?
                 // todo: implement loading the languages
 
-                if (!(await InternetConnection.isConnected)) {
-                  debugPrint('No internet connection!');
-                  // todo: Create an error message
-                }
+
+
                 // If the default language has not been selected, select the first selected language
                 if (!LanguageHelper.loadedLanguages.any(
                   (l) =>

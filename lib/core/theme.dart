@@ -73,6 +73,14 @@ class AppThemeData {
 
     /* Labels */
 
+    // External links
+    labelLarge: GoogleFonts.tienne(
+      fontSize: 16,
+      height: 1.4,
+      color: darkGreen,
+      fontStyle: FontStyle.italic,
+    ),
+
     // Internal links
     labelMedium: GoogleFonts.tienne(
       fontSize: 16,
