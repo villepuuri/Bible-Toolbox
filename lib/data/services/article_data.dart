@@ -54,11 +54,19 @@ class ArticleData {
 
   /// Get the list of original writers
   List<Author> get writers =>
-      authors.where((writer) => writer.tid == 6).toList();
+      authors.where((writer) => writer.vid == 6).toList();
 
   /// Get the list of original translators
   List<Author> get translators =>
-      authors.where((writer) => writer.tid == 7).toList();
+      authors.where((writer) => writer.vid == 7).toList();
+
+  String get writerNames {
+    String names = writers.first.name;
+    for (int i = 1; i < writers.length; i++) {
+      names += ", ${writers[i].name}";
+    }
+    return names;
+  }
 
   DateTime get creationTime =>
       DateTime.fromMillisecondsSinceEpoch(created * 1000);
@@ -67,6 +75,8 @@ class ArticleData {
       DateTime.fromMillisecondsSinceEpoch(changed * 1000);
 
   String get cleanBody => ApiTextCleaner.cleanText(body);
+
+  String get path => type.name; // todo: fix path
 
   @override
   String toString() {
@@ -78,9 +88,8 @@ class ArticleData {
         'lang:\t$language\n'
         'created:\t$creationTime\n'
         'changed:\t$changeTime\n'
-        'body:\t${cleanBody.substring(0,50)}...\n'
-        'url:\t\t$url\n'
-    ;
+        'body:\t${cleanBody.substring(0, 50)}...\n'
+        'url:\t\t$url\n';
   }
 
   /// Create an Article class based on a JSON data from API

@@ -17,7 +17,9 @@ class _ApiTextWidgetState extends State<ApiTextWidget> {
   Widget build(BuildContext context) {
     return Markdown(
       data: widget.body,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      padding: const EdgeInsets.symmetric(vertical: 32),
       builders: {
         // Custom builder for blockquotes
         'blockquote': BlockquoteElementBuilder(),
