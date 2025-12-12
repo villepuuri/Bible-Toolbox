@@ -5,7 +5,7 @@ class ApiService{
 
   static final String baseUrl = "https://www.bibletoolbox.net/d7/marty-api/";
 
-  static Future<String> fetchData() async {
+  static Future<Map<String, dynamic>> fetchData() async {
     final url = Uri.parse("$baseUrl/articles?lang=fi&type=raamattu&limit=5");
 
     final response = await http.get(url).timeout(
@@ -18,7 +18,7 @@ class ApiService{
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
 
-      return (jsonData["data"][1]["body"]["value"]);
+      return (jsonData["data"][1]);
     } else {
       throw Exception(
         "Failed to load data. Status code: ${response.statusCode}",
