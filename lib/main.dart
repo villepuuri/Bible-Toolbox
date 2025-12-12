@@ -1,4 +1,5 @@
 import 'package:bible_toolbox/core/helpers/bookmark.dart';
+import 'package:bible_toolbox/data/services/raw_json_data.dart';
 import 'package:bible_toolbox/presentation/pages/bible_page.dart';
 import 'package:bible_toolbox/presentation/pages/bookmarks_page.dart';
 import 'package:bible_toolbox/presentation/pages/catechism_page.dart';
@@ -22,7 +23,9 @@ void main() async {
   // Init the Hive memory
   await Hive.initFlutter();
   Hive.registerAdapter(BookmarkAdapter());
+  Hive.registerAdapter(RawJsonDataAdapter());
   boxBookmarks = await Hive.openBox<Bookmark>('bookmarkBox');
+  boxJsonData = await Hive.openBox<RawJsonData>('rawJsonBox');
 
   // Initialize the Locale language
   LanguageProvider languageProvider = LanguageProvider();

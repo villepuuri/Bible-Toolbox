@@ -60,12 +60,22 @@ class ArticleData {
   List<Author> get translators =>
       authors.where((writer) => writer.vid == 7).toList();
 
+  /// Get the displayed text for the writers
   String get writerNames {
     String names = writers.first.name;
     for (int i = 1; i < writers.length; i++) {
       names += ", ${writers[i].name}";
     }
     return names;
+  }
+
+  /// Get the displayed text for the translators
+  String get translatorNames {
+    String translatorText = translators.first.name;
+    for (int i = 1; i < translators.length; i++) {
+      translatorText += ", ${translators[i].name}";
+    }
+    return translatorText;
   }
 
   DateTime get creationTime =>

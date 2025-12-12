@@ -1,11 +1,14 @@
 import 'package:bible_toolbox/core/Widgets/main_app_bar.dart';
 import 'package:bible_toolbox/core/Widgets/main_drawer.dart';
+import 'package:bible_toolbox/core/helpers/boxes.dart';
 import 'package:bible_toolbox/core/theme.dart';
 import 'package:bible_toolbox/data/services/api_service.dart';
 import 'package:bible_toolbox/l10n/app_localizations.dart';
 import 'package:bible_toolbox/providers/language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../core/helpers/language_helper.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -79,8 +82,10 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: MainAppBar(title: AppLocalizations.of(context)!.titleHomePage),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        ApiService.fetchData();
+      floatingActionButton: FloatingActionButton(onPressed: () async {
+        debugPrint('getting the data');
+        // await ApiService.getData(LanguageHelper.languages.sublist(8,9));
+        debugPrint(boxJsonData.getAt(0).toString());
       }),
       drawer: MainDrawer(),
       body: Padding(
