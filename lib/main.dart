@@ -1,5 +1,4 @@
 import 'package:bible_toolbox/core/helpers/bookmark.dart';
-import 'package:bible_toolbox/data/services/raw_json_data.dart';
 import 'package:bible_toolbox/presentation/pages/bible_page.dart';
 import 'package:bible_toolbox/presentation/pages/bookmarks_page.dart';
 import 'package:bible_toolbox/presentation/pages/catechism_page.dart';
@@ -15,7 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'core/helpers/boxes.dart';
+import 'core/helpers/box_service.dart';
 import 'core/theme.dart';
 import 'l10n/app_localizations.dart';
 
@@ -23,9 +22,8 @@ void main() async {
   // Init the Hive memory
   await Hive.initFlutter();
   Hive.registerAdapter(BookmarkAdapter());
-  Hive.registerAdapter(RawJsonDataAdapter());
   boxBookmarks = await Hive.openBox<Bookmark>('bookmarkBox');
-  boxJsonData = await Hive.openBox<RawJsonData>('rawJsonBox');
+  boxMeta = await Hive.openBox<Map<dynamic, dynamic>>('metaBox');
 
   // Initialize the Locale language
   LanguageProvider languageProvider = LanguageProvider();

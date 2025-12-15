@@ -1,11 +1,12 @@
 import 'package:bible_toolbox/core/Widgets/main_app_bar.dart';
 import 'package:bible_toolbox/core/Widgets/main_drawer.dart';
-import 'package:bible_toolbox/core/helpers/boxes.dart';
+import 'package:bible_toolbox/core/helpers/box_service.dart';
 import 'package:bible_toolbox/core/theme.dart';
 import 'package:bible_toolbox/data/services/api_service.dart';
 import 'package:bible_toolbox/l10n/app_localizations.dart';
 import 'package:bible_toolbox/providers/language_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/helpers/language_helper.dart';
@@ -15,7 +16,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     // Tile widget to display the content tiles
     Widget myTile(String title, String imageURL, String routeName) => ListTile(
       leading: Image.asset(imageURL),
@@ -41,7 +41,7 @@ class HomePage extends StatelessWidget {
         myTile(
           "Vastauksia elämän suuriin kysymyksiin",
           'assets/btb_images/kysymysmerkki.png',
-          '/answers'
+          '/answers',
         ),
         myTile(
           "Opetuksia Raamatusta teemoittain ja kirjoittain",
@@ -50,7 +50,7 @@ class HomePage extends StatelessWidget {
         ),
         myTile(
           "Katekismus - Kristinusko pähkinänkuoressa",
-          'assets/btb_images/katekismus.png' ,
+          'assets/btb_images/katekismus.png',
           '/catechism',
         ),
         myTile(
@@ -68,25 +68,45 @@ class HomePage extends StatelessWidget {
           "Löydä vastauksia:",
           style: Theme.of(context).textTheme.headlineMedium,
         ),
-        ElevatedButton(onPressed: () {
-          debugPrint('QuestionButton pressed');
-        }, child: Text("Miten voin seurata Jeesusta?"),
+        ElevatedButton(
+          onPressed: () {
+            debugPrint('QuestionButton pressed');
+          },
+          child: Text("Miten voin seurata Jeesusta?"),
         ),
       ],
     );
 
-    Widget emptySpace = const SizedBox(height: 40,);
+    Widget emptySpace = const SizedBox(height: 40);
 
     final lang = context.watch<LanguageProvider>();
     debugPrint('Current locale: ${lang.locale.languageCode}');
 
     return Scaffold(
       appBar: MainAppBar(title: AppLocalizations.of(context)!.titleHomePage),
-      floatingActionButton: FloatingActionButton(onPressed: () async {
-        debugPrint('getting the data');
-        // await ApiService.getData(LanguageHelper.languages.sublist(8,9));
-        debugPrint(boxJsonData.getAt(0).toString());
-      }),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          debugPrint('on pressed');
+
+          // for (LanguageClass language in LanguageHelper.languages) {
+          //   if (await LanguageBoxService.hiveBoxExists(language.code)) {
+          //     debugPrint('Deleting: $language');
+          //     await LanguageBoxService.delete(language.code);
+          //   }
+          // }
+          // await ApiService.getData([LanguageHelper.languages[8]]);
+          for (String code in BoxService.getInstalledLanguages()) {
+            debugPrint('File size of $code: ${await BoxService.getHiveBoxSizeMB(code)}');
+          }
+          // LanguageBoxService.delete("fi");
+          // debugPrint(boxJsonData.getAt(0).toString());
+          // print(BoxService.getInstalledLanguages());
+          // print(BoxService.readMeta());
+          // await BoxService.delete("en");
+          // await BoxService.delete("fi");
+          // debugPrint('deleted');
+        },
+      ),
       drawer: MainDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -117,7 +137,7 @@ class HomePage extends StatelessWidget {
               "Nämä apuvälineet Raamatun opiskeluun tarjoaa sinulle Suomen luterilainen evankeliumiyhdistys SLEY, luterilainen lähetysjärjestö.",
               style: Theme.of(context).textTheme.bodyMedium,
             ),
-            emptySpace
+            emptySpace,
           ],
         ),
       ),

@@ -62,7 +62,6 @@ class _WelcomePageState extends State<WelcomePage> {
           ? null
           : FloatingActionButton.extended(
               onPressed: () async {
-
                 if (!(await InternetConnection.isConnected)) {
                   debugPrint('No internet connection!');
                   // todo: Create an error message
@@ -76,16 +75,13 @@ class _WelcomePageState extends State<WelcomePage> {
                 debugPrint('The user wants to load the Following languages:');
                 for (int i = 0; i < LanguageHelper.languageCount; i++) {
                   if (selectedLanguages[i]) {
-                    debugPrint(' - ${LanguageHelper.languages[i]}');
-                    LanguageHelper.testLoadedLanguages.add(
+                    await LanguageHelper.loadLanguage(
                       LanguageHelper.languages[i],
                     );
                   }
                 }
                 // todo: What if the user does not choose the default language?
                 // todo: implement loading the languages
-
-
 
                 // If the default language has not been selected, select the first selected language
                 if (!LanguageHelper.loadedLanguages.any(

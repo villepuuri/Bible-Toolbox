@@ -1,4 +1,8 @@
 
+import 'package:bible_toolbox/core/helpers/box_service.dart';
+import 'package:bible_toolbox/data/services/api_service.dart';
+import 'package:flutter/cupertino.dart';
+
 class LanguageClass {
   final String displayName;
   final String? englishName;
@@ -25,6 +29,8 @@ class LanguageClass {
   String toString() => "$displayName ($abbreviation)";
 }
 
+/// LanguageHelper is a general class that uses ApiService and BoxService classes
+/// to handle the language functions
 class LanguageHelper {
 
   /// List of all available languages
@@ -33,56 +39,56 @@ class LanguageHelper {
       displayName: "العربية",
       englishName: "Arabic",
       abbreviation: "ar",
-      languagePacketSize: "14 Mb",
+      languagePacketSize: "1 MB",
     ),
     LanguageClass(
       displayName: "မြန်မာဘာသာ",
       englishName: "Burmese",
       abbreviation: "my",
-      languagePacketSize: "14 Mb",
+      languagePacketSize: "2 MB",
     ),
     LanguageClass(
       displayName: "Eesti",
       abbreviation: "et",
-      languagePacketSize: "14 Mb",
+      languagePacketSize: "3 MB",
     ),
     LanguageClass(
       displayName: "English",
       abbreviation: "en",
-      languagePacketSize: "14 Mb",
+      languagePacketSize: "3 MB",
     ),
     LanguageClass(
       displayName: "日本語",
       englishName: "Japanese",
       abbreviation: "ja",
-      languagePacketSize: "14 Mb",
+      languagePacketSize: "7 MB",
     ),
     LanguageClass(
       displayName: "Kiswahili",
       abbreviation: "sw",
-      languagePacketSize: "14 Mb",
+      languagePacketSize: "1 MB",
     ),
     LanguageClass(
       displayName: "فارسی",
       englishName: "Persian",
       abbreviation: "fa",
-      languagePacketSize: "14 Mb",
+      languagePacketSize: "1 MB",
     ),
     LanguageClass(
       displayName: "Русский",
       englishName: "Russian",
       abbreviation: "ru",
-      languagePacketSize: "14 Mb",
+      languagePacketSize: "2 MB",
     ),
     LanguageClass(
       displayName: "Suomi",
       abbreviation: "fi",
-      languagePacketSize: "14 Mb",
+      languagePacketSize: "3 MB",
     ),
     LanguageClass(
       displayName: "Svenska",
       abbreviation: "sv",
-      languagePacketSize: "14 Mb",
+      languagePacketSize: "1 MB",
     ),
   ];
 
@@ -91,12 +97,9 @@ class LanguageHelper {
 
   static int languageCount = languages.length;
 
-  static List<LanguageClass> testLoadedLanguages = [];
-
   static List<LanguageClass> get loadedLanguages {
-    UnimplementedError("Getting the languages has not yet been implemented");
-    // todo: fix this function
-    return testLoadedLanguages;
+    List<String> codeList = BoxService.getInstalledLanguages();
+    return languages.where((l) => codeList.contains(l.code)).toList();
   }
 
   /// Returns the languages, which have not been loaded on the device
@@ -111,8 +114,10 @@ class LanguageHelper {
   }
 
   static Future<bool> loadLanguage(LanguageClass language) async {
-    testLoadedLanguages.add(language);
-    return true;
+    debugPrint('*** Loading the data of $language');
+    bool result = await ApiService.getDataForLanguage(language);
+    debugPrint('   - Did the loading succeeded: $result');
+    return result;
   }
 
   static Future<bool> removeLoadedLanguage(LanguageClass language) async {
@@ -121,7 +126,7 @@ class LanguageHelper {
       loadedLanguages.contains(language),
       "The language to be removed is not in the loaded languages",
     );
-    testLoadedLanguages.remove(language);
+    BoxService.delete(language.code);
     // todo: fix the case where removing the selected language
     return true;
   }

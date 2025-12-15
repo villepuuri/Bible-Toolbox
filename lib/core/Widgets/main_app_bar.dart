@@ -49,8 +49,7 @@ class _MainAppBarState extends State<MainAppBar> {
       List<PopupMenuEntry> buttons = LanguageHelper.loadedLanguages
           .map<PopupMenuEntry<dynamic>>(
             (language) => PopupMenuItem(
-              enabled: true,
-              // todo: disable when the page is not available
+              enabled: true,              // todo: disable when the page is not available
               key: ValueKey(language.abbreviation),
               value: language.abbreviation,
               padding: EdgeInsets.all(0),

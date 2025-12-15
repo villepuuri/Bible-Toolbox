@@ -1,7 +1,7 @@
 import 'package:bible_toolbox/core/Widgets/extendable_headline.dart';
 import 'package:bible_toolbox/core/Widgets/main_app_bar.dart';
 import 'package:bible_toolbox/core/helpers/bookmark.dart';
-import 'package:bible_toolbox/core/helpers/boxes.dart';
+import 'package:bible_toolbox/core/helpers/box_service.dart';
 import 'package:bible_toolbox/core/theme.dart';
 import 'package:bible_toolbox/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
