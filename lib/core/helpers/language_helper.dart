@@ -137,6 +137,7 @@ class LanguageHelper {
   static Future<bool> removeLoadedLanguage(
     LanguageClass language,
     BuildContext context,
+  {Function? updateParent}
   ) async {
     // Throw an assert if the language is not loaded
     assert(
@@ -148,19 +149,24 @@ class LanguageHelper {
       "The last language is tried to be deleted!",
     );
 
-    await BoxService.delete(language.code);
-
     // If the selected language is being deleted, select the first loaded language
-    if (context.read<LanguageProvider>().locale.languageCode == language.code) {
-      debugPrint('Changing the selected language...');
+    if (context.mounted &&
+        context.read<LanguageProvider>().locale.languageCode == language.code) {
+      debugPrint(' - Changing the selected language...');
       await context.read<LanguageProvider>().changeLanguage(
-        // todo: For some reason this gives an error
         loadedLanguages.firstWhere((lang) => lang.code != language.code).code,
       );
-      debugPrint('Language changed!');
+      debugPrint(' - Language changed before the old is deleted!');
     }
 
-    // todo: fix the case where removing the selected language
+    // Delete the language after rebuild is completed
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await BoxService.delete(language.code);
+      if (updateParent != null) {
+        updateParent();
+      }
+    });
+
     return true;
   }
 

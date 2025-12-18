@@ -70,19 +70,15 @@ class BoxService {
     debugPrint(' - Data saved - $languages');
   }
 
-  /// Removes a language box
+  /// Removes a language box and updates metadata
   static Future<void> delete(String langCode) async {
-    debugPrint('Before error 1');
-    // Update the metadata
+    // Get the metadata
     final languages = readMeta();
-    debugPrint('Before error 2');
     languages.remove(langCode);
-    debugPrint('Before error 3');
-    await boxMeta.put(_languagesKey, languages);
-    debugPrint('Before error 4');
     // Delete the box
     await Hive.deleteBoxFromDisk(getBoxName(langCode));
-    debugPrint('Before error 5');
+    // Update the metadata
+    await boxMeta.put(_languagesKey, languages);
     debugPrint(' - Language: $langCode deleted successfully!');
   }
 

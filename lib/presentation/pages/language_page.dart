@@ -95,7 +95,13 @@ class _LanguagePageState extends State<LanguagePage> {
                 if (LanguageHelper.loadedLanguages.length > 1) {
                   // Delete the downloaded language
                   debugPrint('Deleting the following language: $language');
-                  await LanguageHelper.removeLoadedLanguage(language, context);
+                  await LanguageHelper.removeLoadedLanguage(
+                    language,
+                    context,
+                    updateParent: () {
+                      setState(() {});
+                    },
+                  );
                   setState(() {});
                 } else {
                   // The user cannot delete the only language

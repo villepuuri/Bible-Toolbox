@@ -11,3 +11,6 @@ Meta box
     },
 ...
 }
+
+Language box
+
