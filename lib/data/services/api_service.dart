@@ -7,9 +7,11 @@ import 'package:http/http.dart' as http;
 class ApiService {
   static final String baseUrl = "https://www.bibletoolbox.net/d7/marty-api/";
 
-
   /// Retrieves data from API for [language]
-  static Future<bool> getDataForLanguage(LanguageClass language) async {
+  static Future<bool> getDataForLanguage(
+    LanguageClass language,
+    Function? updateParent,
+  ) async {
     // Check if the data is already downloaded
     if (await BoxService.hiveBoxExists(language.code)) {
       debugPrint('Data not downloaded, $language is already in the device!');
@@ -26,6 +28,12 @@ class ApiService {
 
     // Get the data from every page
     for (int i = 0; i <= pageNumber; i++) {
+      // Update the loading value
+      language.setLoadingValue((i + 1) / (pageNumber + 1));
+      if (updateParent != null) {
+        updateParent();
+      }
+
       final uri = Uri.parse("$url&limit=100&page=$i");
       final response = await http
           .get(uri)

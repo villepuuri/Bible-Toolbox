@@ -72,16 +72,21 @@ class BoxService {
 
   /// Removes a language box
   static Future<void> delete(String langCode) async {
+    debugPrint('Before error 1');
     // Update the metadata
     final languages = readMeta();
+    debugPrint('Before error 2');
     languages.remove(langCode);
+    debugPrint('Before error 3');
     await boxMeta.put(_languagesKey, languages);
-
+    debugPrint('Before error 4');
     // Delete the box
     await Hive.deleteBoxFromDisk(getBoxName(langCode));
-
+    debugPrint('Before error 5');
     debugPrint(' - Language: $langCode deleted successfully!');
   }
+
+
 
   /// Returns the size of a data box in mega bytes
   /// example: "12 MB"

@@ -1,15 +1,18 @@
-
 import 'package:bible_toolbox/core/helpers/box_service.dart';
 import 'package:bible_toolbox/data/services/api_service.dart';
+import 'package:bible_toolbox/providers/language_provider.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
 class LanguageClass {
   final String displayName;
   final String? englishName;
   final String abbreviation;
   final String languagePacketSize;
+  bool _isLoading = false;
+  double _loadingValue = 0.0;
 
-  const LanguageClass({
+  LanguageClass({
     required this.displayName,
     this.englishName,
     required this.abbreviation,
@@ -22,6 +25,15 @@ class LanguageClass {
   String get fullName =>
       englishName != null ? '$displayName ($englishName)' : displayName;
 
+  // The loading states
+  void setLoadingState(bool state) => _isLoading = state;
+
+  bool get isLoading => _isLoading;
+
+  void setLoadingValue(double value) => _loadingValue = value;
+
+  double get loadingValue => _loadingValue;
+
   // An easier way to get the language code
   String get code => abbreviation;
 
@@ -32,9 +44,8 @@ class LanguageClass {
 /// LanguageHelper is a general class that uses ApiService and BoxService classes
 /// to handle the language functions
 class LanguageHelper {
-
   /// List of all available languages
-  static const List<LanguageClass> languages = [
+  static List<LanguageClass> languages = [
     LanguageClass(
       displayName: "العربية",
       englishName: "Arabic",
@@ -113,20 +124,42 @@ class LanguageHelper {
     return loadableLanguages;
   }
 
-  static Future<bool> loadLanguage(LanguageClass language) async {
+  static Future<bool> loadLanguage(
+    LanguageClass language, {
+    Function? updateParent,
+  }) async {
     debugPrint('*** Loading the data of $language');
-    bool result = await ApiService.getDataForLanguage(language);
+    bool result = await ApiService.getDataForLanguage(language, updateParent);
     debugPrint('   - Did the loading succeeded: $result');
     return result;
   }
 
-  static Future<bool> removeLoadedLanguage(LanguageClass language) async {
+  static Future<bool> removeLoadedLanguage(
+    LanguageClass language,
+    BuildContext context,
+  ) async {
     // Throw an assert if the language is not loaded
     assert(
       loadedLanguages.contains(language),
       "The language to be removed is not in the loaded languages",
     );
-    BoxService.delete(language.code);
+    assert(
+      !(loadedLanguages.contains(language) && loadedLanguages.length == 1),
+      "The last language is tried to be deleted!",
+    );
+
+    await BoxService.delete(language.code);
+
+    // If the selected language is being deleted, select the first loaded language
+    if (context.read<LanguageProvider>().locale.languageCode == language.code) {
+      debugPrint('Changing the selected language...');
+      await context.read<LanguageProvider>().changeLanguage(
+        // todo: For some reason this gives an error
+        loadedLanguages.firstWhere((lang) => lang.code != language.code).code,
+      );
+      debugPrint('Language changed!');
+    }
+
     // todo: fix the case where removing the selected language
     return true;
   }

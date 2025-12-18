@@ -42,12 +42,34 @@ class _WelcomePageState extends State<WelcomePage> {
             key: ValueKey(element.abbreviation),
             title: element.fullName,
             smallInfoText: element.languagePacketSize,
-            trailing: Checkbox(
-              value: selectedLanguages[index],
-              onChanged: (bool? value) {
-                changeSelection(index, value ?? false);
-              },
+            trailing: SizedBox(
+              width: 30,
+              child: !element.isLoading
+                  ? (!LanguageHelper.loadedLanguages.contains(element)
+                        ? Checkbox(
+                            value: selectedLanguages[index],
+                            onChanged: (bool? value) {
+                              changeSelection(index, value ?? false);
+                            },
+                          )
+                        : Icon(Icons.check_circle))
+                  : TweenAnimationBuilder<double>(
+                      tween: Tween(begin: 0.0, end: element.loadingValue),
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeInOut,
+                      builder: (context, value, child) {
+                        return CircularProgressIndicator(
+                          constraints: BoxConstraints(
+                            minHeight: 30,
+                            minWidth: 30,
+                          ),
+                          value: value,
+                          backgroundColor: Colors.black12,
+                        );
+                      },
+                    ),
             ),
+            // todo: fix the value
             onTap: () {
               // Change the value if the box is pressed
               changeSelection(index, !selectedLanguages[index]);
@@ -62,63 +84,83 @@ class _WelcomePageState extends State<WelcomePage> {
           ? null
           : FloatingActionButton.extended(
               onPressed: () async {
-                if (!(await InternetConnection.isConnected)) {
-                  debugPrint('No internet connection!');
-                  // todo: Create an error message
-                  return;
-                }
-
-                // Update the state of the loading flag
-                isLoadingLanguages = true;
-                setState(() {});
-
-                debugPrint('The user wants to load the Following languages:');
-                for (int i = 0; i < LanguageHelper.languageCount; i++) {
-                  if (selectedLanguages[i]) {
-                    await LanguageHelper.loadLanguage(
-                      LanguageHelper.languages[i],
-                    );
+                // Check that is the button already pressed
+                if (!isLoadingLanguages) {
+                  if (!(await InternetConnection.isConnected)) {
+                    debugPrint('No internet connection!');
+                    // todo: Create an error message
+                    return;
                   }
-                }
-                // todo: What if the user does not choose the default language?
-                // todo: implement loading the languages
 
-                // If the default language has not been selected, select the first selected language
-                if (!LanguageHelper.loadedLanguages.any(
-                  (l) =>
-                      l.code ==
-                      context.read<LanguageProvider>().locale.languageCode,
-                )) {
+                  // Update the state of the loading flag
+                  isLoadingLanguages = true;
+                  setState(() {});
+
+                  debugPrint('The user wants to load the Following languages:');
+                  for (int i = 0; i < LanguageHelper.languageCount; i++) {
+                    if (selectedLanguages[i]) {
+                      setState(() {
+                        LanguageHelper.languages[i].setLoadingState(true);
+                      });
+                      await LanguageHelper.loadLanguage(
+                        LanguageHelper.languages[i],
+                        updateParent: () {
+                          if (mounted) {
+                            setState(() {});
+                          }
+                        },
+                      );
+                      setState(() {
+                        LanguageHelper.languages[i].setLoadingState(false);
+                      });
+                    }
+                  }
+                  // todo: What if the user does not choose the default language?
+                  // todo: implement loading the languages
+
+                  // If the default language has not been selected, select the first selected language
+                  if (!LanguageHelper.loadedLanguages.any(
+                    (l) =>
+                        l.code ==
+                        context.read<LanguageProvider>().locale.languageCode,
+                  )) {
+                    if (context.mounted) {
+                      debugPrint(
+                        'The default language is not selected, selecting ${LanguageHelper.loadedLanguages.first}',
+                      );
+                      await context.read<LanguageProvider>().changeLanguage(
+                        LanguageHelper.loadedLanguages.first.code,
+                      );
+                    }
+                  }
+
                   if (context.mounted) {
-                    debugPrint(
-                      'The default language is not selected, selecting ${LanguageHelper.loadedLanguages.first}',
-                    );
-                    await context.read<LanguageProvider>().changeLanguage(
-                      LanguageHelper.loadedLanguages.first.code,
-                    );
+                    Navigator.pushReplacementNamed(context, '/home');
                   }
-                }
-
-                if (context.mounted) {
-                  Navigator.pushReplacementNamed(context, '/home');
                 }
               },
-              label: Row(
-                children: [
-                  Text(
-                    AppLocalizations.of(context)!.titleLoadLanguages,
-                    style: Theme.of(context).textTheme.headlineMedium!.apply(
-                      color: Theme.of(context).colorScheme.surface,
-                    ),
-                  ),
-                  const SizedBox(width: 15),
-                  !isLoadingLanguages
-                      ? Icon(Icons.download_rounded)
-                      : CircularProgressIndicator(
-                          color: Theme.of(context).colorScheme.surface,
+              label: !isLoadingLanguages
+                  ? Row(
+                      children: [
+                        Text(
+                          AppLocalizations.of(context)!.titleLoadLanguages,
+                          style: Theme.of(context).textTheme.headlineMedium!
+                              .apply(
+                                color: Theme.of(context).colorScheme.surface,
+                              ),
                         ),
-                ],
-              ),
+                        const SizedBox(width: 15),
+
+                        Icon(Icons.download_rounded),
+                      ],
+                    )
+                  : Text(
+                      "(${LanguageHelper.loadedLanguages.length}/${selectedLanguages.where((e) => e).length})",
+                      style: Theme.of(context).textTheme.headlineMedium!
+                          .copyWith(
+                            color: Theme.of(context).colorScheme.surface,
+                          ),
+                    ),
             ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 64, 16, 0),

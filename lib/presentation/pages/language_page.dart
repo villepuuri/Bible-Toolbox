@@ -1,5 +1,6 @@
 import 'package:bible_toolbox/core/Widgets/list_card.dart';
 import 'package:bible_toolbox/core/Widgets/main_app_bar.dart';
+import 'package:bible_toolbox/core/helpers/box_service.dart';
 import 'package:bible_toolbox/core/helpers/language_helper.dart';
 import 'package:bible_toolbox/l10n/app_localizations.dart';
 import 'package:bible_toolbox/providers/language_provider.dart';
@@ -14,6 +15,31 @@ class LanguagePage extends StatefulWidget {
 }
 
 class _LanguagePageState extends State<LanguagePage> {
+  Map<String, String> loadedLanguageSizes = {};
+
+  @override
+  void initState() {
+    super.initState();
+    getLanguageSizes(useSetState: true);
+  }
+
+  Future<void> getLanguageSizes({bool useSetState = false}) async {
+    for (LanguageClass language in LanguageHelper.loadedLanguages) {
+      if (loadedLanguageSizes.containsKey(language.code)) {
+        continue;
+      }
+      String sizeString = await BoxService.getHiveBoxSizeMB(language.code);
+      if (sizeString == "0") {
+        sizeString = "";
+      }
+      loadedLanguageSizes[language.code] = sizeString;
+    }
+    debugPrint(' - The sizes of loaded languages are: $loadedLanguageSizes');
+    if (useSetState) {
+      setState(() {});
+    }
+  }
+
   Widget loadedButton(LanguageClass language) {
     // todo: for some reason the menu with 2 widgets is extra wide
     bool isSelectedLanguage =
@@ -69,7 +95,7 @@ class _LanguagePageState extends State<LanguagePage> {
                 if (LanguageHelper.loadedLanguages.length > 1) {
                   // Delete the downloaded language
                   debugPrint('Deleting the following language: $language');
-                  LanguageHelper.removeLoadedLanguage(language);
+                  await LanguageHelper.removeLoadedLanguage(language, context);
                   setState(() {});
                 } else {
                   // The user cannot delete the only language
@@ -86,17 +112,26 @@ class _LanguagePageState extends State<LanguagePage> {
       onPressed: () async {
         // todo: maybe add a dialog to ask if user wants to download?
         debugPrint('User wants to download: $language');
+        setState(() {
+          language.setLoadingState(true);
+        });
         await LanguageHelper.loadLanguage(language);
-        setState(() {});
+        await getLanguageSizes();
+        setState(() {
+          language.setLoadingState(false);
+        });
       },
-      icon: Icon(Icons.download),
+      icon: !language.isLoading
+          ? Icon(Icons.download)
+          : CircularProgressIndicator(),
     );
   }
 
   Widget languageTile(LanguageClass language, {bool isLoaded = false}) {
     return ListCard(
       title: language.fullName,
-      smallInfoText: language.languagePacketSize,
+      smallInfoText:
+          loadedLanguageSizes[language.code] ?? language.languagePacketSize,
       onTap: () async {
         if (isLoaded) {
           await context.read<LanguageProvider>().changeLanguage(language.code);

@@ -65,10 +65,6 @@ class LanguageProvider extends ChangeNotifier {
   Future<void> changeLanguage(String languageCode) async {
     await setLocale(languageCode);
     notifyListeners();
-    // await loadLanguage(newLocale.languageCode);
   }
-
-  /// Helper to get text by key
-  String getText(String key) => _localizedTexts[key] ?? key;
 
 }
