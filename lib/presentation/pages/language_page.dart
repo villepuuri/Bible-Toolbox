@@ -1,4 +1,5 @@
 import 'package:bible_toolbox/core/Widgets/list_card.dart';
+import 'package:bible_toolbox/core/Widgets/loading_progress_widget.dart';
 import 'package:bible_toolbox/core/Widgets/main_app_bar.dart';
 import 'package:bible_toolbox/core/helpers/box_service.dart';
 import 'package:bible_toolbox/core/helpers/language_helper.dart';
@@ -117,19 +118,26 @@ class _LanguagePageState extends State<LanguagePage> {
     return IconButton(
       onPressed: () async {
         // todo: maybe add a dialog to ask if user wants to download?
-        debugPrint('User wants to download: $language');
-        setState(() {
-          language.setLoadingState(true);
-        });
-        await LanguageHelper.loadLanguage(language);
-        await getLanguageSizes();
-        setState(() {
-          language.setLoadingState(false);
-        });
+        if (!language.isLoading) {
+          debugPrint('User wants to download: $language');
+          setState(() {
+            language.setLoadingState(true);
+          });
+          await LanguageHelper.loadLanguage(
+            language,
+            updateParent: () {
+              setState(() {});
+            },
+          );
+          await getLanguageSizes();
+          setState(() {
+            language.setLoadingState(false);
+          });
+        }
       },
       icon: !language.isLoading
           ? Icon(Icons.download)
-          : CircularProgressIndicator(),
+          : LoadingProgressWidget(loadingValue: language.loadingValue),
     );
   }
 

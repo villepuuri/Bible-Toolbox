@@ -1,4 +1,5 @@
 import 'package:bible_toolbox/core/Widgets/list_card.dart';
+import 'package:bible_toolbox/core/Widgets/loading_progress_widget.dart';
 import 'package:bible_toolbox/core/helpers/language_helper.dart';
 import 'package:bible_toolbox/data/services/internet_connection.dart';
 import 'package:bible_toolbox/l10n/app_localizations.dart';
@@ -53,21 +54,7 @@ class _WelcomePageState extends State<WelcomePage> {
                             },
                           )
                         : Icon(Icons.check_circle))
-                  : TweenAnimationBuilder<double>(
-                      tween: Tween(begin: 0.0, end: element.loadingValue),
-                      duration: const Duration(milliseconds: 500),
-                      curve: Curves.easeInOut,
-                      builder: (context, value, child) {
-                        return CircularProgressIndicator(
-                          constraints: BoxConstraints(
-                            minHeight: 30,
-                            minWidth: 30,
-                          ),
-                          value: value,
-                          backgroundColor: Colors.black12,
-                        );
-                      },
-                    ),
+                  : LoadingProgressWidget(loadingValue: element.loadingValue,),
             ),
             // todo: fix the value
             onTap: () {
