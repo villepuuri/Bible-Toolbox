@@ -58,10 +58,14 @@ class ApiTextCleaner{
       multiLine: true,
     );
     return raw.replaceAllMapped(regex, (match) {
-      final full = match.group(0)!;       // whole matched quote block
+      // final full = match.group(0)!;       // whole matched quote block
       final inner = match.group(1)!;      // text inside the block (after '>')
+
+      // Removes unnecessary ">" marks
+      var convertedInner = inner.replaceAll('>', '');
       // Replace CRLF inside the block
-      final convertedInner = inner.replaceAll('\r\n', '<br>');
+      convertedInner = convertedInner.replaceAll('\r\n', '<br>');
+
       // Rebuild the block with replaced linebreaks
       return '\r\n>$convertedInner\r\n\r\n';
     });

@@ -25,10 +25,7 @@ class BoxService {
     final raw = boxMeta.get('languages', defaultValue: {});
     return Map<String, Map<String, dynamic>>.from(
       (raw as Map).map(
-            (k, v) => MapEntry(
-          k as String,
-          Map<String, dynamic>.from(v as Map),
-        ),
+        (k, v) => MapEntry(k as String, Map<String, dynamic>.from(v as Map)),
       ),
     );
   }
@@ -57,7 +54,7 @@ class BoxService {
 
     await box.put('data', data);
     await box.put('version', version);
-    await box.put('lastUpdated', DateTime.now());
+    await box.put('lastUpdated', DateTime.now().millisecondsSinceEpoch);
 
     // Update meta info
     final languages = readMeta();
@@ -82,7 +79,33 @@ class BoxService {
     debugPrint(' - Language: $langCode deleted successfully!');
   }
 
+  /// Formats the Box data correctly Future<Map<String, Map<String, dynamic>>>
+  static Future<List<Map<String, dynamic>>> readLanguageBox(
+    String languageCode,
+  ) async {
+    // Get the raw data List<dynamic>
+    final raw = (await BoxService.open(
+      languageCode,
+    )).get('data', defaultValue: {});
+    return List<Map<String, dynamic>>.from(
+      (raw as List).map((article) => Map<String, dynamic>.from(article as Map)),
+    );
+  }
 
+  /// Get all the articles from a memory with [languageCode]
+  static Future<List<Map<String, dynamic>>> getAllArticles(
+    String languageCode,
+  ) async {
+    return await readLanguageBox(languageCode);
+  }
+
+  /// Get articles based on the type
+  static Future<List<Map<String, dynamic>>> getArticles(
+    String languageCode, String type
+  ) async {
+    List<Map<String, dynamic>> allData = await readLanguageBox(languageCode);
+    return allData.where((element) => element['type'] == type).toList();
+  }
 
   /// Returns the size of a data box in mega bytes
   /// example: "12 MB"

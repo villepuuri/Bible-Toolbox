@@ -56,7 +56,6 @@ class _WelcomePageState extends State<WelcomePage> {
                         : Icon(Icons.check_circle))
                   : LoadingProgressWidget(loadingValue: element.loadingValue,),
             ),
-            // todo: fix the value
             onTap: () {
               // Change the value if the box is pressed
               changeSelection(index, !selectedLanguages[index]);
@@ -103,7 +102,6 @@ class _WelcomePageState extends State<WelcomePage> {
                     }
                   }
                   // todo: What if the user does not choose the default language?
-                  // todo: implement loading the languages
 
                   // If the default language has not been selected, select the first selected language
                   if (!LanguageHelper.loadedLanguages.any(

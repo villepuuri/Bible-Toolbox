@@ -130,7 +130,7 @@ class ArticleData {
     // Get the list of authors
     List<Author> authors = [];
     for (var author in json["taxonomy"]) {
-      authors.add(Author.fromJson(author));
+      authors.add(Author.fromJson(Map<String, dynamic>.from(author)));
     }
 
     return ArticleData(

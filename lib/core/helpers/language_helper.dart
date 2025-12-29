@@ -1,5 +1,6 @@
 import 'package:bible_toolbox/core/helpers/box_service.dart';
 import 'package:bible_toolbox/data/services/api_service.dart';
+import 'package:bible_toolbox/data/services/article_data.dart';
 import 'package:bible_toolbox/providers/language_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
@@ -170,7 +171,11 @@ class LanguageHelper {
     return true;
   }
 
-  static setLoadedLanguages(List<LanguageClass> languages) {
-    UnimplementedError("Setting the languages has not yet been implemented");
+  /// Returns a random article with selected locale
+  static Future<ArticleData> getRandomBibleArticle(String languageCode) async {
+    final articles = await BoxService.getArticles(languageCode, 'raamattu');
+    articles.shuffle();
+    debugPrint(' - Length of Bible articles: ${articles.length}');
+    return ArticleData.fromJson(articles.first);
   }
 }
