@@ -88,6 +88,9 @@ class HomePage extends StatelessWidget {
         onPressed: () async {
           debugPrint('on pressed');
 
+          for (LanguageClass language in LanguageHelper.loadedLanguages) {
+            ApiService.updateDataForLanguage(language);
+          }
 
           // for (LanguageClass language in LanguageHelper.languages) {
           //   if (await LanguageBoxService.hiveBoxExists(language.code)) {
@@ -96,9 +99,9 @@ class HomePage extends StatelessWidget {
           //   }
           // }
           // await ApiService.getData([LanguageHelper.languages[8]]);
-          for (String code in BoxService.getInstalledLanguages()) {
-            debugPrint('File size of $code: ${await BoxService.getHiveBoxSizeMB(code)}');
-          }
+          // for (String code in BoxService.getInstalledLanguages()) {
+          //   debugPrint('File size of $code: ${await BoxService.getHiveBoxSizeMB(code)}');
+          // }
           // LanguageBoxService.delete("fi");
           // debugPrint(boxJsonData.getAt(0).toString());
           // print(BoxService.getInstalledLanguages());

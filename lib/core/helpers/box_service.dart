@@ -20,6 +20,10 @@ class BoxService {
     return (languages as Map).keys.cast<String>().toList();
   }
 
+  static Map<String, dynamic>? getInstalledLanguageMeta(String langCode) {
+    return readMeta()[langCode];
+  }
+
   /// Formats the meta output correctly
   static Map<String, Map<String, dynamic>> readMeta() {
     final raw = boxMeta.get('languages', defaultValue: {});
@@ -47,20 +51,21 @@ class BoxService {
   /// Save the data to Hive
   static Future<void> saveLanguageData(
     String langCode,
-    List<Map<String, dynamic>> data, {
+    List<Map<String, dynamic>> data,
+    DateTime updateTime, {
     int version = 1,
   }) async {
     final box = await BoxService.open(langCode);
 
     await box.put('data', data);
     await box.put('version', version);
-    await box.put('lastUpdated', DateTime.now().millisecondsSinceEpoch);
+    // await box.put('lastUpdated', DateTime.now().millisecondsSinceEpoch);
 
     // Update meta info
     final languages = readMeta();
     languages[langCode] = {
       'version': version,
-      'lastUpdated': DateTime.now().millisecondsSinceEpoch,
+      'lastUpdated': updateTime.millisecondsSinceEpoch,
     };
     await boxMeta.put(_languagesKey, languages);
 
@@ -101,7 +106,8 @@ class BoxService {
 
   /// Get articles based on the type
   static Future<List<Map<String, dynamic>>> getArticles(
-    String languageCode, String type
+    String languageCode,
+    String type,
   ) async {
     List<Map<String, dynamic>> allData = await readLanguageBox(languageCode);
     return allData.where((element) => element['type'] == type).toList();

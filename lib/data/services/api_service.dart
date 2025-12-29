@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static final String baseUrl = "https://www.bibletoolbox.net/d7/marty-api/";
+  static final String baseUrl = "https://www.bibletoolbox.net/d7/marty-api";
 
   /// Retrieves data from API for [language]
   static Future<bool> getDataForLanguage(
@@ -18,7 +18,81 @@ class ApiService {
       return false;
     }
 
+    // Get the time the data receiving starts
+    DateTime updateTime = DateTime.now();
+
+    // Call the Api
+    List<Map<String, dynamic>> languageApiData = await handleApiCalls(
+      language,
+      updateParent: updateParent,
+    );
+
+    await BoxService.saveLanguageData(
+      language.code,
+      languageApiData,
+      updateTime,
+    );
+    return true;
+  }
+
+  static Future<bool> updateDataForLanguage(LanguageClass language) async {
+    // Check if the language is loaded
+    assert(
+      BoxService.getInstalledLanguages().contains(language.code),
+      'The selected language is not loaded and therefore will not be updated!',
+    );
+
+    // Get the lastUpdateTime for the language
+    int? lastUpdatedMs = BoxService.getInstalledLanguageMeta(
+      language.code,
+    )?['lastUpdated'];
+
+    if (lastUpdatedMs == null) {
+      debugPrint(' ~ LastUpdated info null, not updating');
+      return false;
+    }
+
+    int lastUpdatedS = lastUpdatedMs ~/ 1000;
+
+    // Get the time the data receiving starts
+    DateTime updateTime = DateTime.now();
+
+    // Call the API
+    List<Map<String, dynamic>> languageApiData = await handleApiCalls(
+      language,
+      urlAddition: "&changed_since=$lastUpdatedS"
+    );
+
+    debugPrint(' - Articles to update for $language: ${languageApiData.length}');
+
+    // todo: Combine with the old data
+    for (final article in languageApiData) {
+      // Check if ID exists (if yes, replace)
+
+      // Else add a new entry
+    }
+
+    // await BoxService.saveLanguageData(
+    //   language.code,
+    //   languageApiData,
+    //   updateTime,
+    // );
+    return true;
+  }
+
+  /// Handles the API calling for getting data
+  static Future<List<Map<String, dynamic>>> handleApiCalls(
+    LanguageClass language, {
+    Function? updateParent,
+    String? urlAddition,
+  }) async {
     String url = "$baseUrl/articles?lang=${language.code}";
+
+    if (urlAddition != null) {
+      url += urlAddition;
+    }
+
+    debugPrint(' - URL to be used: $url');
 
     /// Holds the API data for selected language
     List<Map<String, dynamic>> languageApiData = [];
@@ -57,8 +131,7 @@ class ApiService {
         );
       }
     }
-    await BoxService.saveLanguageData(language.code, languageApiData);
-    return true;
+    return languageApiData;
   }
 
   static Future<int> getMaxPageCount(String url) async {
