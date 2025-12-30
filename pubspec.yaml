@@ -63,6 +63,7 @@ dependencies:
   flutter_markdown_plus: ^1.0.5
   # Opening links
   url_launcher: ^6.3.2
+  hive_test: ^1.0.1
 
 dev_dependencies:
   flutter_test:
@@ -78,6 +79,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  test: ^1.26.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

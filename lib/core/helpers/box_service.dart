@@ -84,7 +84,7 @@ class BoxService {
     debugPrint(' - Language: $langCode deleted successfully!');
   }
 
-  /// Formats the Box data correctly Future<Map<String, Map<String, dynamic>>>
+  /// Formats the Box data correctly
   static Future<List<Map<String, dynamic>>> readLanguageBox(
     String languageCode,
   ) async {
