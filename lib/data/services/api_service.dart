@@ -60,23 +60,38 @@ class ApiService {
     // Call the API
     List<Map<String, dynamic>> languageApiData = await handleApiCalls(
       language,
-      urlAddition: "&changed_since=$lastUpdatedS"
+      urlAddition: "&changed_since=$lastUpdatedS",
     );
 
-    debugPrint(' - Articles to update for $language: ${languageApiData.length}');
+    debugPrint(
+      ' - Articles to update for $language: ${languageApiData.length}',
+    );
 
-    // todo: Combine with the old data
-    for (final article in languageApiData) {
-      // Check if ID exists (if yes, replace)
-
-      // Else add a new entry
+    if (languageApiData.isEmpty) {
+      debugPrint(' - No articles to update, returning\n');
+      return false;
     }
 
-    // await BoxService.saveLanguageData(
-    //   language.code,
-    //   languageApiData,
-    //   updateTime,
-    // );
+    List<Map<String, dynamic>> oldData = await BoxService.getAllArticles(
+      language.code,
+    );
+    for (final article in languageApiData) {
+      // Check if ID exists
+      int articleIndex = oldData.indexWhere((e) => e['id'] == article['id']);
+      if (articleIndex != -1) {
+        // ID exists, replace the current one
+        oldData[articleIndex] = article;
+      } else {
+        oldData.add(article);
+      }
+    }
+
+    // Save the updated data
+    await BoxService.saveLanguageData(
+      language.code,
+      oldData,
+      updateTime,
+    );
     return true;
   }
 
