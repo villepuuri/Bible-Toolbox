@@ -62,6 +62,9 @@ class ArticleData {
 
   /// Get the displayed text for the writers
   String get writerNames {
+    if (writers.isEmpty) {
+      return "";
+    }
     String names = writers.first.name;
     for (int i = 1; i < writers.length; i++) {
       names += ", ${writers[i].name}";
@@ -92,7 +95,7 @@ class ArticleData {
   String toString() {
     return 'Title:\t$title\n'
         'authors:\t${authors.length}\n'
-        'author:\t${authors.first}\n'
+        'author:\t${authors.isNotEmpty ? authors.first : ""}\n'
         'ID:\t\t$id\n'
         'type:\t${type.name}\n'
         'lang:\t$language\n'

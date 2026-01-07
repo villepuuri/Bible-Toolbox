@@ -3,6 +3,7 @@ import 'package:bible_toolbox/core/helpers/language_helper.dart';
 import 'package:bible_toolbox/data/services/api_service.dart';
 import 'package:bible_toolbox/data/services/article_data.dart';
 import 'package:bible_toolbox/data/widgets/article_widget.dart';
+import 'package:bible_toolbox/data/widgets/page_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,8 +26,12 @@ class _BiblePageState extends State<BiblePage> {
   }
 
   Future<void> _loadData() async {
-    article = await LanguageHelper.getRandomBibleArticle(
+    // article = await LanguageHelper.getRandomBibleArticle(
+    //   context.read<LanguageProvider>().locale.languageCode,
+    // );
+    article = await LanguageHelper.getArticleById(
       context.read<LanguageProvider>().locale.languageCode,
+      21,
     );
 
     if (!mounted) return;
@@ -39,11 +44,11 @@ class _BiblePageState extends State<BiblePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // debugPrint(article.toString());
-          debugPrint(article?.body.substring(article!.body.length-600));
+          debugPrint(article?.body.substring(article!.body.length - 600));
         },
       ),
-      appBar: MainAppBar(title: "Raamattu"),
-      body: ArticleWidget(article: article),
+      appBar: MainAppBar(title: article?.title ?? ""),
+      body: PageWidget(page: article),
     );
   }
 }

@@ -1,6 +1,8 @@
 
 
 
+import 'package:flutter/cupertino.dart';
+
 class ApiTextCleaner{
 
   /// Calls different functions to clean the raw api data
@@ -15,6 +17,13 @@ class ApiTextCleaner{
     result = fixQuoteBlocks(result);
 
     return result;
+  }
+  
+  static String cleanPage(String raw) {
+
+    // String result = cleanPageLink(raw);
+    
+    return raw;
   }
 
   /// Change the possible HTML link to markdown syntax

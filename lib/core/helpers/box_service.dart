@@ -113,6 +113,20 @@ class BoxService {
     return allData.where((element) => element['type'] == type).toList();
   }
 
+  static Future<Map<String, dynamic>> getArticleById(String languageCode, int id) async {
+    List<Map<String, dynamic>> allData = await readLanguageBox(languageCode);
+    Map<String, dynamic> result = allData.firstWhere((e) => e['id'] == id);
+    return result;
+  }
+
+  /// Gets all the possible types for a language
+  static Future<List<String>> getAvailableTypes(String languageCode) async {
+    List<Map<String, dynamic>> allData = await readLanguageBox(languageCode);
+    List<String> allTypes = allData.map<String>((e) => e['type']).toSet().toList();
+    debugPrint(' - Available types: $allTypes');
+    return allTypes;
+  }
+
   /// Returns the size of a data box in mega bytes
   /// example: "12 MB"
   ///

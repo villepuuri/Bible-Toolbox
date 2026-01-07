@@ -1,7 +1,8 @@
 import 'package:bible_toolbox/core/Widgets/main_app_bar.dart';
 import 'package:bible_toolbox/core/Widgets/main_drawer.dart';
+import 'package:bible_toolbox/core/helpers/box_service.dart';
 import 'package:bible_toolbox/core/theme.dart';
-import 'package:bible_toolbox/data/services/api_service.dart';
+import 'package:bible_toolbox/data/services/article_data.dart';
 import 'package:bible_toolbox/l10n/app_localizations.dart';
 import 'package:bible_toolbox/providers/language_provider.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +10,29 @@ import 'package:provider/provider.dart';
 
 import '../../core/helpers/language_helper.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  ArticleData? randomQuestion;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    getRandomQuestion();
+  }
+
+  Future<void> getRandomQuestion() async {
+    randomQuestion = await LanguageHelper.getRandomQuestion(
+      context.watch<LanguageProvider>().locale.languageCode,
+    );
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +91,9 @@ class HomePage extends StatelessWidget {
         ElevatedButton(
           onPressed: () {
             debugPrint('QuestionButton pressed');
+            Navigator.pushNamed(context, '/showText');
           },
-          child: Text("Miten voin seurata Jeesusta?"),
+          child: Text(randomQuestion?.title ?? ""),
         ),
       ],
     );
@@ -86,9 +109,16 @@ class HomePage extends StatelessWidget {
         onPressed: () async {
           debugPrint('on pressed');
 
-          for (LanguageClass language in LanguageHelper.loadedLanguages) {
-            ApiService.updateDataForLanguage(language);
-          }
+          final article = await LanguageHelper.getArticleById(
+            context.read<LanguageProvider>().locale.languageCode,
+            20,
+          );
+
+          // for (LanguageClass language in LanguageHelper.loadedLanguages) {
+          //   // ApiService.updateDataForLanguage(language);
+          //   debugPrint(language.toString());
+          //   await BoxService.getAvailableTypes(language.code);
+          // }
 
           // for (LanguageClass language in LanguageHelper.languages) {
           //   if (await LanguageBoxService.hiveBoxExists(language.code)) {

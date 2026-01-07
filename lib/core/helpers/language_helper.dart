@@ -137,9 +137,9 @@ class LanguageHelper {
 
   static Future<bool> removeLoadedLanguage(
     LanguageClass language,
-    BuildContext context,
-  {Function? updateParent}
-  ) async {
+    BuildContext context, {
+    Function? updateParent,
+  }) async {
     // Throw an assert if the language is not loaded
     assert(
       loadedLanguages.contains(language),
@@ -177,5 +177,18 @@ class LanguageHelper {
     articles.shuffle();
     debugPrint(' - Length of Bible articles: ${articles.length}');
     return ArticleData.fromJson(articles.first);
+  }
+
+  /// Returns an article with a specific id
+  static Future<ArticleData> getArticleById(String languageCode, int id) async {
+    final result = await BoxService.getArticleById(languageCode, id);
+    return ArticleData.fromJson(result);
+  }
+
+  static Future<ArticleData> getRandomQuestion(String languageCode) async {
+    final questions = await BoxService.getArticles(languageCode, 'vastauksia_etsiville');
+    debugPrint('Questions length: ${questions.length}');
+    questions.shuffle();
+    return ArticleData.fromJson(questions.first);
   }
 }
