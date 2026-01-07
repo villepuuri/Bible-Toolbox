@@ -8,4 +8,14 @@ class Constants {
   static IconData iconAddBookmark = Icons.bookmark_add_outlined;
   static Icon iconShare = Icon(Icons.share, color: AppThemeData.black,);
 
+  /* Data converters */
+  static Map<String, List<String>> internalLinkConvert = {
+    '/bible': ['raamattu'],
+    '/answers': ['vastauksia'],
+    '/catechism': ['katekismus'],
+    '/concord': ['tunnustuskirjat'],
+    '/showText': [],
+    '/about': ['tervetuloa-kotiin']
+  };
+
 }

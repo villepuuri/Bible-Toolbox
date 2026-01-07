@@ -1,8 +1,6 @@
 import 'package:bible_toolbox/core/Widgets/main_app_bar.dart';
 import 'package:bible_toolbox/core/helpers/language_helper.dart';
-import 'package:bible_toolbox/data/services/api_service.dart';
 import 'package:bible_toolbox/data/services/article_data.dart';
-import 'package:bible_toolbox/data/widgets/article_widget.dart';
 import 'package:bible_toolbox/data/widgets/page_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,8 +18,8 @@ class _BiblePageState extends State<BiblePage> {
   ArticleData? article;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _loadData();
   }
 

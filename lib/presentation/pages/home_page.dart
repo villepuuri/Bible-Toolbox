@@ -91,7 +91,8 @@ class _HomePageState extends State<HomePage> {
         ElevatedButton(
           onPressed: () {
             debugPrint('QuestionButton pressed');
-            Navigator.pushNamed(context, '/showText');
+            // todo: implement navigation
+            // Navigator.pushNamed(context, '/showText');
           },
           child: Text(randomQuestion?.title ?? ""),
         ),

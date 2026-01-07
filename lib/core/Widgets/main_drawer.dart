@@ -124,6 +124,7 @@ class MainDrawer extends StatelessWidget {
             drawerListTile(
               "Keitä me olemme?",
               imageURL: "assets/btb_images/ihmiset.png",
+              routeName: '/about'
             ),
             contactRow(),
           ],

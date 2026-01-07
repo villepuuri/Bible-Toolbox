@@ -1,3 +1,4 @@
+import 'package:bible_toolbox/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -41,8 +42,35 @@ class _ApiTextWidgetState extends State<ApiTextWidget> {
         ),
       ),
       onTapLink: (title, url, _) async {
+        /*
+        * Handle opening the links
+        * - If external link -> open in browser
+        * - If internal link (includes bibletoolbox) -> open in the app
+        * */
         debugPrint('User wants to open: $url');
-        if (url != null && !await launchUrl(Uri.parse(url))) {
+        debugPrint('User wants to open: $title');
+        if (url != null && url.contains('bibletoolbox')) {
+          // An internal link
+          debugPrint('Internal link');
+          String keyWord = url.substring(url.lastIndexOf("/") + 1);
+          debugPrint(' - KeyWord for the internal link is: $keyWord');
+
+          // Find the correct link
+          for (String key in Constants.internalLinkConvert.keys) {
+            if (Constants.internalLinkConvert[key]!.contains(keyWord)) {
+              debugPrint(' - Page to move: $key');
+              if (ModalRoute.of(context)?.settings.name == "/home") {
+                // If in home page, push the next page on top of it
+                Navigator.pushNamed(context, key);
+              } else {
+                // If not in home page, push the next page as replacement
+                Navigator.pushReplacementNamed(context, key);
+              }
+              return;
+            }
+          }
+          assert(false, "No key for keyWord: $keyWord");
+        } else if (url != null && !await launchUrl(Uri.parse(url))) {
           throw Exception('Could not launch $url');
         }
       },

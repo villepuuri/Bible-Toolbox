@@ -1,4 +1,5 @@
 import 'package:bible_toolbox/core/helpers/bookmark.dart';
+import 'package:bible_toolbox/presentation/pages/about_page.dart';
 import 'package:bible_toolbox/presentation/pages/bible_page.dart';
 import 'package:bible_toolbox/presentation/pages/bookmarks_page.dart';
 import 'package:bible_toolbox/presentation/pages/catechism_page.dart';
@@ -70,6 +71,7 @@ class MyApp extends StatelessWidget {
         '/showText': (context) => const TextPage(),
         '/bookmarks': (context) => const BookmarksPage(),
         '/languages': (context) => const LanguagePage(),
+        '/about': (context) => const AboutPage()
       },
     );
   }

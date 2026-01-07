@@ -1,3 +1,4 @@
+import 'package:bible_toolbox/data/services/api_text_cleaner.dart';
 import 'package:bible_toolbox/data/services/article_data.dart';
 import 'package:flutter/material.dart';
 
@@ -29,7 +30,9 @@ class _PageWidgetState extends State<PageWidget> {
               slivers: [
                 SliverToBoxAdapter(child: titleWidget()),
                 SliverToBoxAdapter(
-                  child: ApiTextWidget(body: widget.page!.cleanBody),
+                  child: ApiTextWidget(
+                    body: ApiTextCleaner.cleanPage(widget.page!.cleanBody),
+                  ),
                 ),
               ],
             ),
