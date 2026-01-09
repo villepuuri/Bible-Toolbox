@@ -1,3 +1,7 @@
+import 'package:bible_toolbox/core/constants.dart';
+import 'package:bible_toolbox/core/helpers/language_helper.dart';
+import 'package:bible_toolbox/data/services/article_data.dart';
+import 'package:bible_toolbox/data/widgets/page_widget.dart';
 import 'package:flutter/cupertino.dart';
 
 class ApiTextCleaner {
@@ -14,18 +18,26 @@ class ApiTextCleaner {
     return result;
   }
 
-  static String cleanPage(String raw) {
+  static String cleanPage(
+    String raw, {
+    PageType? pageType,
+    int? randomQuestionID,
+  }) {
     // String result = cleanPageLink(raw);
     debugPrint("- Cleaning");
-    raw = cleanTables(raw);
+    pageType ??= PageType.other;
+
+    // Clean tables only in the home page
+    if (pageType == PageType.home) {
+      assert(randomQuestionID != null);
+      raw = cleanTables(raw, randomQuestionID!);
+    }
 
     return raw;
   }
 
-  static String cleanTables(String raw) {
-    debugPrint('Cleaning tables');
-    debugPrint(raw);
-    debugPrint('\n\n');
+  static String cleanTables(String raw, int randomQuestionID) {
+    debugPrint(' - Cleaning tables');
 
     // Clean unused elements
     final unusedRegExp = RegExp(r'<!.*>', dotAll: true);
@@ -38,15 +50,14 @@ class ApiTextCleaner {
         .allMatches(raw)
         .map((e) => e.group(0))
         .toList();
-    for (final s in elements) {
-      debugPrint('- $s');
-    }
     debugPrint(' - category length: ${elementRegExp.allMatches(raw).length}');
 
     // Remove the elements
     raw = raw.replaceAll(elementRegExp, '');
 
-    String mdButtons = "";
+    // Add the opening symbol of the code block and the identifier
+    String mdButtons = "```${Constants.homeButtonID}${Constants.rowSeparator}";
+    final mdButtonsInitialLength = mdButtons.length;
 
     for (final element in elements) {
       if (element == null) break;
@@ -65,30 +76,36 @@ class ApiTextCleaner {
           ?.replaceAll("\n", "");
 
       // URL string
-      RegExp linkTextRE = RegExp(r'(?<=)\s\|\s(.*?)-{3,}', dotAll: true);
-      String? linkTextString = linkTextRE
-          .firstMatch(element)
-          ?.group(1)
-          ?.replaceAll("\n", "");
+      RegExp linkTextRE = RegExp(
+        r'(?<=)\s\|\s\[(.*?)].*?\)(.*?)-{3,}',
+        dotAll: true,
+      );
+      RegExpMatch? labelMatch = linkTextRE.firstMatch(element);
+      String? labelString =
+          ((labelMatch?.group(1) ?? "") + (labelMatch?.group(2) ?? ""))
+              .replaceAll("\n", "")
+              .trim();
 
-      String mdData =
-          '\n<card\n'
-          'title=$linkTextString\n'
-          'path=$pathString\n'
-          'image=$imageString\n'
-          '/>';
-      debugPrint(mdData);
+      // Add a custom line break
+      if (mdButtons.length > mdButtonsInitialLength) {
+        mdButtons += Constants.rowSeparator;
+      }
+      String mdRow =
+          '$labelString${Constants.colSeparator}$pathString${Constants.colSeparator}$imageString';
 
-      mdButtons += mdData;
+      mdButtons += "$mdRow ";
     }
+    // Add the closing symbol for the code block
+    mdButtons += "```";
 
     // The index of the first new line
     int indexPlace = raw.indexOf("\n");
 
-    String mdFinal =
-        "${raw.substring(0, indexPlace)} $mdButtons ${raw.substring(indexPlace)}";
+    String randomQuestionBox =
+        '```${Constants.questionButtonID}${Constants.rowSeparator}$randomQuestionID```';
 
-    debugPrint(mdFinal);
+    String mdFinal =
+        "${raw.substring(0, indexPlace)} $mdButtons $randomQuestionBox ${raw.substring(indexPlace)}";
 
     return mdFinal;
   }

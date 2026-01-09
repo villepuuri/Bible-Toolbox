@@ -184,6 +184,12 @@ class LanguageHelper {
     final result = await BoxService.getArticleById(languageCode, id);
     return ArticleData.fromJson(result);
   }
+  /// Returns an article with a specific id
+  static ArticleData getArticleByIdSync(String languageCode, int id) {
+    final result =  BoxService.getArticleByIdSync(languageCode, id);
+    return ArticleData.fromJson(result);
+  }
+
 
   static Future<ArticleData> getRandomQuestion(String languageCode) async {
     final questions = await BoxService.getArticles(languageCode, 'vastauksia_etsiville');

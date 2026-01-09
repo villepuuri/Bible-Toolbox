@@ -18,4 +18,10 @@ class Constants {
     '/about': ['tervetuloa-kotiin']
   };
 
+  /* Markdown cleaner constants */
+  static String rowSeparator = "^^^";
+  static String colSeparator = "^^";
+  static String homeButtonID = "homeButton";
+  static String questionButtonID = "questionButton";
+
 }

@@ -6,6 +6,8 @@ import 'dart:io';
 late Box boxBookmarks;
 late Box boxMeta;
 
+// todo: Implement clear sync functions, remove unnecessary futures
+
 class BoxService {
   static const _languagesKey = "languages";
 
@@ -97,6 +99,18 @@ class BoxService {
     );
   }
 
+  static List<Map<String, dynamic>> readLanguageBoxSync(
+    String languageCode,
+  ) {
+    // Get the raw data List<dynamic>
+    final raw = Hive.box(getBoxName(languageCode)).get('data', defaultValue: {});
+    return List<Map<String, dynamic>>.from(
+      (raw as List).map((article) => Map<String, dynamic>.from(article as Map)),
+    );
+  }
+
+
+
   /// Get all the articles from a memory with [languageCode]
   static Future<List<Map<String, dynamic>>> getAllArticles(
     String languageCode,
@@ -118,6 +132,12 @@ class BoxService {
     Map<String, dynamic> result = allData.firstWhere((e) => e['id'] == id);
     return result;
   }
+  static Map<String, dynamic> getArticleByIdSync(String languageCode, int id) {
+    List<Map<String, dynamic>> allData = readLanguageBoxSync(languageCode);
+    Map<String, dynamic> result = allData.firstWhere((e) => e['id'] == id);
+    return result;
+  }
+
 
   /// Gets all the possible types for a language
   static Future<List<String>> getAvailableTypes(String languageCode) async {

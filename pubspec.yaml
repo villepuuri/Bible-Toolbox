@@ -64,6 +64,7 @@ dependencies:
   # Opening links
   url_launcher: ^6.3.2
   hive_test: ^1.0.1
+  markdown: ^7.3.0
 
 dev_dependencies:
   flutter_test:

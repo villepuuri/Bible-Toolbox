@@ -4,10 +4,14 @@ import 'package:flutter/material.dart';
 
 import 'api_text_widget.dart';
 
+enum PageType { home, bible, answers, other }
+
 class PageWidget extends StatefulWidget {
   final ArticleData? page;
+  final int? randomQuestionID;
+  final PageType? pageType;
 
-  const PageWidget({super.key, required this.page});
+  const PageWidget({super.key, required this.page, this.pageType, this.randomQuestionID});
 
   @override
   State<PageWidget> createState() => _PageWidgetState();
@@ -31,7 +35,13 @@ class _PageWidgetState extends State<PageWidget> {
                 SliverToBoxAdapter(child: titleWidget()),
                 SliverToBoxAdapter(
                   child: ApiTextWidget(
-                    body: ApiTextCleaner.cleanPage(widget.page!.cleanBody),
+                    body: ApiTextCleaner.cleanPage(
+                      widget.page!.cleanBody,
+                      pageType: widget.pageType,
+                      randomQuestionID: widget.pageType == PageType.home
+                          ? widget.randomQuestionID
+                          : null,
+                    ),
                   ),
                 ),
               ],

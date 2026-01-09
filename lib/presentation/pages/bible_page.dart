@@ -16,6 +16,7 @@ class BiblePage extends StatefulWidget {
 
 class _BiblePageState extends State<BiblePage> {
   ArticleData? article;
+  int? randomQuestionID;
 
   @override
   void didChangeDependencies() {
@@ -32,6 +33,12 @@ class _BiblePageState extends State<BiblePage> {
       21,
     );
 
+    if (mounted) {
+      randomQuestionID = (await LanguageHelper.getRandomQuestion(
+        context.read<LanguageProvider>().locale.languageCode,
+      )).id;
+    }
+
     if (!mounted) return;
     setState(() {});
   }
@@ -41,12 +48,15 @@ class _BiblePageState extends State<BiblePage> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // debugPrint(article.toString());
-          debugPrint(article?.body.substring(article!.body.length - 600));
+          setState(() {});
         },
       ),
       appBar: MainAppBar(title: article?.title ?? ""),
-      body: PageWidget(page: article),
+      body: PageWidget(
+        page: article,
+        pageType: PageType.home,
+        randomQuestionID: randomQuestionID,
+      ),
     );
   }
 }
