@@ -35,24 +35,13 @@ class _ApiTextWidgetState extends State<ApiTextWidget> {
           // 'questionBox': QuestionBoxBuilder()
         },
         styleSheet: MarkdownStyleSheet(
-          p: Theme
-              .of(context)
-              .textTheme
-              .bodyMedium,
-          h1: Theme
-              .of(context)
-              .textTheme
-              .headlineLarge,
+          p: Theme.of(context).textTheme.bodyMedium,
+          h1: Theme.of(context).textTheme.headlineLarge,
           h1Padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-          a: Theme
-              .of(context)
-              .textTheme
-              .labelMedium,
-          blockquote: Theme
-              .of(context)
-              .textTheme
-              .bodyMedium!
-              .copyWith(fontStyle: FontStyle.italic),
+          a: Theme.of(context).textTheme.labelMedium,
+          blockquote: Theme.of(
+            context,
+          ).textTheme.bodyMedium!.copyWith(fontStyle: FontStyle.italic),
           pPadding: EdgeInsets.zero,
           blockquotePadding: EdgeInsets.zero,
           codeblockPadding: EdgeInsets.zero,
@@ -61,9 +50,7 @@ class _ApiTextWidgetState extends State<ApiTextWidget> {
           horizontalRuleDecoration: BoxDecoration(
             border: Border(
               top: BorderSide(
-                color: Theme
-                    .of(context)
-                    .primaryColor,
+                color: Theme.of(context).primaryColor,
                 width: 1.5,
               ),
               bottom: BorderSide(width: 15, color: Colors.transparent),
@@ -88,10 +75,7 @@ class _ApiTextWidgetState extends State<ApiTextWidget> {
             for (String key in Constants.internalLinkConvert.keys) {
               if (Constants.internalLinkConvert[key]!.contains(keyWord)) {
                 debugPrint(' - Page to move: $key');
-                if (ModalRoute
-                    .of(context)
-                    ?.settings
-                    .name == "/home") {
+                if (ModalRoute.of(context)?.settings.name == "/home") {
                   // If in home page, push the next page on top of it
                   Navigator.pushNamed(context, key);
                 } else {
@@ -133,21 +117,16 @@ class BlockquoteElementBuilder extends MarkdownElementBuilder {
               Icon(
                 Icons.format_quote_rounded,
                 size: 35,
-                color: Theme
-                    .of(context)
-                    .primaryColor,
+                color: Theme.of(context).primaryColor,
               ),
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
                   text,
                   style:
-                  (preferredStyle ??
-                      Theme
-                          .of(context)
-                          .textTheme
-                          .bodyMedium!)
-                      .copyWith(fontStyle: FontStyle.italic),
+                      (preferredStyle ??
+                              Theme.of(context).textTheme.bodyMedium!)
+                          .copyWith(fontStyle: FontStyle.italic),
                 ),
               ),
             ],
@@ -159,24 +138,20 @@ class BlockquoteElementBuilder extends MarkdownElementBuilder {
 }
 
 class TableBuilder extends MarkdownElementBuilder {
-
   Widget buildQuestionButton(int randomQuestionID) {
     return Builder(
       builder: (context) {
-        ArticleData randomQuestion = LanguageHelper.getArticleByIdSync(context
-            .read<LanguageProvider>()
-            .locale
-            .languageCode, randomQuestionID);
+        ArticleData randomQuestion = LanguageHelper.getArticleById(
+          context.read<LanguageProvider>().locale.languageCode,
+          randomQuestionID,
+        );
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               "Löydä vastauksia:",
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headlineMedium,
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
             ElevatedButton(
               onPressed: () {
@@ -186,7 +161,7 @@ class TableBuilder extends MarkdownElementBuilder {
               },
               child: Text(randomQuestion.title),
             ),
-            const SizedBox(height: 10,)
+            const SizedBox(height: 10),
           ],
         );
       },
@@ -215,7 +190,7 @@ class TableBuilder extends MarkdownElementBuilder {
       );
     }
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0,16,0,16),
+      padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
       child: Column(spacing: 8, children: buttonWidgets),
     );
   }
@@ -228,8 +203,8 @@ class TableBuilder extends MarkdownElementBuilder {
 
     assert(element.children != null, "The table doesn't have children!");
     assert(
-    element.children!.length == 1,
-    "The table has wrong amount of children!",
+      element.children!.length == 1,
+      "The table has wrong amount of children!",
     );
 
     final rows = element.children!.first.textContent

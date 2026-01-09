@@ -1,5 +1,8 @@
+import 'package:bible_toolbox/core/helpers/box_service.dart';
 import 'package:bible_toolbox/core/helpers/shared_preferences_keys.dart';
+import 'package:bible_toolbox/providers/language_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -26,8 +29,13 @@ class LoadingPage extends StatelessWidget {
       // Not the first time, open the home page
       debugPrint('- It not the first time using the app -> to Home Screen');
       if (context.mounted) {
+        // Open the box
+        await BoxService.open(context.read<LanguageProvider>().locale.languageCode);
+      }
+      if (context.mounted) {
         Navigator.pushReplacementNamed(context, '/home');
       }
+
     }
   }
 

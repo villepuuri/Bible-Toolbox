@@ -87,62 +87,43 @@ class BoxService {
   }
 
   /// Formats the Box data correctly
-  static Future<List<Map<String, dynamic>>> readLanguageBox(
-    String languageCode,
-  ) async {
+  static List<Map<String, dynamic>> readLanguageBox(String languageCode) {
     // Get the raw data List<dynamic>
-    final raw = (await BoxService.open(
-      languageCode,
-    )).get('data', defaultValue: {});
+    final raw = Hive.box(
+      getBoxName(languageCode),
+    ).get('data', defaultValue: {});
     return List<Map<String, dynamic>>.from(
       (raw as List).map((article) => Map<String, dynamic>.from(article as Map)),
     );
   }
-
-  static List<Map<String, dynamic>> readLanguageBoxSync(
-    String languageCode,
-  ) {
-    // Get the raw data List<dynamic>
-    final raw = Hive.box(getBoxName(languageCode)).get('data', defaultValue: {});
-    return List<Map<String, dynamic>>.from(
-      (raw as List).map((article) => Map<String, dynamic>.from(article as Map)),
-    );
-  }
-
-
 
   /// Get all the articles from a memory with [languageCode]
-  static Future<List<Map<String, dynamic>>> getAllArticles(
-    String languageCode,
-  ) async {
-    return await readLanguageBox(languageCode);
+  static List<Map<String, dynamic>> getAllArticles(String languageCode) {
+    return readLanguageBox(languageCode);
   }
 
   /// Get articles based on the type
-  static Future<List<Map<String, dynamic>>> getArticles(
+  static List<Map<String, dynamic>> getArticles(
     String languageCode,
     String type,
-  ) async {
-    List<Map<String, dynamic>> allData = await readLanguageBox(languageCode);
+  ) {
+    List<Map<String, dynamic>> allData = readLanguageBox(languageCode);
     return allData.where((element) => element['type'] == type).toList();
   }
 
-  static Future<Map<String, dynamic>> getArticleById(String languageCode, int id) async {
-    List<Map<String, dynamic>> allData = await readLanguageBox(languageCode);
+  static Map<String, dynamic> getArticleById(String languageCode, int id) {
+    List<Map<String, dynamic>> allData = readLanguageBox(languageCode);
     Map<String, dynamic> result = allData.firstWhere((e) => e['id'] == id);
     return result;
   }
-  static Map<String, dynamic> getArticleByIdSync(String languageCode, int id) {
-    List<Map<String, dynamic>> allData = readLanguageBoxSync(languageCode);
-    Map<String, dynamic> result = allData.firstWhere((e) => e['id'] == id);
-    return result;
-  }
-
 
   /// Gets all the possible types for a language
-  static Future<List<String>> getAvailableTypes(String languageCode) async {
-    List<Map<String, dynamic>> allData = await readLanguageBox(languageCode);
-    List<String> allTypes = allData.map<String>((e) => e['type']).toSet().toList();
+  static List<String> getAvailableTypes(String languageCode)  {
+    List<Map<String, dynamic>> allData =  readLanguageBox(languageCode);
+    List<String> allTypes = allData
+        .map<String>((e) => e['type'])
+        .toSet()
+        .toList();
     debugPrint(' - Available types: $allTypes');
     return allTypes;
   }

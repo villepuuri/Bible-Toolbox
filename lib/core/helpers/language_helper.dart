@@ -167,32 +167,25 @@ class LanguageHelper {
         updateParent();
       }
     });
-
     return true;
   }
 
   /// Returns a random article with selected locale
-  static Future<ArticleData> getRandomBibleArticle(String languageCode) async {
-    final articles = await BoxService.getArticles(languageCode, 'raamattu');
+  static ArticleData getRandomBibleArticle(String languageCode) {
+    final articles = BoxService.getArticles(languageCode, 'raamattu');
     articles.shuffle();
     debugPrint(' - Length of Bible articles: ${articles.length}');
     return ArticleData.fromJson(articles.first);
   }
 
   /// Returns an article with a specific id
-  static Future<ArticleData> getArticleById(String languageCode, int id) async {
-    final result = await BoxService.getArticleById(languageCode, id);
-    return ArticleData.fromJson(result);
-  }
-  /// Returns an article with a specific id
-  static ArticleData getArticleByIdSync(String languageCode, int id) {
-    final result =  BoxService.getArticleByIdSync(languageCode, id);
+  static ArticleData getArticleById(String languageCode, int id) {
+    final result = BoxService.getArticleById(languageCode, id);
     return ArticleData.fromJson(result);
   }
 
-
-  static Future<ArticleData> getRandomQuestion(String languageCode) async {
-    final questions = await BoxService.getArticles(languageCode, 'vastauksia_etsiville');
+  static ArticleData getRandomQuestion(String languageCode) {
+    final questions = BoxService.getArticles(languageCode, 'vastauksia_etsiville');
     debugPrint('Questions length: ${questions.length}');
     questions.shuffle();
     return ArticleData.fromJson(questions.first);

@@ -1,5 +1,6 @@
 
 
+import 'package:bible_toolbox/core/helpers/box_service.dart';
 import 'package:bible_toolbox/core/helpers/language_helper.dart';
 import 'package:bible_toolbox/core/helpers/shared_preferences_keys.dart';
 import 'package:flutter/widgets.dart';
@@ -64,6 +65,7 @@ class LanguageProvider extends ChangeNotifier {
   /// Call this function to change the language based on the languageCode
   Future<void> changeLanguage(String languageCode) async {
     await setLocale(languageCode);
+    await BoxService.open(languageCode);
     notifyListeners();
   }
 

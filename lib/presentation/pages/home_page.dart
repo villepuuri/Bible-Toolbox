@@ -26,29 +26,23 @@ class _HomePageState extends State<HomePage> {
     _loadData();
   }
 
-  Future<void> _loadData() async {
-    // article = await LanguageHelper.getRandomBibleArticle(
-    //   context.read<LanguageProvider>().locale.languageCode,
-    // );
-    article = await LanguageHelper.getArticleById(
-      context.read<LanguageProvider>().locale.languageCode,
-      21,
-    );
-
-    if (mounted) {
-      randomQuestionID = (await LanguageHelper.getRandomQuestion(
-        context.read<LanguageProvider>().locale.languageCode,
-      )).id;
-    }
-
-    if (!mounted) return;
-    setState(() {});
-  }
+  void _loadData() {}
 
   @override
   Widget build(BuildContext context) {
     final lang = context.watch<LanguageProvider>();
     debugPrint('Current locale: ${lang.locale.languageCode}');
+
+    // In the first build, update article and randomQuestionID
+    if (article == null) {
+      article = LanguageHelper.getArticleById(
+        lang.locale.languageCode,
+        21,
+      );
+      randomQuestionID = (LanguageHelper.getRandomQuestion(
+        lang.locale.languageCode,
+      )).id;
+    }
 
     return Scaffold(
       appBar: MainAppBar(title: AppLocalizations.of(context)!.titleHomePage),

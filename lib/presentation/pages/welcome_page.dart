@@ -1,5 +1,6 @@
 import 'package:bible_toolbox/core/Widgets/list_card.dart';
 import 'package:bible_toolbox/core/Widgets/loading_progress_widget.dart';
+import 'package:bible_toolbox/core/helpers/box_service.dart';
 import 'package:bible_toolbox/core/helpers/language_helper.dart';
 import 'package:bible_toolbox/data/services/internet_connection.dart';
 import 'package:bible_toolbox/l10n/app_localizations.dart';
@@ -54,7 +55,7 @@ class _WelcomePageState extends State<WelcomePage> {
                             },
                           )
                         : Icon(Icons.check_circle))
-                  : LoadingProgressWidget(loadingValue: element.loadingValue,),
+                  : LoadingProgressWidget(loadingValue: element.loadingValue),
             ),
             onTap: () {
               // Change the value if the box is pressed
@@ -115,6 +116,13 @@ class _WelcomePageState extends State<WelcomePage> {
                       );
                       await context.read<LanguageProvider>().changeLanguage(
                         LanguageHelper.loadedLanguages.first.code,
+                      );
+                    }
+                  } else {
+                    // Default language selected, opening the box
+                    if (context.mounted) {
+                      await BoxService.open( // todo: test that the opening works!
+                        context.read<LanguageProvider>().locale.languageCode,
                       );
                     }
                   }
