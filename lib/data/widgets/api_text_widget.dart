@@ -65,7 +65,7 @@ class _ApiTextWidgetState extends State<ApiTextWidget> {
           * */
           debugPrint('User wants to open: $url');
           debugPrint('User wants to open: $title');
-          if (url != null && url.contains('bibletoolbox')) {
+          if (url != null && url.contains('bibletoolbox.net')) {
             // An internal link
             debugPrint('Internal link');
             String keyWord = url.substring(url.lastIndexOf("/") + 1);
@@ -86,7 +86,8 @@ class _ApiTextWidgetState extends State<ApiTextWidget> {
               }
             }
             assert(false, "No key for keyWord: $keyWord");
-          } else if (url != null && !await launchUrl(Uri.parse(url))) {
+          }
+          else if (url != null && !await launchUrl(Uri.parse(url))) {
             throw Exception('Could not launch $url');
           }
         },

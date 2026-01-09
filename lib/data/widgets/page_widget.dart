@@ -44,6 +44,7 @@ class _PageWidgetState extends State<PageWidget> {
                     ),
                   ),
                 ),
+                SliverToBoxAdapter(child: const SizedBox(height: 60,),)
               ],
             ),
           )

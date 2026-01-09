@@ -21,14 +21,6 @@ class _HomePageState extends State<HomePage> {
   int? randomQuestionID;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _loadData();
-  }
-
-  void _loadData() {}
-
-  @override
   Widget build(BuildContext context) {
     final lang = context.watch<LanguageProvider>();
     debugPrint('Current locale: ${lang.locale.languageCode}');
