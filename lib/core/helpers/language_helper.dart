@@ -184,10 +184,52 @@ class LanguageHelper {
     return ArticleData.fromJson(result);
   }
 
+  /// Returns an article with a specific title
+  static ArticleData getArticleByTitle(String languageCode, String title) {
+    final result = BoxService.getArticleByTitle(languageCode, title);
+    debugPrint('Result: $result');
+    return ArticleData.fromJson(result);
+  }
+
+  /// Returns an article with a specific title
+  static bool articleExists(String languageCode, String title) {
+    return BoxService.getArticleByTitle(languageCode, title).isNotEmpty;
+  }
+
+
   static ArticleData getRandomQuestion(String languageCode) {
     final questions = BoxService.getArticles(languageCode, 'vastauksia_etsiville');
     debugPrint('Questions length: ${questions.length}');
     questions.shuffle();
     return ArticleData.fromJson(questions.first);
+  }
+
+  static void getDoubles() {
+    final questions = BoxService.getArticles('fi', 'vastauksia_etsiville');
+    Map<String, int> allData = {};
+    Map<String, int> multiples = {};
+    List<String> keys = [];
+
+    for (final item in questions) {
+      String title = item['title'];
+      if (allData.keys.contains(title)){
+        // contains
+        if (multiples.keys.contains(title)) {
+          int current = multiples[title] ?? 5;
+          multiples[title] = current + 1;
+        }
+        else {
+          multiples[title] = 2;
+          keys.add(title);
+        }
+      }
+      else {
+        allData[title] = 1;
+      }
+    }
+    debugPrint('Multiples');
+    print(multiples.keys);
+    print(keys);
+
   }
 }

@@ -1,7 +1,11 @@
+import 'package:bible_toolbox/core/Widgets/extendable_headline.dart';
+import 'package:bible_toolbox/core/Widgets/link_headline.dart';
 import 'package:bible_toolbox/core/Widgets/page_button.dart';
 import 'package:bible_toolbox/core/constants.dart';
+import 'package:bible_toolbox/core/helpers/box_service.dart';
 import 'package:bible_toolbox/core/helpers/language_helper.dart';
 import 'package:bible_toolbox/data/services/article_data.dart';
+import 'package:bible_toolbox/data/widgets/page_widget.dart';
 import 'package:bible_toolbox/providers/language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
@@ -12,8 +16,9 @@ import 'package:url_launcher/url_launcher.dart';
 class ApiTextWidget extends StatefulWidget {
   /// Body text in markdown format
   final String body;
+  final PageType pageType;
 
-  const ApiTextWidget({super.key, required this.body});
+  const ApiTextWidget({super.key, required this.body, required this.pageType});
 
   @override
   State<ApiTextWidget> createState() => _ApiTextWidgetState();
@@ -22,6 +27,12 @@ class ApiTextWidget extends StatefulWidget {
 class _ApiTextWidgetState extends State<ApiTextWidget> {
   @override
   Widget build(BuildContext context) {
+    debugPrint('type: ${widget.pageType}');
+    if (widget.pageType == PageType.answers) {
+      // debugPrint(widget.body);
+      // debugPrint('*-*_*_*_*_');
+    }
+
     return SelectionArea(
       child: Markdown(
         data: widget.body,
@@ -32,6 +43,7 @@ class _ApiTextWidgetState extends State<ApiTextWidget> {
           // Custom builder for blockquotes
           'blockquote': BlockquoteElementBuilder(),
           'code': TableBuilder(),
+          // 'a': LinkBuilder()
           // 'questionBox': QuestionBoxBuilder()
         },
         styleSheet: MarkdownStyleSheet(
@@ -86,8 +98,7 @@ class _ApiTextWidgetState extends State<ApiTextWidget> {
               }
             }
             assert(false, "No key for keyWord: $keyWord");
-          }
-          else if (url != null && !await launchUrl(Uri.parse(url))) {
+          } else if (url != null && !await launchUrl(Uri.parse(url))) {
             throw Exception('Could not launch $url');
           }
         },
@@ -196,9 +207,78 @@ class TableBuilder extends MarkdownElementBuilder {
     );
   }
 
+  Widget buildAnswerList(List<String> answerList, BuildContext context) {
+    debugPrint('Length of answerList: ${answerList.length}');
+
+    // {blockName: {title: url}}
+    Map<String, String> answerMap = {};
+    List<Widget> blockWidgets = [];
+
+    for (String block in answerList) {
+      List<String> rows = block.split(Constants.rowSeparator);
+
+      // debugPrint('-----------------------------');
+      // print(rows);
+      // debugPrint('-----------------------------');
+
+      assert(
+        !rows[0].contains(Constants.colSeparator),
+        "The first row should be the blockName",
+      );
+      String blockName = rows[0];
+
+      List<Widget> titleWidgets = rows
+          .sublist(1)
+          .map((row) {
+            List<String> elements = row.split(Constants.colSeparator);
+            assert(elements.length == 2);
+            String title = elements[0];
+            String url = elements[1];
+
+            // todo: remove this
+            if (!LanguageHelper.articleExists(
+              context.read<LanguageProvider>().locale.languageCode,
+              title,
+            )) {
+              debugPrint('Missing:\t $title');
+            }
+
+            if (LanguageHelper.articleExists(
+              context.read<LanguageProvider>().locale.languageCode,
+              title,
+            )) {
+            return LinkHeadline(
+              text: title,
+              onTap: () async {
+                debugPrint('User wants to open: $title');
+
+                ArticleData answer = LanguageHelper.getArticleByTitle(
+                  context.read<LanguageProvider>().locale.languageCode,
+                  title,
+                );
+                // Navigator.pushNamed(context, '/showText',
+                //     arguments: {
+                //       'id': entry.key,
+                //       'clicked': question
+              },
+            ); }
+            else {
+              return const SizedBox();
+            }
+          })
+          .cast<Widget>()
+          .toList();
+      blockWidgets.add(
+        ExtendableHeadline(title: blockName, children: titleWidgets),
+      );
+    }
+
+    return Column(children: blockWidgets);
+  }
+
   @override
   Widget? visitElementAfter(var element, TextStyle? preferredStyle) {
-    debugPrint('\nModifying the table');
+    debugPrint('\nModifying the codeBlock named:');
 
     debugPrint(element.children!.length.toString());
 
@@ -209,16 +289,25 @@ class TableBuilder extends MarkdownElementBuilder {
     );
 
     final rows = element.children!.first.textContent
-        .split(Constants.rowSeparator)
+        .split(Constants.blockSeparator)
         .toList();
 
-    debugPrint('first');
-    print(rows.first);
-    if (rows.first == Constants.questionButtonID) {
-      return buildQuestionButton(int.parse(rows[1]));
-    } else if (rows.first == Constants.homeButtonID) {
-      return buildHomeButtons(rows);
+    debugPrint(rows.first);
+    switch (rows.first) {
+      case Constants.questionButtonID:
+        return buildQuestionButton(int.parse(rows[1]));
+      case Constants.homeButtonID:
+        return buildHomeButtons(rows);
+      case Constants.answerListID:
+        debugPrint('Answer LIst');
+        return Builder(
+          builder: (context) {
+            return buildAnswerList(rows.sublist(1), context);
+          },
+        );
+      default:
+        debugPrint('Returning null');
+        return null;
     }
-    return null;
   }
 }

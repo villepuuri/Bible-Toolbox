@@ -2,6 +2,7 @@ import 'package:bible_toolbox/core/constants.dart';
 import 'package:bible_toolbox/core/helpers/bookmark.dart';
 import 'package:bible_toolbox/data/services/article_data.dart';
 import 'package:bible_toolbox/data/widgets/api_text_widget.dart';
+import 'package:bible_toolbox/data/widgets/page_widget.dart';
 import 'package:flutter/material.dart';
 
 class ArticleWidget extends StatefulWidget {
@@ -112,7 +113,10 @@ class _ArticleWidgetState extends State<ArticleWidget> {
                 if (widget.showFullTitle)
                   SliverToBoxAdapter(child: Divider(thickness: 1)),
                 SliverToBoxAdapter(
-                  child: ApiTextWidget(body: widget.article!.cleanBody),
+                  child: ApiTextWidget(
+                    body: widget.article!.cleanBody,
+                    pageType: PageType.other,
+                  ),
                 ),
               ],
             ),

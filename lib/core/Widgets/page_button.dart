@@ -22,8 +22,6 @@ class PageButton extends StatefulWidget {
 class _PageButtonState extends State<PageButton> {
   @override
   Widget build(BuildContext context) {
-    debugPrint('Building the pageButton');
-
     String? findCorrectPath(String routeName) {
       // Find the correct link
       for (String key in Constants.internalLinkConvert.keys) {

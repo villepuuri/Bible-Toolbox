@@ -16,7 +16,6 @@ class BiblePage extends StatefulWidget {
 
 class _BiblePageState extends State<BiblePage> {
   ArticleData? article;
-  int? randomQuestionID;
 
   @override
   void didChangeDependencies() {
@@ -28,16 +27,11 @@ class _BiblePageState extends State<BiblePage> {
     // article = await LanguageHelper.getRandomBibleArticle(
     //   context.read<LanguageProvider>().locale.languageCode,
     // );
-    article = await LanguageHelper.getArticleById(
+    article = LanguageHelper.getArticleById(
       context.read<LanguageProvider>().locale.languageCode,
       21,
     );
 
-    if (mounted) {
-      randomQuestionID = (await LanguageHelper.getRandomQuestion(
-        context.read<LanguageProvider>().locale.languageCode,
-      )).id;
-    }
 
     if (!mounted) return;
     setState(() {});
@@ -55,7 +49,6 @@ class _BiblePageState extends State<BiblePage> {
       body: PageWidget(
         page: article,
         pageType: PageType.home,
-        randomQuestionID: randomQuestionID,
       ),
     );
   }

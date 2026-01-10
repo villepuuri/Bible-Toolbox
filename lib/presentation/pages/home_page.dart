@@ -18,7 +18,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   ArticleData? article;
-  int? randomQuestionID;
 
   @override
   Widget build(BuildContext context) {
@@ -26,15 +25,10 @@ class _HomePageState extends State<HomePage> {
     debugPrint('Current locale: ${lang.locale.languageCode}');
 
     // In the first build, update article and randomQuestionID
-    if (article == null) {
-      article = LanguageHelper.getArticleById(
+    article ??= LanguageHelper.getArticleById(
         lang.locale.languageCode,
         21,
       );
-      randomQuestionID = (LanguageHelper.getRandomQuestion(
-        lang.locale.languageCode,
-      )).id;
-    }
 
     return Scaffold(
       appBar: MainAppBar(title: AppLocalizations.of(context)!.titleHomePage),
@@ -47,7 +41,6 @@ class _HomePageState extends State<HomePage> {
       body: PageWidget(
         page: article,
         pageType: PageType.home,
-        randomQuestionID: randomQuestionID,
       ),
     );
   }

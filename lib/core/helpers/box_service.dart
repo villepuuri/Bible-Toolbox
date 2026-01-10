@@ -47,6 +47,8 @@ class BoxService {
   static Future<bool> hiveBoxExists(String langCode) async {
     final dir = await getApplicationDocumentsDirectory();
     final file = File('${dir.path}/${getBoxName(langCode)}.hive');
+    bool exists = await file.exists();
+    debugPrint(' - Does ${getBoxName(langCode)} exist: $exists');
     return file.exists();
   }
 
@@ -117,9 +119,24 @@ class BoxService {
     return result;
   }
 
+  static Map<String, dynamic> getArticleByTitle(
+    String languageCode,
+    String title,
+  ) {
+    List<Map<String, dynamic>> allData = getArticles(
+      languageCode,
+      'vastauksia_etsiville',
+    );
+    Map<String, dynamic> result = allData.firstWhere(
+      (e) => e['title'] == title,
+      orElse: () => {},
+    );
+    return result;
+  }
+
   /// Gets all the possible types for a language
-  static List<String> getAvailableTypes(String languageCode)  {
-    List<Map<String, dynamic>> allData =  readLanguageBox(languageCode);
+  static List<String> getAvailableTypes(String languageCode) {
+    List<Map<String, dynamic>> allData = readLanguageBox(languageCode);
     List<String> allTypes = allData
         .map<String>((e) => e['type'])
         .toSet()

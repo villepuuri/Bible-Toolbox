@@ -19,9 +19,11 @@ class Constants {
   };
 
   /* Markdown cleaner constants */
-  static String rowSeparator = "^^^";
-  static String colSeparator = "^^";
-  static String homeButtonID = "homeButton";
-  static String questionButtonID = "questionButton";
+  static const String blockSeparator = "^^^^";
+  static const String rowSeparator = "^^^";
+  static const String colSeparator = "^^";
+  static const String homeButtonID = "homeButton";
+  static const String questionButtonID = "questionButton";
+  static const String answerListID = "answerList";
 
 }

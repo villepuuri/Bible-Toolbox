@@ -27,12 +27,25 @@ class ApiTextCleaner {
     debugPrint("- Cleaning");
     pageType ??= PageType.other;
 
-    // Clean tables only in the home page
-    if (pageType == PageType.home) {
-      assert(randomQuestionID != null);
-      raw = cleanTables(raw, randomQuestionID!);
-    }
+    // Fix the bolded text
+    raw = raw.replaceAll('<br>\r\n', '');
 
+
+    // Handle the specific cases
+    switch (pageType) {
+      case (PageType.home):
+        // Clean tables only in the home page
+        debugPrint('Home');
+        assert(randomQuestionID != null);
+        raw = cleanTables(raw, randomQuestionID!);
+        break;
+      case (PageType.answers):
+        // Set links to codeBlocs
+        raw = cleanAnswerLinks(raw);
+        break;
+      default:
+        break;
+    }
     return raw;
   }
 
@@ -44,7 +57,6 @@ class ApiTextCleaner {
     raw = raw.replaceAll(unusedRegExp, '');
 
     // Extracting the table elements
-    // final elementRegExp = RegExp(r'(\[!.*)-{3}', dotAll: true);
     final elementRegExp = RegExp(r'\[!(.*?)-{3,}\|-{3,}', dotAll: true);
     List<String?> elements = elementRegExp
         .allMatches(raw)
@@ -56,11 +68,10 @@ class ApiTextCleaner {
     raw = raw.replaceAll(elementRegExp, '');
 
     // Add the opening symbol of the code block and the identifier
-    String mdButtons = "```${Constants.homeButtonID}${Constants.rowSeparator}";
-    final mdButtonsInitialLength = mdButtons.length;
+    String mdButtons = "```${Constants.homeButtonID}";
 
     for (final element in elements) {
-      if (element == null) break;
+      if (element == null) continue;
       // Image string
       RegExp imageRE = RegExp(r'/(\w{2,})(?=\.png)', multiLine: true);
       String? imageString = imageRE
@@ -86,10 +97,8 @@ class ApiTextCleaner {
               .replaceAll("\n", "")
               .trim();
 
-      // Add a custom line break
-      if (mdButtons.length > mdButtonsInitialLength) {
-        mdButtons += Constants.rowSeparator;
-      }
+
+      mdButtons += Constants.blockSeparator;
       String mdRow =
           '$labelString${Constants.colSeparator}$pathString${Constants.colSeparator}$imageString';
 
@@ -102,12 +111,94 @@ class ApiTextCleaner {
     int indexPlace = raw.indexOf("\n");
 
     String randomQuestionBox =
-        '```${Constants.questionButtonID}${Constants.rowSeparator}$randomQuestionID```';
+        '```${Constants.questionButtonID}${Constants.blockSeparator}$randomQuestionID```';
 
     String mdFinal =
         "${raw.substring(0, indexPlace)} $mdButtons $randomQuestionBox ${raw.substring(indexPlace)}";
 
     return mdFinal;
+  }
+
+  static String cleanAnswerLinks(String raw) {
+    debugPrint(' - Cleaning Answer links');
+
+    // Extract the question blocks from the data
+    RegExp blockSeparatorRE = RegExp(
+      r'(\[[\s\S]*?)(?<=)\r\n\r\n',
+      dotAll: true,
+    );
+    List<String?> blocks = blockSeparatorRE
+        .allMatches(raw)
+        .map((e) => e.group(1))
+        .toList();
+
+    debugPrint('Blocks length: ${blocks.length}');
+
+    int quesitonCount = 0;
+
+    String allCodeBlocks = "```${Constants.answerListID}";
+    for (final dataBlock in blocks) {
+      // If data is null, skip the element
+      if (dataBlock == null) {
+        debugPrint(' *** Block NOT FOUND: ${dataBlock.toString()}');
+        continue;
+      }
+
+      // Extract the question element from the data
+      RegExp elementSeparatorRE = RegExp(
+        r'(\[[\s\S]*?)(?<=)(\r\n|$)',
+        dotAll: true,
+      );
+      List<String?> elements = elementSeparatorRE
+          .allMatches(dataBlock)
+          .map((e) => e.group(1))
+          .toList();
+
+      String? blockName;
+      String codeBlock = "";
+
+      // Go through each question element
+      for (final element in elements) {
+        // If data is null, skip the element
+        if (element == null) {
+          debugPrint(' *** ELEMENT NOT FOUND: ${element.toString()}');
+          continue;
+        }
+
+        // Extract title and url
+        RegExp titleSeparatorRE = RegExp(r'\[([\s\S]*?)\]', dotAll: true);
+        RegExp urlSeparatorRE = RegExp(r'\]\s*\(([\s\S]*?)\)', dotAll: true);
+
+        String title = titleSeparatorRE.firstMatch(element)?.group(1) ?? "";
+        String url = urlSeparatorRE.firstMatch(element)?.group(1) ?? "";
+
+        // Try to extract the blockName
+        // All urls don't contain the block name, but most of them do
+        RegExp blockNameRE = RegExp(r'([\w-]*?)(?<=)(#)', dotAll: true);
+        blockName = blockName ?? blockNameRE.firstMatch(url)?.group(1);
+
+        // Add a row separator between rows
+        if (codeBlock.isNotEmpty) {
+          codeBlock += Constants.rowSeparator;
+        }
+        codeBlock += '$title${Constants.colSeparator}$url';
+        quesitonCount++;
+      }
+      codeBlock = (blockName ?? "") + Constants.rowSeparator + codeBlock;
+      allCodeBlocks += '${Constants.blockSeparator}$codeBlock';
+    }
+    allCodeBlocks += "```";
+
+    debugPrint(' - QuestionCount: $quesitonCount');
+
+    // Get the index where to put the codeBlock
+    int? blockIndex = blockSeparatorRE.firstMatch(raw)?.start;
+    if (blockIndex == null) return raw;
+
+    // Replace the original links with the code block
+    raw = raw.replaceAll(blockSeparatorRE, "");
+
+    return raw.substring(0,blockIndex) + allCodeBlocks + raw.substring(blockIndex);
   }
 
   /// Change the possible HTML link to markdown syntax

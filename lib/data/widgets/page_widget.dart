@@ -1,17 +1,20 @@
 import 'package:bible_toolbox/data/services/api_text_cleaner.dart';
 import 'package:bible_toolbox/data/services/article_data.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../core/helpers/language_helper.dart';
+import '../../providers/language_provider.dart';
 import 'api_text_widget.dart';
 
 enum PageType { home, bible, answers, other }
 
 class PageWidget extends StatefulWidget {
   final ArticleData? page;
-  final int? randomQuestionID;
-  final PageType? pageType;
+  final PageType pageType;
 
-  const PageWidget({super.key, required this.page, this.pageType, this.randomQuestionID});
+  const PageWidget({super.key, required this.page, PageType? pageType})
+    : pageType = pageType ?? PageType.other;
 
   @override
   State<PageWidget> createState() => _PageWidgetState();
@@ -20,6 +23,7 @@ class PageWidget extends StatefulWidget {
 class _PageWidgetState extends State<PageWidget> {
   @override
   Widget build(BuildContext context) {
+
     Widget titleWidget() {
       return Text(
         widget.page!.title,
@@ -35,16 +39,22 @@ class _PageWidgetState extends State<PageWidget> {
                 SliverToBoxAdapter(child: titleWidget()),
                 SliverToBoxAdapter(
                   child: ApiTextWidget(
+                    pageType: widget.pageType,
                     body: ApiTextCleaner.cleanPage(
                       widget.page!.cleanBody,
                       pageType: widget.pageType,
                       randomQuestionID: widget.pageType == PageType.home
-                          ? widget.randomQuestionID
+                          ? (LanguageHelper.getRandomQuestion(
+                              context
+                                  .read<LanguageProvider>()
+                                  .locale
+                                  .languageCode,
+                            )).id
                           : null,
                     ),
                   ),
                 ),
-                SliverToBoxAdapter(child: const SizedBox(height: 60,),)
+                SliverToBoxAdapter(child: const SizedBox(height: 60)),
               ],
             ),
           )
