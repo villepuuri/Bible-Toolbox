@@ -30,6 +30,9 @@ class ApiTextCleaner {
     // Fix the bolded text
     raw = raw.replaceAll('<br>\r\n', '');
 
+    // Remove all the comments
+    RegExp commentRE = RegExp(r'<!-*.*?-*>', dotAll: true);
+    raw = raw.replaceAll(commentRE, '');
 
     // Handle the specific cases
     switch (pageType) {
@@ -43,9 +46,87 @@ class ApiTextCleaner {
         // Set links to codeBlocs
         raw = cleanAnswerLinks(raw);
         break;
+      case (PageType.bible):
+        // Set links to codeBlocs
+        raw = cleanBiblePage(raw);
+        break;
+
       default:
         break;
     }
+    return raw;
+  }
+
+  static String cleanBiblePage(String raw) {
+    debugPrint('');
+    debugPrint('*** Cleaning Bible page ***');
+    debugPrint('');
+
+    // Separate blocks (starting with ###)
+    RegExp blockRE = RegExp(r'(###.*?)(?=(###)|(<!)|$)', dotAll: true);
+    List<String?> blocks = blockRE
+        .allMatches(raw)
+        .map((match) => match.group(1))
+        .toList();
+
+    // print(blocks);
+    for (String? block in blocks) {
+      if (block == null) continue;
+
+      // Get the title of the block
+
+      RegExp blockNameRE = RegExp(r'(?<=###)(.*?)(?=(\r\n)|$)');
+      String? blockName = blockNameRE.firstMatch(block)?.group(1);
+
+      debugPrint(' - Block: $blockName');
+
+      // If the block contains list of links
+      if (block.contains('*   [')) {
+        debugPrint('   * has a list of links');
+
+        // Separate links (starting with '*   ')
+        RegExp linkRE = RegExp(r'(\s*\*.*)', multiLine: true);
+        List<String?> links = linkRE
+            .allMatches(block)
+            .map((match) => match.group(1))
+            .toList();
+
+        debugPrint('   * Links length: ${links.length}');
+
+        for (String? link in links) {
+          if (link == null) continue;
+
+          // Get link Title
+          RegExp linkTitleRE = RegExp(r'\[(.*?)\]');
+          String? linkTitle = linkTitleRE.firstMatch(link)?.group(1);
+
+          // Get link url
+          RegExp linkUrlRE = RegExp(r'\((.*?)\)');
+          String? linkUrl = linkUrlRE.firstMatch(link)?.group(1);
+
+          // debugPrint('LINK:--$link--');
+
+          RegExp mainLinkRE = RegExp(r'(\n\*\s{3,})', dotAll: true);
+          RegExp subLinkRE = RegExp(r'(\s\*\s)');
+
+          int? linkType = link.contains(mainLinkRE)
+              ? 1
+              : (link.contains(subLinkRE) ? 2 : null);
+
+          if (linkType == null) {
+            debugPrint(' ~LINKTYPE NULL: $link');
+            continue;
+          }
+
+          // If there is not a link, use the whole text as title
+          linkTitle ??= link.replaceAll("*", '').trim();
+
+          debugPrint('${linkType == 2 ? '   ' : ''}$linkType $linkTitle\t $linkUrl');
+        }
+      }
+    }
+    debugPrint('');
+
     return raw;
   }
 
@@ -96,7 +177,6 @@ class ApiTextCleaner {
           ((labelMatch?.group(1) ?? "") + (labelMatch?.group(2) ?? ""))
               .replaceAll("\n", "")
               .trim();
-
 
       mdButtons += Constants.blockSeparator;
       String mdRow =
@@ -198,7 +278,9 @@ class ApiTextCleaner {
     // Replace the original links with the code block
     raw = raw.replaceAll(blockSeparatorRE, "");
 
-    return raw.substring(0,blockIndex) + allCodeBlocks + raw.substring(blockIndex);
+    return raw.substring(0, blockIndex) +
+        allCodeBlocks +
+        raw.substring(blockIndex);
   }
 
   /// Change the possible HTML link to markdown syntax

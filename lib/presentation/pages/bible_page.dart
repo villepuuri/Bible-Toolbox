@@ -29,7 +29,7 @@ class _BiblePageState extends State<BiblePage> {
     // );
     article = LanguageHelper.getArticleById(
       context.read<LanguageProvider>().locale.languageCode,
-      21,
+      22,
     );
 
 
@@ -48,7 +48,7 @@ class _BiblePageState extends State<BiblePage> {
       appBar: MainAppBar(title: article?.title ?? ""),
       body: PageWidget(
         page: article,
-        pageType: PageType.home,
+        pageType: PageType.bible,
       ),
     );
   }

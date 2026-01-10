@@ -217,10 +217,6 @@ class TableBuilder extends MarkdownElementBuilder {
     for (String block in answerList) {
       List<String> rows = block.split(Constants.rowSeparator);
 
-      // debugPrint('-----------------------------');
-      // print(rows);
-      // debugPrint('-----------------------------');
-
       assert(
         !rows[0].contains(Constants.colSeparator),
         "The first row should be the blockName",
