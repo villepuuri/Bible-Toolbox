@@ -5,6 +5,7 @@ import 'package:bible_toolbox/core/constants.dart';
 import 'package:bible_toolbox/core/helpers/box_service.dart';
 import 'package:bible_toolbox/core/helpers/language_helper.dart';
 import 'package:bible_toolbox/data/services/article_data.dart';
+import 'package:bible_toolbox/data/widgets/answer_page_list.dart';
 import 'package:bible_toolbox/data/widgets/bible_page_list.dart';
 import 'package:bible_toolbox/data/widgets/home_page_list.dart';
 import 'package:bible_toolbox/data/widgets/page_widget.dart';
@@ -30,7 +31,7 @@ class _ApiTextWidgetState extends State<ApiTextWidget> {
   @override
   Widget build(BuildContext context) {
     debugPrint('type: ${widget.pageType}');
-    if (widget.pageType == PageType.home) {
+    if (widget.pageType == PageType.answers) {
       debugPrint('*-*_*_*_*_');
       debugPrint(widget.body);
       debugPrint('*-*_*_*_*_');
@@ -154,71 +155,6 @@ class BlockquoteElementBuilder extends MarkdownElementBuilder {
 class TableBuilder extends MarkdownElementBuilder {
 
 
-  Widget buildAnswerList(List<String> answerList, BuildContext context) {
-    debugPrint('Length of answerList: ${answerList.length}');
-
-    // {blockName: {title: url}}
-    Map<String, String> answerMap = {};
-    List<Widget> blockWidgets = [];
-
-    for (String block in answerList) {
-      List<String> rows = block.split(Constants.rowSeparator);
-
-      assert(
-        !rows[0].contains(Constants.colSeparator),
-        "The first row should be the blockName",
-      );
-      String blockName = rows[0];
-
-      List<Widget> titleWidgets = rows
-          .sublist(1)
-          .map((row) {
-            List<String> elements = row.split(Constants.colSeparator);
-            assert(elements.length == 2);
-            String title = elements[0];
-            String url = elements[1];
-
-            // todo: remove this
-            if (!LanguageHelper.articleExists(
-              context.read<LanguageProvider>().locale.languageCode,
-              title,
-            )) {
-              debugPrint('Missing:\t $title');
-            }
-
-            if (LanguageHelper.articleExists(
-              context.read<LanguageProvider>().locale.languageCode,
-              title,
-            )) {
-              return LinkHeadline(
-                text: title,
-                onTap: () async {
-                  debugPrint('User wants to open: $title');
-
-                  ArticleData answer = LanguageHelper.getArticleByTitle(
-                    context.read<LanguageProvider>().locale.languageCode,
-                    title,
-                  );
-                  // Navigator.pushNamed(context, '/showText',
-                  //     arguments: {
-                  //       'id': entry.key,
-                  //       'clicked': question
-                },
-              );
-            } else {
-              return const SizedBox();
-            }
-          })
-          .cast<Widget>()
-          .toList();
-      blockWidgets.add(
-        ExtendableHeadline(title: blockName, children: titleWidgets),
-      );
-    }
-
-    return Column(children: blockWidgets);
-  }
-
 
   @override
   Widget? visitElementAfter(var element, TextStyle? preferredStyle) {
@@ -230,20 +166,14 @@ class TableBuilder extends MarkdownElementBuilder {
       "The table has wrong amount of children!",
     );
 
-    print(element.textContent);
-
+    // Extract the ID and the data
     final rows = element.children!.first.textContent
         .split(Constants.idSeparator)
         .toList(); // [ID][blockSeparator][rawData]
-
-    debugPrint(rows.length.toString());
-
     String id = rows[0];
     String rawData = rows[1];
 
-
-    debugPrint(' - Block type: $id, length: ${rawData.length}');
-    // print(element.textContent.substring(0, element.textContent.length < 100 ? 1 : 100));
+    debugPrint(' - Block type: $id, data length: ${rawData.length}');
     switch (id) {
       case Constants.homePageID:
         return HomePageList(rawData: rawData);
@@ -251,11 +181,7 @@ class TableBuilder extends MarkdownElementBuilder {
         return BiblePageList(raw: rawData);
       case Constants.answerListID:
         debugPrint('Answer LIst');
-        return Builder(
-          builder: (context) {
-            return buildAnswerList(rows.sublist(1), context);
-          },
-        );
+        return AnswerPageList(rawData: rawData);
       default:
         debugPrint('Returning null');
         return null;

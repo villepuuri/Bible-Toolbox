@@ -45,7 +45,7 @@ class ApiTextCleaner {
         break;
       case (PageType.answers):
         // Set links to codeBlocs
-        raw = cleanAnswerLinks(raw);
+        raw = answerPage2CodeBlock(raw);
         break;
       case (PageType.bible):
         // Set links to codeBlocs
@@ -103,7 +103,7 @@ class ApiTextCleaner {
     // Create the data string
     // "String before the block" + ``` + ID + separator + block + ```
     String finalString =
-        "${raw.substring(0,dataBlockIndex)}\n```\n${Constants.homePageID}${Constants.idSeparator}\n${raw.substring(dataBlockIndex)}```";
+        "${raw.substring(0, dataBlockIndex)}\n```\n${Constants.homePageID}${Constants.idSeparator}\n${raw.substring(dataBlockIndex)}```";
     if (indexPlace > 0) {
       // "String before the block" + ``` + ID + separator + block + ``` + String after the block
       finalString =
@@ -112,88 +112,23 @@ class ApiTextCleaner {
     return finalString;
   }
 
-  static String cleanAnswerLinks(String raw) {
+  static String answerPage2CodeBlock(String raw) {
     debugPrint(' - Cleaning Answer links');
 
     // Extract the question blocks from the data
-    RegExp blockSeparatorRE = RegExp(
-      r'(\[[\s\S]*?)(?<=)\r\n\r\n',
-      dotAll: true,
-    );
-    List<String?> blocks = blockSeparatorRE
-        .allMatches(raw)
-        .map((e) => e.group(1))
-        .toList();
+    RegExp blockRE = RegExp(r'(\[[\s\S]*?(\r\n){1,})', multiLine: true);
 
-    debugPrint('Blocks length: ${blocks.length}');
+    // Get the start and end indexes
+    Iterable<RegExpMatch> allMatches = blockRE.allMatches(raw);
+    int startIndex = allMatches.first.start;
+    int endIndex = allMatches.last.end;
 
-    int quesitonCount = 0;
+    // Create the data string
+    // "String before the block" + ``` + ID + separator + block + ```
+    String finalString =
+        "${raw.substring(0, startIndex)}\n```\n${Constants.answerListID}${Constants.idSeparator}\n${raw.substring(startIndex, endIndex)}```\n${raw.substring(endIndex)}";
 
-    String allCodeBlocks = "```${Constants.answerListID}";
-    for (final dataBlock in blocks) {
-      // If data is null, skip the element
-      if (dataBlock == null) {
-        debugPrint(' *** Block NOT FOUND: ${dataBlock.toString()}');
-        continue;
-      }
-
-      // Extract the question element from the data
-      RegExp elementSeparatorRE = RegExp(
-        r'(\[[\s\S]*?)(?<=)(\r\n|$)',
-        dotAll: true,
-      );
-      List<String?> elements = elementSeparatorRE
-          .allMatches(dataBlock)
-          .map((e) => e.group(1))
-          .toList();
-
-      String? blockName;
-      String codeBlock = "";
-
-      // Go through each question element
-      for (final element in elements) {
-        // If data is null, skip the element
-        if (element == null) {
-          debugPrint(' *** ELEMENT NOT FOUND: ${element.toString()}');
-          continue;
-        }
-
-        // Extract title and url
-        RegExp titleSeparatorRE = RegExp(r'\[([\s\S]*?)\]', dotAll: true);
-        RegExp urlSeparatorRE = RegExp(r'\]\s*\(([\s\S]*?)\)', dotAll: true);
-
-        String title = titleSeparatorRE.firstMatch(element)?.group(1) ?? "";
-        String url = urlSeparatorRE.firstMatch(element)?.group(1) ?? "";
-
-        // Try to extract the blockName
-        // All urls don't contain the block name, but most of them do
-        RegExp blockNameRE = RegExp(r'([\w-]*?)(?<=)(#)', dotAll: true);
-        blockName = blockName ?? blockNameRE.firstMatch(url)?.group(1);
-
-        // Add a row separator between rows
-        if (codeBlock.isNotEmpty) {
-          codeBlock += Constants.rowSeparator;
-        }
-        codeBlock += '$title${Constants.colSeparator}$url';
-        quesitonCount++;
-      }
-      codeBlock = (blockName ?? "") + Constants.rowSeparator + codeBlock;
-      allCodeBlocks += '${Constants.blockSeparator}$codeBlock';
-    }
-    allCodeBlocks += "```";
-
-    debugPrint(' - QuestionCount: $quesitonCount');
-
-    // Get the index where to put the codeBlock
-    int? blockIndex = blockSeparatorRE.firstMatch(raw)?.start;
-    if (blockIndex == null) return raw;
-
-    // Replace the original links with the code block
-    raw = raw.replaceAll(blockSeparatorRE, "");
-
-    return raw.substring(0, blockIndex) +
-        allCodeBlocks +
-        raw.substring(blockIndex);
+    return finalString;
   }
 
   /// Change the possible HTML link to markdown syntax
