@@ -1,131 +1,115 @@
+import 'package:bible_toolbox/core/Widgets/extendable_headline.dart';
+import 'package:bible_toolbox/data/widgets/api_text_widget.dart';
+import 'package:bible_toolbox/data/widgets/page_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/constants.dart';
 
 /// Turns raw markdown data from the Bible page to different links
-class BiblePageList extends StatefulWidget {
+class BiblePageList extends StatelessWidget {
+  final String rawData;
 
-  final String raw;
+  const BiblePageList({super.key, required this.rawData});
 
-  const BiblePageList({super.key, required this.raw});
+  List<Widget> extractData() {
+    // Separate blocks (starting with ###)
+    List<Widget> blockWidgets = [];
 
-  @override
-  State<BiblePageList> createState() => _BiblePageListState();
-}
+    RegExp blockRE = RegExp(r'(###.*?)(?=(###)|(<!)|$)', dotAll: true);
+    List<String?> blocks = blockRE
+        .allMatches(rawData)
+        .map((match) => match.group(1))
+        .toList();
 
-class _BiblePageListState extends State<BiblePageList> {
+    for (String? block in blocks) {
+      if (block == null) continue;
 
-  List<Widget> extractData(String raw) {
+      List<Widget> rowWidgets = [];
 
-  // Separate blocks (starting with ###)
-  RegExp blockRE = RegExp(r'(###.*?)(?=(###)|(<!)|$)', dotAll: true);
-  List<String?> blocks = blockRE
-      .allMatches(raw)
-      .map((match) => match.group(1))
-      .toList();
+      // Get the title of the block
+      RegExp blockNameRE = RegExp(r'(?<=###)(.*?)(?=(\n)|$)');
+      String? blockName = blockNameRE.firstMatch(block)?.group(1);
 
-  String codeBlock = "```${Constants.bibleListID}${Constants.blockSeparator}";
-  int initialBlockSize0 = codeBlock.length;
+      debugPrint('\n\n - Block: $blockName');
 
-  for (String? block in blocks) {
-  if (block == null) continue;
+      // Cut block name from the block
+      block = block.replaceAll(blockNameRE, "").replaceAll("###", "");
 
-  // Get the title of the block
-  RegExp blockNameRE = RegExp(r'(?<=###)(.*?)(?=(\r\n)|$)');
-  String? blockName = blockNameRE.firstMatch(block)?.group(1);
+      // If the block contains list of links
+      // if (block.contains('*   [')) {
+      if(false) {
+        debugPrint('   * has a list of links');
 
-  debugPrint('\n\n - Block: $blockName');
+        // Separate links (starting with '*   ')
+        RegExp linkRE = RegExp(r'(\s*\*.*)', multiLine: true);
+        List<String?> links = linkRE
+            .allMatches(block)
+            .map((match) => match.group(1))
+            .toList();
 
-  // Add the block separator
-  if (codeBlock.length > initialBlockSize0)
-  codeBlock += Constants.blockSeparator;
-  codeBlock += '$blockName${Constants.blockSeparator}';
+        debugPrint('   * Links length: ${links.length}');
 
-  int initialBlockSize1 = codeBlock.length;
+        for (String? link in links) {
+          if (link == null) continue;
 
-  // If the block contains list of links
-  if (block.contains('*   [')) {
-  debugPrint('   * has a list of links');
+          // Get link url
+          RegExp linkUrlRE = RegExp(r'\((.*?)\)');
+          String? linkUrl = linkUrlRE.firstMatch(link)?.group(1);
 
-  // Separate links (starting with '*   ')
-  RegExp linkRE = RegExp(r'(\s*\*.*)', multiLine: true);
-  List<String?> links = linkRE
-      .allMatches(block)
-      .map((match) => match.group(1))
-      .toList();
+          // Cut links and brackets away
+          link = link
+              .replaceAll(linkUrlRE, "")
+              .replaceAll(RegExp(r'[\[\]]'), "");
 
-  debugPrint('   * Links length: ${links.length}');
+          // Get link text
+          RegExp linkTextRE = RegExp(r'\*\s*(.*?)\s*\\r\\n');
+          String? linkText = linkTextRE.firstMatch(link)?.group(1);
 
-  for (String? link in links) {
-  if (link == null) continue;
+          // debugPrint('LINK:--$link--');
 
-  // Get link url
-  RegExp linkUrlRE = RegExp(r'\((.*?)\)');
-  String? linkUrl = linkUrlRE.firstMatch(link)?.group(1);
+          RegExp mainLinkRE = RegExp(r'(\n\*\s{3,})', dotAll: true);
+          RegExp subLinkRE = RegExp(r'(\s\*\s)');
 
-  // Cut links and brackets away
-  link = link
-      .replaceAll(linkUrlRE, "")
-      .replaceAll(RegExp(r'[\[\]]'), "");
+          int? linkType = link.contains(mainLinkRE)
+              ? 1
+              : (link.contains(subLinkRE) ? 2 : null);
 
-  // Get link text
-  RegExp linkTextRE = RegExp(r'\*\s*(.*?)\s*\\r\\n');
-  String? linkText = linkTextRE.firstMatch(link)?.group(1);
+          if (linkType == null) {
+            debugPrint(' ~LINKTYPE NULL: $link');
+            continue;
+          }
 
-  // debugPrint('LINK:--$link--');
+          // If there is not a link, use the whole text as title
+          linkText ??= link.replaceAll("*", '').trim();
 
-  RegExp mainLinkRE = RegExp(r'(\n\*\s{3,})', dotAll: true);
-  RegExp subLinkRE = RegExp(r'(\s\*\s)');
+          debugPrint('${linkType == 2 ? '   ' : ''}$linkText');
 
-  int? linkType = link.contains(mainLinkRE)
-  ? 1
-      : (link.contains(subLinkRE) ? 2 : null);
+          rowWidgets.add(Text('> $linkText'));
+        }
+        // Cut links from the block
+        block = block.replaceAll(linkRE, "");
+      } else {
+        // The block does not contain links
+        rowWidgets.add(ApiTextWidget(body: block, pageType: PageType.other,));
+      }
 
-  if (linkType == null) {
-  debugPrint(' ~LINKTYPE NULL: $link');
-  continue;
+      blockWidgets.add(
+        ExtendableHeadline(title: blockName ?? "", children: rowWidgets),
+      );
+    }
+    // debugPrint(codeBlock.substring(codeBlock.length-300, codeBlock.length));
+    // print(codeBlock);
+    // final RegExp pattern = RegExp('.{1,800}');
+    // pattern.allMatches(codeBlock).forEach((match) => print(match.group(0)));
+    debugPrint('');
+
+    return blockWidgets;
   }
-
-  // If there is not a link, use the whole text as title
-  linkText ??= link.replaceAll("*", '').trim();
-
-  String linkRow =
-  '$linkType${Constants.colSeparator}$linkText${Constants.colSeparator}$linkUrl';
-
-  // debugPrint(
-  //   '${linkType == 2 ? '   ' : ''}$linkRow',
-  // );
-
-  if (codeBlock.length > initialBlockSize1) {
-  codeBlock += Constants.rowSeparator;
-  }
-  codeBlock += linkRow;
-  }
-  // Cut links from the block
-  block = block.replaceAll(linkRE, "");
-  }
-  codeBlock += Constants.rowSeparator;
-  // Cut block name from the block
-  block = block.replaceAll(blockNameRE, "").replaceAll("###", "");
-
-  // if (block.isNotEmpty) debugPrint('After links: $block');
-  codeBlock += block;
-  }
-  codeBlock += "```";
-  debugPrint('');
-  // debugPrint(codeBlock.substring(codeBlock.length-300, codeBlock.length));
-  // print(codeBlock);
-  // final RegExp pattern = RegExp('.{1,800}');
-  // pattern.allMatches(codeBlock).forEach((match) => print(match.group(0)));
-  debugPrint('');
-
-  return [];
-
-}
-
 
   @override
   Widget build(BuildContext context) {
-    return Text('moi');
+    extractData();
+
+    return Column(children: extractData());
   }
 }

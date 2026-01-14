@@ -91,6 +91,9 @@ class ArticleData {
 
   String get path => type.name; // todo: fix path
 
+  // todo: test that this works
+  String get urlLink => 'https://www.bibletoolbox.net/$language/node/$id';
+
   @override
   String toString() {
     return 'Title:\t$title\n'

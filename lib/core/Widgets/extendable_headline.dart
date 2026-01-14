@@ -58,9 +58,11 @@ class _ExtendableHeadlineState extends State<ExtendableHeadline>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  widget.title,
-                  style: Theme.of(context).textTheme.headlineMedium,
+                Expanded(
+                  child: Text(
+                    widget.title,
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
                 ),
                 SizedBox(
                   height: 24,

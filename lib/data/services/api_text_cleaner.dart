@@ -22,7 +22,6 @@ class ApiTextCleaner {
   static String cleanPage(
     String raw, {
     PageType? pageType,
-    int? randomQuestionID,
   }) {
     // String result = cleanPageLink(raw);
     debugPrint("- Cleaning");
@@ -38,9 +37,6 @@ class ApiTextCleaner {
     // Handle the specific cases
     switch (pageType) {
       case (PageType.home):
-        // Clean tables only in the home page
-        debugPrint('Home');
-        assert(randomQuestionID != null);
         raw = homePage2CodeBlock(raw);
         break;
       case (PageType.answers):
@@ -112,6 +108,7 @@ class ApiTextCleaner {
     return finalString;
   }
 
+  /// Convert the necessary text in the Answer page to a code block
   static String answerPage2CodeBlock(String raw) {
     debugPrint(' - Cleaning Answer links');
 

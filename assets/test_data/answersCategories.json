@@ -1,0 +1,134 @@
+{
+  "elaman_tarkoitus": {
+    "kategoria": {
+      "fi": 524
+    },
+    "elementit": {
+      "fi": [
+        316,
+        317,
+        318,
+        319,
+        345
+      ]
+    }
+  },
+  "ihminen": {
+    "kategoria": {
+      "fi": 526
+    },
+    "elementit": {
+      "fi": [
+        320,
+        2384,
+        321,
+        349
+      ]
+    }
+  },
+  "synti": {
+    "kategoria": {
+      "fi": 529
+    },
+    "elementit": {
+      "fi": [
+        323,
+        324,
+        325,
+        326,
+        327,
+        328,
+        329,
+        364
+      ]
+    }
+  },
+  "raamattu": {
+    "kategoria": {
+      "fi": 530
+    },
+    "elementit": {
+      "fi": [
+        330,
+        331,
+        332,
+        333,
+        334,
+        335
+      ]
+    }
+  },
+  "jeesus": {
+    "kategoria": {
+      "fi": 531
+    },
+    "elementit": {
+      "fi": [
+        336,
+        337,
+        338,
+        339,
+        340,
+        341
+      ]
+    }
+  },
+  "usko-ja-pelastus": {
+    "kategoria": {
+      "fi": 534
+    },
+    "elementit": {
+      "fi": [
+        358,
+        347,
+        342,
+        348,
+        322,
+        365
+      ]
+    }
+  },
+  "kaste-ja-ehtoollinen": {
+    "kategoria": {
+      "fi": 535
+    },
+    "elementit": {
+      "fi": [
+        350,
+        351,
+        353,
+        352,
+        354,
+        355,
+        356,
+        357
+      ]
+    }
+  },
+  "pyha-henki": {
+    "kategoria": {
+      "fi": 532
+    },
+    "elementit": {
+      "fi": [
+        343,
+        344,
+        346
+      ]
+    }
+  },
+  "kuoleman-jalkeen": {
+    "kategoria": {
+      "fi": 536
+    },
+    "elementit": {
+      "fi": [
+        539,
+        361,
+        362,
+        363,
+        359
+      ]
+    }
+  }
+}

@@ -115,7 +115,10 @@ class BoxService {
 
   static Map<String, dynamic> getArticleById(String languageCode, int id) {
     List<Map<String, dynamic>> allData = readLanguageBox(languageCode);
-    Map<String, dynamic> result = allData.firstWhere((e) => e['id'] == id);
+    Map<String, dynamic> result = allData.firstWhere(
+      (e) => e['id'] == id,
+      orElse: () => {},
+    );
     return result;
   }
 

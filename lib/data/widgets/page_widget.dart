@@ -1,10 +1,6 @@
 import 'package:bible_toolbox/data/services/api_text_cleaner.dart';
 import 'package:bible_toolbox/data/services/article_data.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../../core/helpers/language_helper.dart';
-import '../../providers/language_provider.dart';
 import 'api_text_widget.dart';
 
 enum PageType { home, bible, answers, other }
@@ -23,7 +19,6 @@ class PageWidget extends StatefulWidget {
 class _PageWidgetState extends State<PageWidget> {
   @override
   Widget build(BuildContext context) {
-
     Widget titleWidget() {
       return Text(
         widget.page!.title,
@@ -43,14 +38,6 @@ class _PageWidgetState extends State<PageWidget> {
                     body: ApiTextCleaner.cleanPage(
                       widget.page!.cleanBody,
                       pageType: widget.pageType,
-                      randomQuestionID: widget.pageType == PageType.home
-                          ? (LanguageHelper.getRandomQuestion(
-                              context
-                                  .read<LanguageProvider>()
-                                  .locale
-                                  .languageCode,
-                            )).id
-                          : null,
                     ),
                   ),
                 ),

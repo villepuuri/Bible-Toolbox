@@ -32,9 +32,9 @@ class _ApiTextWidgetState extends State<ApiTextWidget> {
   Widget build(BuildContext context) {
     debugPrint('type: ${widget.pageType}');
     if (widget.pageType == PageType.answers) {
-      debugPrint('*-*_*_*_*_');
-      debugPrint(widget.body);
-      debugPrint('*-*_*_*_*_');
+      // debugPrint('*-*_*_*_*_');
+      // debugPrint(widget.body);
+      // debugPrint('*-*_*_*_*_');
     }
 
     return SelectionArea(
@@ -46,7 +46,7 @@ class _ApiTextWidgetState extends State<ApiTextWidget> {
         builders: {
           // Custom builder for blockquotes
           'blockquote': BlockquoteElementBuilder(),
-          'code': TableBuilder(),
+          'code': CustomBuilder(),
         },
         styleSheet: MarkdownStyleSheet(
           p: Theme.of(context).textTheme.bodyMedium,
@@ -120,8 +120,6 @@ class BlockquoteElementBuilder extends MarkdownElementBuilder {
     // Fix the line brake marks set previously
     text = text.replaceAll("<br>", "\n");
 
-    debugPrint(text);
-
     return Builder(
       builder: (context) {
         return Padding(
@@ -152,9 +150,7 @@ class BlockquoteElementBuilder extends MarkdownElementBuilder {
   }
 }
 
-class TableBuilder extends MarkdownElementBuilder {
-
-
+class CustomBuilder extends MarkdownElementBuilder {
 
   @override
   Widget? visitElementAfter(var element, TextStyle? preferredStyle) {
@@ -178,7 +174,7 @@ class TableBuilder extends MarkdownElementBuilder {
       case Constants.homePageID:
         return HomePageList(rawData: rawData);
       case Constants.bibleListID:
-        return BiblePageList(raw: rawData);
+        return BiblePageList(rawData: rawData);
       case Constants.answerListID:
         debugPrint('Answer LIst');
         return AnswerPageList(rawData: rawData);

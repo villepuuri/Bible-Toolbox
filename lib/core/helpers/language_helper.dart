@@ -187,19 +187,26 @@ class LanguageHelper {
   /// Returns an article with a specific title
   static ArticleData getArticleByTitle(String languageCode, String title) {
     final result = BoxService.getArticleByTitle(languageCode, title);
-    debugPrint('Result: $result');
     return ArticleData.fromJson(result);
   }
 
   /// Returns an article with a specific title
-  static bool articleExists(String languageCode, String title) {
-    return BoxService.getArticleByTitle(languageCode, title).isNotEmpty;
+  static bool articleExists(String languageCode, {String? title, int? id}) {
+    if (title != null) {
+      return BoxService.getArticleByTitle(languageCode, title).isNotEmpty;
+    }
+    if (id != null) {
+      return BoxService.getArticleById(languageCode, id).isNotEmpty;
+    }
+    assert(false, "You need to give either a title or an id");
+    return false;
   }
 
-
   static ArticleData getRandomQuestion(String languageCode) {
-    final questions = BoxService.getArticles(languageCode, 'vastauksia_etsiville');
-    debugPrint('Questions length: ${questions.length}');
+    final questions = BoxService.getArticles(
+      languageCode,
+      'vastauksia_etsiville',
+    );
     questions.shuffle();
     return ArticleData.fromJson(questions.first);
   }
@@ -212,24 +219,21 @@ class LanguageHelper {
 
     for (final item in questions) {
       String title = item['title'];
-      if (allData.keys.contains(title)){
+      if (allData.keys.contains(title)) {
         // contains
         if (multiples.keys.contains(title)) {
           int current = multiples[title] ?? 5;
           multiples[title] = current + 1;
-        }
-        else {
+        } else {
           multiples[title] = 2;
           keys.add(title);
         }
-      }
-      else {
+      } else {
         allData[title] = 1;
       }
     }
     debugPrint('Multiples');
     print(multiples.keys);
     print(keys);
-
   }
 }

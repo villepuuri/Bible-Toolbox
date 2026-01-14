@@ -21,23 +21,26 @@ class HomePageList extends StatelessWidget {
             context.read<LanguageProvider>().locale.languageCode,
           );
 
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Löydä vastauksia:",
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  debugPrint('QuestionButton pressed');
-                  // todo: implement navigation
-                  // Navigator.pushNamed(context, '/showText');
-                },
-                child: Text(randomQuestion.title),
-              ),
-              const SizedBox(height: 10),
-            ],
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(0,10,0,0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Löydä vastauksia:",
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    debugPrint('QuestionButton pressed');
+                    // todo: implement navigation
+                    // Navigator.pushNamed(context, '/showText');
+                  },
+                  child: Text(randomQuestion.title),
+                ),
+                const SizedBox(height: 10),
+              ],
+            ),
           );
         },
       );
