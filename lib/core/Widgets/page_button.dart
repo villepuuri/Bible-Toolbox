@@ -33,25 +33,33 @@ class _PageButtonState extends State<PageButton> {
       return null;
     }
 
-    return ListTile(
-      leading: Image.asset('assets/btb_images/${widget.imagePath}.png'),
-      minLeadingWidth: 50,
-      title: Text(widget.title),
-      // titleTextStyle: Theme.of(context).textTheme.bodyMedium,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      splashColor: AppThemeData.opaqueGreen,
-      tileColor: AppThemeData.opaqueGreen,
-      // shape: RoundedRectangleBorder(
-      //   borderRadius: BorderRadius.all(Radius.circular(18))
-      // ),
-      onTap: () {
-        debugPrint('Pressed a tile: ${widget.title}');
-
-        String? routeName = findCorrectPath(widget.path);
-        if (routeName != null) {
-          Navigator.pushNamed(context, routeName);
-        }
-      },
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(width: 1, color: AppThemeData.lightGreen),
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+        boxShadow: [
+          BoxShadow(
+            offset: Offset(-4, 2),
+            color: AppThemeData.shadowBlack,
+            blurRadius: 2,
+          ),
+        ],
+      ),
+      child: ListTile(
+        leading: Image.asset('assets/btb_images/${widget.imagePath}.png'),
+        minLeadingWidth: 50,
+        title: Text(widget.title),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        onTap: () {
+          debugPrint('Pressed a tile: ${widget.title}');
+          String? routeName = findCorrectPath(widget.path);
+          if (routeName != null) {
+            Navigator.pushNamed(context, routeName);
+          }
+        },
+      ),
     );
   }
 }

@@ -18,6 +18,7 @@ class ApiTextCleaner {
     return result;
   }
 
+  /// Cleaner for pages
   static String cleanPage(
     String raw, {
     PageType? pageType,
@@ -40,7 +41,7 @@ class ApiTextCleaner {
         // Clean tables only in the home page
         debugPrint('Home');
         assert(randomQuestionID != null);
-        raw = cleanTables(raw, randomQuestionID!);
+        raw = homePage2CodeBlock(raw);
         break;
       case (PageType.answers):
         // Set links to codeBlocs
@@ -48,7 +49,7 @@ class ApiTextCleaner {
         break;
       case (PageType.bible):
         // Set links to codeBlocs
-        raw = cleanBiblePage(raw);
+        raw = biblePage2CodeBlock(raw);
         break;
 
       default:
@@ -57,146 +58,58 @@ class ApiTextCleaner {
     return raw;
   }
 
-  static String cleanBiblePage(String raw) {
+  /// Convert the necessary text in the Bible page to a code block
+  static String biblePage2CodeBlock(String raw) {
     debugPrint('');
-    debugPrint('*** Cleaning Bible page ***');
-    debugPrint('');
-
-    // Separate blocks (starting with ###)
-    RegExp blockRE = RegExp(r'(###.*?)(?=(###)|(<!)|$)', dotAll: true);
-    List<String?> blocks = blockRE
-        .allMatches(raw)
-        .map((match) => match.group(1))
-        .toList();
-
-    // print(blocks);
-    for (String? block in blocks) {
-      if (block == null) continue;
-
-      // Get the title of the block
-
-      RegExp blockNameRE = RegExp(r'(?<=###)(.*?)(?=(\r\n)|$)');
-      String? blockName = blockNameRE.firstMatch(block)?.group(1);
-
-      debugPrint(' - Block: $blockName');
-
-      // If the block contains list of links
-      if (block.contains('*   [')) {
-        debugPrint('   * has a list of links');
-
-        // Separate links (starting with '*   ')
-        RegExp linkRE = RegExp(r'(\s*\*.*)', multiLine: true);
-        List<String?> links = linkRE
-            .allMatches(block)
-            .map((match) => match.group(1))
-            .toList();
-
-        debugPrint('   * Links length: ${links.length}');
-
-        for (String? link in links) {
-          if (link == null) continue;
-
-          // Get link Title
-          RegExp linkTitleRE = RegExp(r'\[(.*?)\]');
-          String? linkTitle = linkTitleRE.firstMatch(link)?.group(1);
-
-          // Get link url
-          RegExp linkUrlRE = RegExp(r'\((.*?)\)');
-          String? linkUrl = linkUrlRE.firstMatch(link)?.group(1);
-
-          // debugPrint('LINK:--$link--');
-
-          RegExp mainLinkRE = RegExp(r'(\n\*\s{3,})', dotAll: true);
-          RegExp subLinkRE = RegExp(r'(\s\*\s)');
-
-          int? linkType = link.contains(mainLinkRE)
-              ? 1
-              : (link.contains(subLinkRE) ? 2 : null);
-
-          if (linkType == null) {
-            debugPrint(' ~LINKTYPE NULL: $link');
-            continue;
-          }
-
-          // If there is not a link, use the whole text as title
-          linkTitle ??= link.replaceAll("*", '').trim();
-
-          debugPrint('${linkType == 2 ? '   ' : ''}$linkType $linkTitle\t $linkUrl');
-        }
-      }
-    }
+    debugPrint('*** Converting Bible page ***');
     debugPrint('');
 
-    return raw;
+    // Get the blocks
+    RegExp blockRE = RegExp(r'(?<=.)(###.*?$)', dotAll: true);
+    int? dataBlockIndex = blockRE.firstMatch(raw)?.start;
+
+    assert(
+      dataBlockIndex != null,
+      "Data block could not be read from the Bible page",
+    );
+
+    // Create the data string
+    // "String before the block" + ``` + ID + separator + block + ```
+    String finalString =
+        "${raw.substring(0, dataBlockIndex!)}```\n${Constants.bibleListID}${Constants.idSeparator}${raw.substring(dataBlockIndex)}\n```";
+    // debugPrint(finalString.substring(finalString.length-100));
+    return finalString;
   }
 
-  static String cleanTables(String raw, int randomQuestionID) {
-    debugPrint(' - Cleaning tables');
+  /// Convert the necessary text in the Home page to a code block
+  static String homePage2CodeBlock(String raw) {
+    debugPrint(' - Cleaning homePage tables to codeBlock');
 
     // Clean unused elements
-    final unusedRegExp = RegExp(r'<!.*>', dotAll: true);
-    raw = raw.replaceAll(unusedRegExp, '');
+    final blockRE = RegExp(r'(\[!.*?$)', dotAll: true);
+    int? dataBlockIndex = blockRE.firstMatch(raw)?.start;
 
-    // Extracting the table elements
-    final elementRegExp = RegExp(r'\[!(.*?)-{3,}\|-{3,}', dotAll: true);
-    List<String?> elements = elementRegExp
-        .allMatches(raw)
-        .map((e) => e.group(0))
-        .toList();
-    debugPrint(' - category length: ${elementRegExp.allMatches(raw).length}');
-
-    // Remove the elements
-    raw = raw.replaceAll(elementRegExp, '');
-
-    // Add the opening symbol of the code block and the identifier
-    String mdButtons = "```${Constants.homeButtonID}";
-
-    for (final element in elements) {
-      if (element == null) continue;
-      // Image string
-      RegExp imageRE = RegExp(r'/(\w{2,})(?=\.png)', multiLine: true);
-      String? imageString = imageRE
-          .firstMatch(element)
-          ?.group(1)
-          ?.replaceAll("\n", "");
-
-      // Path string
-      RegExp pathRE = RegExp(r'(\w{2,})(?=)\)\s\|', multiLine: true);
-      String? pathString = pathRE
-          .firstMatch(element)
-          ?.group(1)
-          ?.replaceAll("\n", "");
-
-      // URL string
-      RegExp linkTextRE = RegExp(
-        r'(?<=)\s\|\s\[(.*?)].*?\)(.*?)-{3,}',
-        dotAll: true,
+    if (dataBlockIndex == null) {
+      assert(
+        dataBlockIndex != null,
+        "Data block could not be read from the Bible page",
       );
-      RegExpMatch? labelMatch = linkTextRE.firstMatch(element);
-      String? labelString =
-          ((labelMatch?.group(1) ?? "") + (labelMatch?.group(2) ?? ""))
-              .replaceAll("\n", "")
-              .trim();
-
-      mdButtons += Constants.blockSeparator;
-      String mdRow =
-          '$labelString${Constants.colSeparator}$pathString${Constants.colSeparator}$imageString';
-
-      mdButtons += "$mdRow ";
+      return "";
     }
-    // Add the closing symbol for the code block
-    mdButtons += "```";
 
     // The index of the first new line
-    int indexPlace = raw.indexOf("\n");
+    int indexPlace = raw.indexOf("\r\n\r\n");
 
-    String randomQuestionBox =
-        '```${Constants.questionButtonID}${Constants.blockSeparator}$randomQuestionID```';
-
-    String mdFinal =
-        "${raw.substring(0, indexPlace)} $mdButtons $randomQuestionBox ${raw.substring(indexPlace)}";
-
-    return mdFinal;
+    // Create the data string
+    // "String before the block" + ``` + ID + separator + block + ```
+    String finalString =
+        "${raw.substring(0,dataBlockIndex)}\n```\n${Constants.homePageID}${Constants.idSeparator}\n${raw.substring(dataBlockIndex)}```";
+    if (indexPlace > 0) {
+      // "String before the block" + ``` + ID + separator + block + ``` + String after the block
+      finalString =
+          "${raw.substring(0, indexPlace)}\n```\n${Constants.homePageID}${Constants.idSeparator}\n${raw.substring(dataBlockIndex)}```\n${raw.substring(indexPlace, dataBlockIndex)}";
+    }
+    return finalString;
   }
 
   static String cleanAnswerLinks(String raw) {

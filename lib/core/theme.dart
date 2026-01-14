@@ -8,6 +8,7 @@ class AppThemeData {
   static final darkGreen = Color(0xFF536248);
   static final black = Color(0xFF0A0A0A);
   static final white = Color(0xFFFFFFFF);
+  static final shadowBlack = black.withAlpha(25); // 10%
 
   // Color schemes
   static final lightColorScheme = ColorScheme.light(

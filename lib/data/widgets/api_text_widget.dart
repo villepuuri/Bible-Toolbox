@@ -5,6 +5,8 @@ import 'package:bible_toolbox/core/constants.dart';
 import 'package:bible_toolbox/core/helpers/box_service.dart';
 import 'package:bible_toolbox/core/helpers/language_helper.dart';
 import 'package:bible_toolbox/data/services/article_data.dart';
+import 'package:bible_toolbox/data/widgets/bible_page_list.dart';
+import 'package:bible_toolbox/data/widgets/home_page_list.dart';
 import 'package:bible_toolbox/data/widgets/page_widget.dart';
 import 'package:bible_toolbox/providers/language_provider.dart';
 import 'package:flutter/material.dart';
@@ -28,9 +30,10 @@ class _ApiTextWidgetState extends State<ApiTextWidget> {
   @override
   Widget build(BuildContext context) {
     debugPrint('type: ${widget.pageType}');
-    if (widget.pageType == PageType.answers) {
-      // debugPrint(widget.body);
-      // debugPrint('*-*_*_*_*_');
+    if (widget.pageType == PageType.home) {
+      debugPrint('*-*_*_*_*_');
+      debugPrint(widget.body);
+      debugPrint('*-*_*_*_*_');
     }
 
     return SelectionArea(
@@ -43,13 +46,12 @@ class _ApiTextWidgetState extends State<ApiTextWidget> {
           // Custom builder for blockquotes
           'blockquote': BlockquoteElementBuilder(),
           'code': TableBuilder(),
-          // 'a': LinkBuilder()
-          // 'questionBox': QuestionBoxBuilder()
         },
         styleSheet: MarkdownStyleSheet(
           p: Theme.of(context).textTheme.bodyMedium,
           h1: Theme.of(context).textTheme.headlineLarge,
           h1Padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+          h3: Theme.of(context).textTheme.headlineMedium,
           a: Theme.of(context).textTheme.labelMedium,
           blockquote: Theme.of(
             context,
@@ -150,62 +152,7 @@ class BlockquoteElementBuilder extends MarkdownElementBuilder {
 }
 
 class TableBuilder extends MarkdownElementBuilder {
-  Widget buildQuestionButton(int randomQuestionID) {
-    return Builder(
-      builder: (context) {
-        ArticleData randomQuestion = LanguageHelper.getArticleById(
-          context.read<LanguageProvider>().locale.languageCode,
-          randomQuestionID,
-        );
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Löydä vastauksia:",
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                debugPrint('QuestionButton pressed');
-                // todo: implement navigation
-                // Navigator.pushNamed(context, '/showText');
-              },
-              child: Text(randomQuestion.title),
-            ),
-            const SizedBox(height: 10),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget buildHomeButtons(List<String> rows) {
-    List<Widget> buttonWidgets = [];
-    for (int i = 1; i < rows.length; i++) {
-      // Separate columns
-      final elements = rows[i].split(Constants.colSeparator).toList();
-
-      // Extract each element
-      final label = elements[0];
-      final path = elements.length > 1 ? elements[1] : null;
-      final imagePath = elements.length > 2 ? elements[2] : null;
-
-      // Check if elements exist
-      assert(path != null);
-      assert(imagePath != null);
-
-      debugPrint('$label - $path - $imagePath');
-
-      buttonWidgets.add(
-        PageButton(title: label, imagePath: imagePath!.trim(), path: path!),
-      );
-    }
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
-      child: Column(spacing: 8, children: buttonWidgets),
-    );
-  }
 
   Widget buildAnswerList(List<String> answerList, BuildContext context) {
     debugPrint('Length of answerList: ${answerList.length}');
@@ -243,22 +190,22 @@ class TableBuilder extends MarkdownElementBuilder {
               context.read<LanguageProvider>().locale.languageCode,
               title,
             )) {
-            return LinkHeadline(
-              text: title,
-              onTap: () async {
-                debugPrint('User wants to open: $title');
+              return LinkHeadline(
+                text: title,
+                onTap: () async {
+                  debugPrint('User wants to open: $title');
 
-                ArticleData answer = LanguageHelper.getArticleByTitle(
-                  context.read<LanguageProvider>().locale.languageCode,
-                  title,
-                );
-                // Navigator.pushNamed(context, '/showText',
-                //     arguments: {
-                //       'id': entry.key,
-                //       'clicked': question
-              },
-            ); }
-            else {
+                  ArticleData answer = LanguageHelper.getArticleByTitle(
+                    context.read<LanguageProvider>().locale.languageCode,
+                    title,
+                  );
+                  // Navigator.pushNamed(context, '/showText',
+                  //     arguments: {
+                  //       'id': entry.key,
+                  //       'clicked': question
+                },
+              );
+            } else {
               return const SizedBox();
             }
           })
@@ -272,11 +219,10 @@ class TableBuilder extends MarkdownElementBuilder {
     return Column(children: blockWidgets);
   }
 
+
   @override
   Widget? visitElementAfter(var element, TextStyle? preferredStyle) {
-    debugPrint('\nModifying the codeBlock named:');
-
-    debugPrint(element.children!.length.toString());
+    debugPrint('\nModifying the codeBlock');
 
     assert(element.children != null, "The table doesn't have children!");
     assert(
@@ -284,16 +230,25 @@ class TableBuilder extends MarkdownElementBuilder {
       "The table has wrong amount of children!",
     );
 
-    final rows = element.children!.first.textContent
-        .split(Constants.blockSeparator)
-        .toList();
+    print(element.textContent);
 
-    debugPrint(rows.first);
-    switch (rows.first) {
-      case Constants.questionButtonID:
-        return buildQuestionButton(int.parse(rows[1]));
-      case Constants.homeButtonID:
-        return buildHomeButtons(rows);
+    final rows = element.children!.first.textContent
+        .split(Constants.idSeparator)
+        .toList(); // [ID][blockSeparator][rawData]
+
+    debugPrint(rows.length.toString());
+
+    String id = rows[0];
+    String rawData = rows[1];
+
+
+    debugPrint(' - Block type: $id, length: ${rawData.length}');
+    // print(element.textContent.substring(0, element.textContent.length < 100 ? 1 : 100));
+    switch (id) {
+      case Constants.homePageID:
+        return HomePageList(rawData: rawData);
+      case Constants.bibleListID:
+        return BiblePageList(raw: rawData);
       case Constants.answerListID:
         debugPrint('Answer LIst');
         return Builder(
