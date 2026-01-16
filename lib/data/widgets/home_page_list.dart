@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bible_toolbox/data/services/extract_key_information.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -79,7 +80,6 @@ class _HomePageListState extends State<HomePageList> {
                           },
                         );
                       }
-
                     }
                   },
                   child: Text(randomQuestion.title),
@@ -93,59 +93,24 @@ class _HomePageListState extends State<HomePageList> {
     }
 
     List<Widget> extractWidgets() {
-      List<Widget> widgetList = [];
-      // Extracting the table elements
-      final elementRegExp = RegExp(r'\[!(.*?)-{3,}\|-{3,}', dotAll: true);
-      List<String?> elements = elementRegExp
-          .allMatches(widget.rawData)
-          .map((e) => e.group(0))
+      // Get the category map
+      Map<String, dynamic> categoryMap =
+          ExtractKeyInformation.getMainCategories(
+            context.read<LanguageProvider>().locale.languageCode,
+          );
+
+      // Convert the map to widgets
+      List<Widget> buttons = categoryMap.entries
+          .map<Widget>(
+            (entry) => PageButton(
+              title: entry.key,
+              imagePath: entry.value["image"],
+              path: entry.value["path"],
+            ),
+          )
           .toList();
-      debugPrint(
-        ' - category length: ${elementRegExp.allMatches(widget.rawData).length}',
-      );
 
-      for (final element in elements) {
-        if (element == null) continue;
-        // Image string
-        RegExp imageRE = RegExp(r'/(\w{2,})(?=\.png)', multiLine: true);
-        String? imageString = imageRE
-            .firstMatch(element)
-            ?.group(1)
-            ?.replaceAll("\n", "");
-
-        // Path string
-        RegExp pathRE = RegExp(r'(\w{2,})(?=)\)\s\|', multiLine: true);
-        String? pathString = pathRE
-            .firstMatch(element)
-            ?.group(1)
-            ?.replaceAll("\n", "");
-
-        // URL string
-        RegExp linkTextRE = RegExp(
-          r'(?<=)\s\|\s\[(.*?)].*?\)(.*?)-{3,}',
-          dotAll: true,
-        );
-        RegExpMatch? labelMatch = linkTextRE.firstMatch(element);
-        String? labelString =
-            ((labelMatch?.group(1) ?? "") + (labelMatch?.group(2) ?? ""))
-                .replaceAll("\n", "")
-                .trim();
-
-        assert(imageString != null, "ImageString is null");
-        assert(pathString != null, "PathString is null");
-        if (imageString == null || pathString == null) continue;
-
-        widgetList.add(
-          PageButton(
-            title: labelString,
-            imagePath: imageString,
-            path: pathString,
-          ),
-        );
-      }
-
-      List<Widget> list = widgetList + [buildQuestionButton()];
-      return list;
+      return buttons + [buildQuestionButton()];
     }
 
     return Padding(

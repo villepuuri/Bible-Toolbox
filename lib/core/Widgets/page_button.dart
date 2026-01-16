@@ -24,6 +24,7 @@ class _PageButtonState extends State<PageButton> {
   Widget build(BuildContext context) {
     String? findCorrectPath(String routeName) {
       // Find the correct link
+      // todo: Fix this navigation
       for (String key in Constants.internalLinkConvert.keys) {
         if (Constants.internalLinkConvert[key]!.contains(routeName)) {
           debugPrint(' - Page to move: $key');

@@ -1,12 +1,20 @@
 import 'package:bible_toolbox/core/theme.dart';
+import 'package:bible_toolbox/data/services/extract_key_information.dart';
 import 'package:bible_toolbox/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:provider/provider.dart';
+
+import '../../providers/language_provider.dart';
+import '../constants.dart';
 
 class MainDrawer extends StatelessWidget {
   const MainDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    String languageCode = context.read<LanguageProvider>().locale.languageCode;
+
     Widget drawerListTile(
       String title, {
       String? imageURL,
@@ -25,7 +33,7 @@ class MainDrawer extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(18)),
       ),
       onTap: () {
-        debugPrint('Pressed a tile: $title');
+        debugPrint('Pressed a tile: $title, $routeName)');
         if (routeName != null) {
           Navigator.pop(context);
           Navigator.pushNamed(context, routeName);
@@ -78,56 +86,48 @@ class MainDrawer extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12.0),
         child: Column(
-          children: [
-            SizedBox(height: kToolbarHeight),
-            Image.asset('assets/btb_images/logo.png'),
-            Spacer(),
-            // drawerListTile(
-            //   "Etusivu",
-            //   imageURL: "assets/btb_images/laatikko.png",
-            //   routeName: '/home',
-            // ),
-            // drawLine(),
-            drawerListTile(
-              "Vastaukset",
-              imageURL: "assets/btb_images/kysymysmerkki.png",
-              routeName: '/answers',
-            ),
-            drawerListTile(
-              "Raamattu",
-              imageURL: "assets/btb_images/raamattu.png",
-              routeName: '/bible',
-            ),
-            drawerListTile(
-              "Katekismus",
-              imageURL: "assets/btb_images/katekismus.png",
-              routeName: '/catechism',
-            ),
-            drawerListTile(
-              "Tunnustuskirjat",
-              imageURL: "assets/btb_images/tunnustuskirjat.png",
-              routeName: '/concord',
-            ),
-            drawLine(),
-            drawerListTile(
-              AppLocalizations.of(context)!.titleLanguageSettings,
-              icon: Icons.language,
-              routeName: '/languages',
-            ),
-            drawerListTile(
-              AppLocalizations.of(context)!.titleBookmarks,
-              icon: Icons.bookmark,
-              routeName: '/bookmarks',
-            ),
-            Spacer(),
-            drawLine(),
-            drawerListTile(
-              "Keitä me olemme?",
-              imageURL: "assets/btb_images/ihmiset.png",
-              routeName: '/about'
-            ),
-            contactRow(),
-          ],
+          children:
+              [
+                SizedBox(height: kToolbarHeight),
+                Image.asset('assets/btb_images/logo.png'),
+                Spacer(),
+              ] +
+              // drawerListTile(
+              //   "Etusivu",
+              //   imageURL: "assets/btb_images/laatikko.png",
+              //   routeName: '/home',
+              // ),
+              // drawLine(),
+              ExtractKeyInformation.getMainCategories(languageCode).entries
+                  .map(
+                    (entry) => drawerListTile(
+                      entry.value["group1"],
+                      imageURL: "assets/btb_images/${entry.value["image"]}.png",
+                      routeName: Constants.getPath(entry.value["path"])
+                    ),
+                  )
+                  .toList() +
+              [
+                drawLine(),
+                drawerListTile(
+                  AppLocalizations.of(context)!.titleLanguageSettings,
+                  icon: Icons.language,
+                  routeName: '/languages',
+                ),
+                drawerListTile(
+                  AppLocalizations.of(context)!.titleBookmarks,
+                  icon: Icons.bookmark,
+                  routeName: '/bookmarks',
+                ),
+                Spacer(),
+                drawLine(),
+                drawerListTile(
+                  "Keitä me olemme?",
+                  imageURL: "assets/btb_images/ihmiset.png",
+                  routeName: '/about',
+                ),
+                contactRow(),
+              ],
         ),
       ),
     );
