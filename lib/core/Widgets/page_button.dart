@@ -1,3 +1,4 @@
+import 'package:bible_toolbox/core/Widgets/simple_box.dart';
 import 'package:bible_toolbox/core/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -34,20 +35,7 @@ class _PageButtonState extends State<PageButton> {
       return null;
     }
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(width: 1, color: AppThemeData.lightGreen),
-        borderRadius: BorderRadius.all(Radius.circular(20)),
-        boxShadow: [
-          BoxShadow(
-            offset: Offset(-4, 2),
-            color: AppThemeData.shadowBlack,
-            blurRadius: 2,
-          ),
-        ],
-      ),
+    return SimpleBox(
       child: ListTile(
         leading: Image.asset('assets/btb_images/${widget.imagePath}.png'),
         minLeadingWidth: 50,

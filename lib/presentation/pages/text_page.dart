@@ -9,6 +9,7 @@ import 'package:bible_toolbox/providers/language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../core/constants.dart';
 import '../../core/helpers/bookmark.dart';
@@ -34,6 +35,7 @@ class _TextPageState extends State<TextPage> {
       ModalRoute.of(context)!.settings.arguments != null,
       "There are no arguments for the text page",
     );
+    // Extract the data passed from the previous page
     Map<String, dynamic> model =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     List<int> idList = model["idList"];
@@ -42,7 +44,6 @@ class _TextPageState extends State<TextPage> {
 
     debugPrint('idList length: ${idList.length}');
     debugPrint('selectedID: $selectedID');
-    print(idList);
 
     String languageCode = context.read<LanguageProvider>().locale.languageCode;
 
@@ -71,52 +72,60 @@ class _TextPageState extends State<TextPage> {
       bool isBookmarked = BookmarkHelper.isPageBookmarked(article.title);
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: Column(
           children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    article.title,
-                    style: Theme.of(context).textTheme.titleSmall,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        article.title,
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                      const SizedBox(height: 4),
+                      if (article.authors.isNotEmpty)
+                        authorBox(author: article.writerNames),
+                      if (article.translators.isNotEmpty)
+                        authorBox(translator: article.translatorNames),
+                    ],
                   ),
-                  const SizedBox(height: 4),
-                  if (article.authors.isNotEmpty)
-                    authorBox(author: article.writerNames),
-                  if (article.translators.isNotEmpty)
-                    authorBox(translator: article.translatorNames),
-                ],
-              ),
+                ),
+                IconButton(
+                  onPressed: () async {
+                    debugPrint('User wants to share: ${article.title}');
+                    SharePlus.instance.share(
+                        ShareParams(uri: Uri.parse(article.urlLink))
+                    );
+                    // todo: fix sharing
+                  },
+                  icon: Constants.iconShare,
+                ),
+                IconButton(
+                  onPressed: () async {
+                    if (!isBookmarked) {
+                      await BookmarkHelper.addBookmark(article.title, article.url);
+                    } else {
+                      await BookmarkHelper.deleteBookmark(title: article.title);
+                    }
+                    setState(() {});
+                  },
+                  icon: isBookmarked
+                      ? Icon(
+                          Constants.iconSelectedBookmark,
+                          color: Theme.of(context).colorScheme.primary,
+                        )
+                      : Icon(
+                          Constants.iconAddBookmark,
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
+                ),
+              ],
             ),
-            IconButton(
-              onPressed: () async {
-                debugPrint('User wants to share: ${article.title}');
-                // todo: fix sharing
-              },
-              icon: Constants.iconShare,
-            ),
-            IconButton(
-              onPressed: () async {
-                if (!isBookmarked) {
-                  await BookmarkHelper.addBookmark(article.title, article.url);
-                } else {
-                  await BookmarkHelper.deleteBookmark(title: article.title);
-                }
-                setState(() {});
-              },
-              icon: isBookmarked
-                  ? Icon(
-                      Constants.iconSelectedBookmark,
-                      color: Theme.of(context).colorScheme.primary,
-                    )
-                  : Icon(
-                      Constants.iconAddBookmark,
-                      color: Theme.of(context).colorScheme.outline,
-                    ),
-            ),
+            const Divider()
           ],
         ),
       );
@@ -139,7 +148,7 @@ class _TextPageState extends State<TextPage> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Divider(),
+            // Divider(),
             titleBox(article),
             ApiTextWidget(
               pageType: PageType.article,

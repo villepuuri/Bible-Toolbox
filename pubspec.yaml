@@ -66,6 +66,9 @@ dependencies:
   hive_test: ^1.0.1
   markdown: ^7.3.0
 
+  # For sharing links
+  share_plus: ^12.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

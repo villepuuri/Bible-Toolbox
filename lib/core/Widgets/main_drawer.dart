@@ -2,8 +2,8 @@ import 'package:bible_toolbox/core/theme.dart';
 import 'package:bible_toolbox/data/services/extract_key_information.dart';
 import 'package:bible_toolbox/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../providers/language_provider.dart';
 import '../constants.dart';
@@ -62,20 +62,23 @@ class MainDrawer extends StatelessWidget {
       children: [
         contactBox(
           icon: Icons.facebook,
-          onPressed: () {
+          onPressed: () async {
             debugPrint('Facebook pressed');
+            String url = 'https://www.facebook.com/bibletoolbox';
+            if (!(await launchUrl(Uri.parse(url)))) {
+              debugPrint(' ~ Could not launch url: $url');
+            }
           },
         ),
+        const SizedBox(width: 10,),
         contactBox(
           icon: Icons.email,
-          onPressed: () {
+          onPressed: () async {
             debugPrint('Email pressed');
-          },
-        ),
-        contactBox(
-          icon: Icons.people,
-          onPressed: () {
-            debugPrint('People pressed');
+            String url = 'mailto:bibletoolbox@gmail.com';
+            if (!(await launchUrl(Uri.parse(url)))) {
+            debugPrint(' ~ Could not launch url: $url');
+            }
           },
         ),
       ],

@@ -174,7 +174,7 @@ class ApiTextCleaner {
       // Replace CRLF inside the block
       convertedInner = convertedInner.replaceAll('\r\n', '<br>');
 
-      // Rebuild the block with replaced linebreaks
+      // Rebuild the block with replaced line breaks
       return '\r\n>$convertedInner\r\n\r\n';
     });
   }
