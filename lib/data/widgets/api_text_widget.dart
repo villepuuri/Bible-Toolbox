@@ -1,27 +1,25 @@
-import 'package:bible_toolbox/core/Widgets/extendable_headline.dart';
-import 'package:bible_toolbox/core/Widgets/link_headline.dart';
-import 'package:bible_toolbox/core/Widgets/page_button.dart';
 import 'package:bible_toolbox/core/constants.dart';
-import 'package:bible_toolbox/core/helpers/box_service.dart';
-import 'package:bible_toolbox/core/helpers/language_helper.dart';
-import 'package:bible_toolbox/data/services/article_data.dart';
+
 import 'package:bible_toolbox/data/widgets/answer_page_list.dart';
 import 'package:bible_toolbox/data/widgets/bible_page_list.dart';
 import 'package:bible_toolbox/data/widgets/home_page_list.dart';
 import 'package:bible_toolbox/data/widgets/page_widget.dart';
-import 'package:bible_toolbox/providers/language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
-import 'package:provider/provider.dart';
-import 'package:markdown/markdown.dart' as md;
 import 'package:url_launcher/url_launcher.dart';
 
 class ApiTextWidget extends StatefulWidget {
   /// Body text in markdown format
   final String body;
   final PageType pageType;
+  final bool? scrollable;
 
-  const ApiTextWidget({super.key, required this.body, required this.pageType});
+  const ApiTextWidget({
+    super.key,
+    required this.body,
+    required this.pageType,
+    this.scrollable,
+  });
 
   @override
   State<ApiTextWidget> createState() => _ApiTextWidgetState();
@@ -30,7 +28,6 @@ class ApiTextWidget extends StatefulWidget {
 class _ApiTextWidgetState extends State<ApiTextWidget> {
   @override
   Widget build(BuildContext context) {
-    debugPrint('type: ${widget.pageType}');
     if (widget.pageType == PageType.answers) {
       // debugPrint('*-*_*_*_*_');
       // debugPrint(widget.body);
@@ -40,7 +37,9 @@ class _ApiTextWidgetState extends State<ApiTextWidget> {
     return SelectionArea(
       child: Markdown(
         data: widget.body,
-        physics: NeverScrollableScrollPhysics(),
+        physics: widget.scrollable != null
+            ? null
+            : NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         padding: const EdgeInsets.symmetric(vertical: 32),
         builders: {
@@ -151,7 +150,6 @@ class BlockquoteElementBuilder extends MarkdownElementBuilder {
 }
 
 class CustomBuilder extends MarkdownElementBuilder {
-
   @override
   Widget? visitElementAfter(var element, TextStyle? preferredStyle) {
     debugPrint('\nModifying the codeBlock');

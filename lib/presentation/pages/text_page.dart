@@ -1,3 +1,4 @@
+import 'package:bible_toolbox/core/Widgets/link_headline.dart';
 import 'package:bible_toolbox/core/Widgets/main_app_bar.dart';
 import 'package:bible_toolbox/core/helpers/language_helper.dart';
 import 'package:bible_toolbox/data/services/api_text_cleaner.dart';
@@ -8,7 +9,6 @@ import 'package:bible_toolbox/providers/language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/constants.dart';
 import '../../core/helpers/bookmark.dart';
@@ -22,6 +22,7 @@ class TextPage extends StatefulWidget {
 
 class _TextPageState extends State<TextPage> {
   final ItemScrollController itemScrollController = ItemScrollController();
+  bool firstBuild = true;
 
   @override
   Widget build(BuildContext context) {
@@ -35,16 +36,22 @@ class _TextPageState extends State<TextPage> {
     );
     Map<String, dynamic> model =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    int id = model["id"];
-    String? selectedHeadline = model["clicked"];
+    List<int> idList = model["idList"];
+    int? selectedID = model["selectedID"];
+    String? headline = model["headline"];
 
-    debugPrint('id: $id');
-    debugPrint('selectedHeadline: $selectedHeadline');
+    debugPrint('idList length: ${idList.length}');
+    debugPrint('selectedID: $selectedID');
+    print(idList);
 
-    ArticleData article = LanguageHelper.getArticleById(
-      context.read<LanguageProvider>().locale.languageCode,
-      id,
-    );
+    String languageCode = context.read<LanguageProvider>().locale.languageCode;
+
+    List<ArticleData> articles = [];
+    for (final id in idList) {
+      if (LanguageHelper.articleExists(languageCode, id: id)) {
+        articles.add(LanguageHelper.getArticleById(languageCode, id));
+      }
+    }
 
     // todo: translations
     Widget authorBox({String? author, String? translator}) {
@@ -73,7 +80,7 @@ class _TextPageState extends State<TextPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "> ${article.title}",
+                    article.title,
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
                   const SizedBox(height: 4),
@@ -115,52 +122,82 @@ class _TextPageState extends State<TextPage> {
       );
     }
 
-    // if (isDataReady && firstTimeWithData) {
-    //   firstTimeWithData = false;
-    //   if (selectedHeadline != null) {
-    //     Future.delayed(const Duration(milliseconds: 5), () {
-    //       debugPrint('len of items: ${answers[id]["items"].length}');
-    //       int indexToJump = answers[id]["items"].indexWhere(
-    //         (item) => item == selectedHeadline,
-    //       );
-    //       debugPrint('itemToJump: $indexToJump');
-    //       itemScrollController.jumpTo(index: indexToJump + 1);
-    //     });
-    //   }
-    // }
+    if (firstBuild) {
+      firstBuild = false;
+      if (selectedID != null) {
+        Future.delayed(const Duration(milliseconds: 5), () {
+          int jumpIndex = articles.indexWhere((a) => a.id == selectedID);
+          if (jumpIndex > -1) {
+            debugPrint('itemToJump: $jumpIndex');
+            itemScrollController.jumpTo(index: jumpIndex + 1);
+          }
+        });
+      }
+    }
+
+    Widget singleArticleWidget(ArticleData article, {bool? scrollable}) =>
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Divider(),
+            titleBox(article),
+            ApiTextWidget(
+              pageType: PageType.article,
+              scrollable: scrollable,
+              body: ApiTextCleaner.cleanText(article.body),
+            ),
+            const SizedBox(height: 50),
+          ],
+        );
+
+    Widget introWidget() => Padding(
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: articles.map((a) => LinkHeadline(text: a.title, onTap: () {
+          itemScrollController.scrollTo(
+            index: articles.indexOf(a) + 1,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut
+          );
+        },)).toList(),
+      ),
+    );
 
     return Scaffold(
       appBar: MainAppBar(
-        title: article.title,
+        title: headline ?? articles.first.title,
         useSmallAppBar: true,
         showBookmarkButton: false,
       ),
 
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: titleBox(article),
-              // Column(
-              //   crossAxisAlignment: CrossAxisAlignment.start,
-              //   children: [
-              //     if (article.authors.isNotEmpty)
-              //       authorBox(author: article.writerNames),
-              //     if (article.translators.isNotEmpty)
-              //       authorBox(translator: article.translatorNames),
-              //   ],
-              // ),
-            ),
-            SliverToBoxAdapter(
-              child: ApiTextWidget(
-                pageType: PageType.other,
-                body: ApiTextCleaner.cleanText(article.body),
+        child: articles.length > 1
+            ? ScrollablePositionedList.builder(
+                itemCount: articles.length + 1,
+                itemScrollController: itemScrollController,
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    // Build the intro widget
+                    return introWidget();
+                  } else {
+                    // Build the
+                    return singleArticleWidget(articles[index - 1]);
+                  }
+                },
+              )
+            : CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: singleArticleWidget(
+                      articles.first,
+                      scrollable: true,
+                    ),
+                  ),
+                  SliverToBoxAdapter(child: const SizedBox(height: 60)),
+                ],
               ),
-            ),
-            SliverToBoxAdapter(child: const SizedBox(height: 60)),
-          ],
-        ),
       ),
     );
   }

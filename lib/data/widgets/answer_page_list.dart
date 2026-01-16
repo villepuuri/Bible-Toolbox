@@ -166,14 +166,13 @@ class _AnswerPageListState extends State<AnswerPageList> {
           'fi',
           category["kategoria"]["fi"],
         ).title;
-        print(categoryTitle);
 
         List<Widget> categoryList = [];
+        List<int> idList = category["elementit"]["fi"].cast<int>();
 
-        for (int element in category["elementit"]["fi"]) {
+        for (int element in idList) {
           if (LanguageHelper.articleExists('fi', id: element)) {
-            ArticleData article = LanguageHelper.getArticleById('fi', element);
-            debugPrint(article.title);
+            ArticleData? article = LanguageHelper.getArticleById('fi', element);
 
             categoryList.add(
               LinkHeadline(
@@ -183,13 +182,16 @@ class _AnswerPageListState extends State<AnswerPageList> {
                   Navigator.pushNamed(
                     context,
                     '/showText',
-                    arguments: {'id': element},
+                    arguments: {
+                      'idList': idList,
+                      'selectedID': element,
+                      'headline': categoryTitle,
+                    },
                   );
                 },
               ),
             );
           }
-
         }
         categories.add(
           ExtendableHeadline(title: categoryTitle, children: categoryList),

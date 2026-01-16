@@ -9,6 +9,8 @@ class Constants {
   static Icon iconShare = Icon(Icons.share, color: AppThemeData.black,);
 
   /* Data converters */
+  /// The lists have keywords, which are in the URLs. This translates the
+  /// keywords to app links.
   static Map<String, List<String>> internalLinkConvert = {
     '/bible': ['raamattu'],
     '/answers': ['vastauksia'],
@@ -20,9 +22,6 @@ class Constants {
 
   /* Markdown cleaner constants */
   static const String idSeparator = "^^^^";
-  static const String blockSeparator = "^^^^";
-  static const String rowSeparator = "^^^";
-  static const String colSeparator = "^^";
 
   // IDs need to be only one character
   static const String homePageID = "H";

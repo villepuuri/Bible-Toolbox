@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/Widgets/page_button.dart';
@@ -7,10 +10,32 @@ import '../../providers/language_provider.dart';
 import '../services/article_data.dart';
 
 /// Builds the home page buttons based on [rawData] produced by the ApiTextCleaner
-class HomePageList extends StatelessWidget {
+class HomePageList extends StatefulWidget {
   final String rawData;
 
   const HomePageList({super.key, required this.rawData});
+
+  @override
+  State<HomePageList> createState() => _HomePageListState();
+}
+
+class _HomePageListState extends State<HomePageList> {
+  Map<String, dynamic>? dataMap;
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  Future<void> loadData() async {
+    String jsonString = await rootBundle.loadString(
+      'assets/test_data/answersCategories.json',
+    );
+    dataMap = jsonDecode(jsonString);
+    debugPrint('DataMap got');
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +47,7 @@ class HomePageList extends StatelessWidget {
           );
 
           return Padding(
-            padding: const EdgeInsets.fromLTRB(0,10,0,0),
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -30,11 +55,32 @@ class HomePageList extends StatelessWidget {
                   "Löydä vastauksia:",
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
+                const SizedBox(height: 5),
                 ElevatedButton(
                   onPressed: () {
                     debugPrint('QuestionButton pressed');
                     // todo: implement navigation
-                    // Navigator.pushNamed(context, '/showText');
+                    // Find the category, where the question is
+                    for (final category in dataMap!.values) {
+                      List<int> idList = category["elementit"]["fi"]
+                          .cast<int>();
+                      if (idList.contains(randomQuestion.id)) {
+                        String categoryTitle = LanguageHelper.getArticleById(
+                          'fi',
+                          category["kategoria"]["fi"],
+                        ).title;
+                        Navigator.pushNamed(
+                          context,
+                          '/showText',
+                          arguments: {
+                            'idList': idList,
+                            'selectedID': randomQuestion.id,
+                            'headline': categoryTitle,
+                          },
+                        );
+                      }
+
+                    }
                   },
                   child: Text(randomQuestion.title),
                 ),
@@ -51,11 +97,11 @@ class HomePageList extends StatelessWidget {
       // Extracting the table elements
       final elementRegExp = RegExp(r'\[!(.*?)-{3,}\|-{3,}', dotAll: true);
       List<String?> elements = elementRegExp
-          .allMatches(rawData)
+          .allMatches(widget.rawData)
           .map((e) => e.group(0))
           .toList();
       debugPrint(
-        ' - category length: ${elementRegExp.allMatches(rawData).length}',
+        ' - category length: ${elementRegExp.allMatches(widget.rawData).length}',
       );
 
       for (final element in elements) {
