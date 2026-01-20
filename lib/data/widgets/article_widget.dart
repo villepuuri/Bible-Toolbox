@@ -72,8 +72,7 @@ class _ArticleWidgetState extends State<ArticleWidget> {
             onPressed: () async {
               if (!isBookmarked) {
                 await BookmarkHelper.addBookmark(
-                  widget.article!.title,
-                  widget.article!.path,
+                  widget.article!
                 );
               } else {
                 await BookmarkHelper.deleteBookmark(

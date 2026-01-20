@@ -7,7 +7,7 @@ class SimpleBox extends StatefulWidget {
 
   final EdgeInsetsGeometry? padding;
 
-  SimpleBox({super.key, required this.child, EdgeInsetsGeometry? padding})
+  const SimpleBox({super.key, required this.child, EdgeInsetsGeometry? padding})
    : padding = padding ?? const EdgeInsets.symmetric(horizontal: 4);
 
   @override

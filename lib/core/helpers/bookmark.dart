@@ -1,4 +1,6 @@
 import 'package:bible_toolbox/core/helpers/box_service.dart';
+import 'package:bible_toolbox/data/services/article_data.dart';
+import 'package:bible_toolbox/data/widgets/page_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -8,38 +10,37 @@ enum BookmarkType { answer, bible, catechism, concord, other }
 
 @HiveType(typeId: 1)
 class Bookmark {
-  @HiveField(0)
-  String id = DateTime.now().millisecondsSinceEpoch.toString();
-
   @HiveField(1)
   String name;
 
   @HiveField(2)
-  String path;
+  int typeId;
 
   @HiveField(3)
   late DateTime creationTime;
 
+  @HiveField(4)
+  int id;
+
+  @HiveField(5)
+  String languageCode;
+
   // todo: Before building the app, make sure that these are correct
   // todo: Maybe add type?
 
-  Bookmark({required this.name, required this.path, DateTime? creationTime})
-    : creationTime = creationTime ?? DateTime.now();
+  Bookmark({
+    required this.name,
+    required this.typeId,
+    required this.id,
+    required this.languageCode,
+    DateTime? creationTime,
+  }) : creationTime = creationTime ?? DateTime.now();
+
+  PageType get type => PageType.values[typeId];
 
   @override
   String toString() {
-    return "Bookmark: $name, ID: $id, path: $path, creationTime: $creationTime";
-  }
-
-  BookmarkType get type {
-    // todo: Fix this after getting the correct path
-    if (creationTime.second % 2 == 0) {
-      return BookmarkType.answer;
-    } else if (creationTime.second % 3 == 0) {
-      return BookmarkType.concord;
-    }
-    return BookmarkType.bible;
-    // return BookmarkType.values[Random().nextInt(BookmarkType.values.length)];
+    return "Bookmark: $name, ID: $id, typeId: $typeId, creationTime: $creationTime";
   }
 }
 
@@ -48,8 +49,13 @@ class BookmarkHelper {
   static bool isPageBookmarked(String title) =>
       boxBookmarks.values.any((b) => b.name == title);
 
-  static Future<void> addBookmark(String title, String path) async {
-    Bookmark bookmark = Bookmark(name: title, path: path);
+  static Future<void> addBookmark(ArticleData article) async {
+    Bookmark bookmark = Bookmark(
+      name: article.title,
+      typeId: article.type.index,
+      id: article.id,
+      languageCode: article.language,
+    );
     debugPrint('Adding a new bookmark: $bookmark');
     await boxBookmarks.put(bookmark.id, bookmark);
   }

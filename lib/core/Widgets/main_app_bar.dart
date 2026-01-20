@@ -38,8 +38,10 @@ class _MainAppBarState extends State<MainAppBar> {
         await BookmarkHelper.deleteBookmark(title: widget.title);
       } else {
         BookmarkHelper.addBookmark(
-          widget.title,
-          "Etusivu/Raamattu/${widget.title}",
+          LanguageHelper.getArticleByTitle(
+            context.read<LanguageProvider>().locale.languageCode,
+            widget.title,
+          ),
         ); // todo: fix this path
       }
       setState(() {});
@@ -49,7 +51,8 @@ class _MainAppBarState extends State<MainAppBar> {
       List<PopupMenuEntry> buttons = LanguageHelper.loadedLanguages
           .map<PopupMenuEntry<dynamic>>(
             (language) => PopupMenuItem(
-              enabled: true,              // todo: disable when the page is not available
+              enabled: true,
+              // todo: disable when the page is not available
               key: ValueKey(language.abbreviation),
               value: language.abbreviation,
               padding: EdgeInsets.all(0),

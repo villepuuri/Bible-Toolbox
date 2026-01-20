@@ -82,11 +82,11 @@ class _BookmarksPageState extends State<BookmarksPage> {
   Widget build(BuildContext context) {
     List<Bookmark> bookmarkList = getSortedBookmarks();
 
-    void moveToPage(String path) {
+    void moveToPage(int pageId) {
       /* When pressing a bookmark, this function is used to navigate
       * to the new page */
       // todo: Build navigation to a new page
-      debugPrint('User wants to move to page: $path');
+      debugPrint('User wants to move to page: $pageId');
       UnimplementedError();
     }
 
@@ -99,7 +99,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
           child: ListTile(
             title: Text(b.name, style: Theme.of(context).textTheme.bodyLarge),
             subtitle: Text(
-              b.path,
+              b.type.toString(),
               style: Theme.of(context).textTheme.bodySmall,
             ),
             trailing: PopupMenuButton(
@@ -138,7 +138,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
               onSelected: (value) {
                 // if value 1 show dialog
                 if (value == 1) {
-                  moveToPage(b.path);
+                  moveToPage(b.id);
                 }
                 // if value 2 show dialog
                 else if (value == 2) {
@@ -158,7 +158,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
               ),
             ),
             onTap: () {
-              moveToPage(b.path);
+              moveToPage(b.id);
             },
           ),
         ),

@@ -107,7 +107,7 @@ class _TextPageState extends State<TextPage> {
                 IconButton(
                   onPressed: () async {
                     if (!isBookmarked) {
-                      await BookmarkHelper.addBookmark(article.title, article.url);
+                      await BookmarkHelper.addBookmark(article);
                     } else {
                       await BookmarkHelper.deleteBookmark(title: article.title);
                     }
