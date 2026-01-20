@@ -71,7 +71,7 @@ class _TextPageState extends State<TextPage> {
     Widget titleBox(ArticleData article) {
       bool isBookmarked = BookmarkHelper.isPageBookmarked(article.title);
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        padding: const EdgeInsets.fromLTRB(0,16,0,0),
         child: Column(
           children: [
             Row(
@@ -146,15 +146,17 @@ class _TextPageState extends State<TextPage> {
 
     Widget singleArticleWidget(ArticleData article, {bool? scrollable}) =>
         Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // Divider(),
             titleBox(article),
+            const SizedBox(height: 10,),
             ApiTextWidget(
               pageType: PageType.article,
               scrollable: scrollable,
               body: ApiTextCleaner.cleanText(article.body),
             ),
+            SizedBox(width: 100, child: const Divider()),
             const SizedBox(height: 50),
           ],
         );

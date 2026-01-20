@@ -1,6 +1,4 @@
 import 'package:bible_toolbox/core/constants.dart';
-import 'package:bible_toolbox/core/helpers/language_helper.dart';
-import 'package:bible_toolbox/data/services/article_data.dart';
 import 'package:bible_toolbox/data/widgets/page_widget.dart';
 import 'package:flutter/cupertino.dart';
 

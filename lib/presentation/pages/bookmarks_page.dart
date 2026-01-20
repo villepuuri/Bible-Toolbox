@@ -1,10 +1,16 @@
+import 'dart:convert';
+
 import 'package:bible_toolbox/core/Widgets/extendable_headline.dart';
 import 'package:bible_toolbox/core/Widgets/main_app_bar.dart';
 import 'package:bible_toolbox/core/helpers/bookmark.dart';
 import 'package:bible_toolbox/core/helpers/box_service.dart';
 import 'package:bible_toolbox/core/theme.dart';
+import 'package:bible_toolbox/data/services/article_data.dart';
 import 'package:bible_toolbox/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import '../../core/helpers/language_helper.dart';
 
 class BookmarksPage extends StatefulWidget {
   const BookmarksPage({super.key});
@@ -16,19 +22,19 @@ class BookmarksPage extends StatefulWidget {
 class _BookmarksPageState extends State<BookmarksPage> {
   bool sortExtended = false;
 
-  Map<String, bool> selectedSorts = {
-    "Kaikki": true,
-    "Vastaukset": false,
-    "Raamattu": false,
-    "Katekismus": false,
-    "Tunnustuskirjat": false,
+  Map<BookmarkType, bool> selectedSorts = {
+    BookmarkType.other: true,
+    BookmarkType.answer: false,
+    BookmarkType.bible: false,
+    BookmarkType.catechism: false,
+    BookmarkType.concord: false,
   };
 
   Widget dividerLine({double width = 1}) =>
       Container(color: Theme.of(context).colorScheme.primary, height: width);
 
-  Widget sortBox(String name) {
-    bool selected = selectedSorts[name] ?? false;
+  Widget sortBox(BookmarkType type) {
+    bool selected = selectedSorts[type] ?? false;
     return OutlinedButton(
       style: AppThemeData.outlinedButtonTheme.style?.copyWith(
         backgroundColor: selected
@@ -36,12 +42,12 @@ class _BookmarksPageState extends State<BookmarksPage> {
             : null,
       ),
       onPressed: () {
-        if (!(selectedSorts[name] ?? false)) {
+        if (!(selectedSorts[type] ?? false)) {
           // Deselect all
-          for (String key in selectedSorts.keys) {
+          for (BookmarkType key in selectedSorts.keys) {
             selectedSorts[key] = false;
           }
-          selectedSorts[name] = true;
+          selectedSorts[type] = true;
           setState(() {});
         }
       },
@@ -49,7 +55,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            name,
+            type.name,
             style: selected
                 ? Theme.of(context).textTheme.labelSmall?.apply(
                     color: Colors.white,
@@ -64,11 +70,16 @@ class _BookmarksPageState extends State<BookmarksPage> {
 
   List<Bookmark> getSortedBookmarks() {
     List<Bookmark> list = [];
-    int typeIndex = selectedSorts.values.toList().indexOf(true);
-    for (var b in boxBookmarks.values) {
-      if (typeIndex == 0) {
+    // Get the selected sorting method (0=all)
+    BookmarkType selectedType = selectedSorts.entries
+        .firstWhere((e) => e.value, orElse: () => selectedSorts.entries.first)
+        .key;
+    debugPrint('Selected: $selectedType');
+    for (Bookmark b in boxBookmarks.values) {
+      debugPrint(' - ${b.type}');
+      if (selectedType == BookmarkType.other) {
         list.add(b);
-      } else if (typeIndex - 1 == b.type.index) {
+      } else if (selectedType.name == b.type.name) {
         list.add(b);
       }
     }
@@ -82,12 +93,38 @@ class _BookmarksPageState extends State<BookmarksPage> {
   Widget build(BuildContext context) {
     List<Bookmark> bookmarkList = getSortedBookmarks();
 
-    void moveToPage(int pageId) {
-      /* When pressing a bookmark, this function is used to navigate
-      * to the new page */
+    /// When pressing a bookmark, this function is used to navigate
+    /// to the new page with id: pageId
+    Future<void> moveToPage(int pageId) async {
       // todo: Build navigation to a new page
       debugPrint('User wants to move to page: $pageId');
-      UnimplementedError();
+
+      String jsonString = await rootBundle.loadString(
+        'assets/test_data/answersCategories.json',
+      );
+      Map<String, dynamic> dataMap = jsonDecode(jsonString);
+      for (final category in dataMap.entries) {
+        if (category.value["elementit"]['fi'].contains(pageId) &&
+            context.mounted) {
+          // Get the articles in the same category
+          List<int> idList = category.value["elementit"]['fi'].cast<int>();
+          String categoryTitle = LanguageHelper.getArticleById(
+            'fi',
+            category.value["kategoria"]["fi"],
+          ).title;
+          // Move to the text page
+          Navigator.pushReplacementNamed(
+            context,
+            '/showText',
+            arguments: {
+              'idList': idList,
+              'selectedID': pageId,
+              'headline': categoryTitle,
+            },
+          );
+          break;
+        }
+      }
     }
 
     Widget bookmarkTile(Bookmark b) {
@@ -98,10 +135,6 @@ class _BookmarksPageState extends State<BookmarksPage> {
           padding: const EdgeInsets.symmetric(vertical: 6),
           child: ListTile(
             title: Text(b.name, style: Theme.of(context).textTheme.bodyLarge),
-            subtitle: Text(
-              b.type.toString(),
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
             trailing: PopupMenuButton(
               itemBuilder: (menuContext) {
                 return [
@@ -183,13 +216,9 @@ class _BookmarksPageState extends State<BookmarksPage> {
                   Wrap(
                     spacing: 8,
                     runSpacing: 0,
-                    children: [
-                      sortBox("Kaikki"),
-                      sortBox("Vastaukset"),
-                      sortBox("Raamattu"),
-                      sortBox("Katekismus"),
-                      sortBox("Tunnustuskirjat"),
-                    ],
+                    children: selectedSorts.keys
+                        .map((BookmarkType type) => sortBox(type))
+                        .toList(),
                   ),
                 ],
               ),

@@ -41,7 +41,7 @@ class _ApiTextWidgetState extends State<ApiTextWidget> {
             ? null
             : NeverScrollableScrollPhysics(),
         shrinkWrap: true,
-        padding: const EdgeInsets.symmetric(vertical: 32),
+        padding: const EdgeInsets.symmetric(vertical: 16),
         builders: {
           // Custom builder for blockquotes
           'blockquote': BlockquoteElementBuilder(),

@@ -1,6 +1,5 @@
 import 'package:bible_toolbox/core/helpers/box_service.dart';
 import 'package:bible_toolbox/data/services/article_data.dart';
-import 'package:bible_toolbox/data/widgets/page_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -26,7 +25,6 @@ class Bookmark {
   String languageCode;
 
   // todo: Before building the app, make sure that these are correct
-  // todo: Maybe add type?
 
   Bookmark({
     required this.name,
@@ -36,7 +34,7 @@ class Bookmark {
     DateTime? creationTime,
   }) : creationTime = creationTime ?? DateTime.now();
 
-  PageType get type => PageType.values[typeId];
+  BookmarkType get type => BookmarkType.values[typeId];
 
   @override
   String toString() {
@@ -50,9 +48,24 @@ class BookmarkHelper {
       boxBookmarks.values.any((b) => b.name == title);
 
   static Future<void> addBookmark(ArticleData article) async {
+    BookmarkType type = BookmarkType.other;
+    switch (article.type) {
+      case (ArticleType.catechism):
+        type = BookmarkType.catechism;
+        break;
+      case (ArticleType.bible):
+        type = BookmarkType.bible;
+        break;
+      case (ArticleType.answers):
+        type = BookmarkType.answer;
+        break;
+      default:
+        break;
+    }
+
     Bookmark bookmark = Bookmark(
       name: article.title,
-      typeId: article.type.index,
+      typeId: type.index,
       id: article.id,
       languageCode: article.language,
     );
