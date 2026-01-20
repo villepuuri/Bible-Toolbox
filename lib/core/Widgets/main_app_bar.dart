@@ -102,7 +102,7 @@ class _MainAppBarState extends State<MainAppBar> {
       scrolledUnderElevation: 0,
 
       actions: [
-        widget.useSmallAppBar && widget.showBookmarkButton
+        widget.useSmallAppBar || widget.showBookmarkButton
             ? IconButton(
                 onPressed: onBookmarkPressed,
                 icon: BookmarkHelper.isPageBookmarked(widget.title)

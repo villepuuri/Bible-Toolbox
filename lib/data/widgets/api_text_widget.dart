@@ -28,7 +28,7 @@ class ApiTextWidget extends StatefulWidget {
 class _ApiTextWidgetState extends State<ApiTextWidget> {
   @override
   Widget build(BuildContext context) {
-    if (widget.pageType == PageType.answers) {
+    if (widget.pageType == PageType.catechism) {
       // debugPrint('*-*_*_*_*_');
       // debugPrint(widget.body);
       // debugPrint('*-*_*_*_*_');

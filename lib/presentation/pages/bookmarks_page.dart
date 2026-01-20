@@ -5,7 +5,6 @@ import 'package:bible_toolbox/core/Widgets/main_app_bar.dart';
 import 'package:bible_toolbox/core/helpers/bookmark.dart';
 import 'package:bible_toolbox/core/helpers/box_service.dart';
 import 'package:bible_toolbox/core/theme.dart';
-import 'package:bible_toolbox/data/services/article_data.dart';
 import 'package:bible_toolbox/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -135,6 +134,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
           padding: const EdgeInsets.symmetric(vertical: 6),
           child: ListTile(
             title: Text(b.name, style: Theme.of(context).textTheme.bodyLarge),
+            subtitle: Text("- ${b.creationDate}"),
             trailing: PopupMenuButton(
               itemBuilder: (menuContext) {
                 return [

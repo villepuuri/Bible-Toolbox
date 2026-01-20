@@ -1,3 +1,4 @@
+import 'package:bible_toolbox/core/Widgets/article_title_widget.dart';
 import 'package:bible_toolbox/core/Widgets/link_headline.dart';
 import 'package:bible_toolbox/core/Widgets/main_app_bar.dart';
 import 'package:bible_toolbox/core/helpers/language_helper.dart';
@@ -9,10 +10,7 @@ import 'package:bible_toolbox/providers/language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:share_plus/share_plus.dart';
 
-import '../../core/constants.dart';
-import '../../core/helpers/bookmark.dart';
 
 class TextPage extends StatefulWidget {
   const TextPage({super.key});
@@ -54,82 +52,7 @@ class _TextPageState extends State<TextPage> {
       }
     }
 
-    // todo: translations
-    Widget authorBox({String? author, String? translator}) {
-      assert(
-        !(author == null && translator == null),
-        "You must give at least one",
-      );
-      if (author != null && author.isEmpty) return SizedBox();
-      if (translator != null && translator.isEmpty) return SizedBox();
-      return Text(
-        author != null ? "Kirjoittanut: $author" : "Kääntänyt: $translator",
-        style: Theme.of(context).textTheme.bodySmall,
-      );
-    }
 
-    Widget titleBox(ArticleData article) {
-      bool isBookmarked = BookmarkHelper.isPageBookmarked(article.title);
-      return Padding(
-        padding: const EdgeInsets.fromLTRB(0,16,0,0),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        article.title,
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                      const SizedBox(height: 4),
-                      if (article.authors.isNotEmpty)
-                        authorBox(author: article.writerNames),
-                      if (article.translators.isNotEmpty)
-                        authorBox(translator: article.translatorNames),
-                    ],
-                  ),
-                ),
-                IconButton(
-                  onPressed: () async {
-                    debugPrint('User wants to share: ${article.title}');
-                    SharePlus.instance.share(
-                        ShareParams(uri: Uri.parse(article.urlLink))
-                    );
-                    // todo: fix sharing
-                  },
-                  icon: Constants.iconShare,
-                ),
-                IconButton(
-                  onPressed: () async {
-                    if (!isBookmarked) {
-                      await BookmarkHelper.addBookmark(article);
-                    } else {
-                      await BookmarkHelper.deleteBookmark(title: article.title);
-                    }
-                    setState(() {});
-                  },
-                  icon: isBookmarked
-                      ? Icon(
-                          Constants.iconSelectedBookmark,
-                          color: Theme.of(context).colorScheme.primary,
-                        )
-                      : Icon(
-                          Constants.iconAddBookmark,
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
-                ),
-              ],
-            ),
-            const Divider()
-          ],
-        ),
-      );
-    }
 
     if (firstBuild) {
       firstBuild = false;
@@ -149,7 +72,7 @@ class _TextPageState extends State<TextPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // Divider(),
-            titleBox(article),
+            ArticleTitleWidget(article: article),
             const SizedBox(height: 10,),
             ApiTextWidget(
               pageType: PageType.article,

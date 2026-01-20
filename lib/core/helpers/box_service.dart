@@ -107,10 +107,14 @@ class BoxService {
   /// Get articles based on the type
   static List<Map<String, dynamic>> getArticles(
     String languageCode,
-    String type,
+    String? type,
   ) {
     List<Map<String, dynamic>> allData = readLanguageBox(languageCode);
-    return allData.where((element) => element['type'] == type).toList();
+    if (type == null) {
+      return allData;
+    } else {
+      return allData.where((element) => element['type'] == type).toList();
+    }
   }
 
   static Map<String, dynamic> getArticleById(String languageCode, int id) {

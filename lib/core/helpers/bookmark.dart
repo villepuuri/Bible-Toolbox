@@ -2,6 +2,7 @@ import 'package:bible_toolbox/core/helpers/box_service.dart';
 import 'package:bible_toolbox/data/services/article_data.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 
 part 'bookmark.g.dart';
 
@@ -36,6 +37,8 @@ class Bookmark {
 
   BookmarkType get type => BookmarkType.values[typeId];
 
+  String get creationDate => DateFormat('d.M.yyyy').format(creationTime);
+
   @override
   String toString() {
     return "Bookmark: $name, ID: $id, typeId: $typeId, creationTime: $creationTime";
@@ -47,17 +50,17 @@ class BookmarkHelper {
   static bool isPageBookmarked(String title) =>
       boxBookmarks.values.any((b) => b.name == title);
 
-  static Future<void> addBookmark(ArticleData article) async {
-    BookmarkType type = BookmarkType.other;
+  static Future<void> addBookmark(ArticleData article, {BookmarkType? type}) async {
+    BookmarkType newType = BookmarkType.other;
     switch (article.type) {
       case (ArticleType.catechism):
-        type = BookmarkType.catechism;
+        newType = BookmarkType.catechism;
         break;
       case (ArticleType.bible):
-        type = BookmarkType.bible;
+        newType = BookmarkType.bible;
         break;
       case (ArticleType.answers):
-        type = BookmarkType.answer;
+        newType = BookmarkType.answer;
         break;
       default:
         break;
@@ -65,7 +68,7 @@ class BookmarkHelper {
 
     Bookmark bookmark = Bookmark(
       name: article.title,
-      typeId: type.index,
+      typeId: type?.index ?? newType.index,
       id: article.id,
       languageCode: article.language,
     );

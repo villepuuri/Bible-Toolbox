@@ -128,6 +128,7 @@ class ArticleData {
         articleType = ArticleType.faith;
         break;
     }
+    // todo: do I need this assert?
     assert(
       articleType != ArticleType.none,
       "Article type has not been selected!",
@@ -135,12 +136,12 @@ class ArticleData {
 
     // Get the list of authors
     List<Author> authors = [];
-    for (var author in json["taxonomy"]) {
+    for (var author in json["taxonomy"] ?? []) {
       authors.add(Author.fromJson(Map<String, dynamic>.from(author)));
     }
 
     return ArticleData(
-      id: json["id"],
+      id: json["id"] ?? -1,
       type: articleType,
       title: json["title"],
       language: json["language"],

@@ -17,20 +17,22 @@ class ApiTextCleaner {
   }
 
   /// Cleaner for pages
-  static String cleanPage(
-    String raw, {
-    PageType? pageType,
-  }) {
+  static String cleanPage(String raw, {PageType? pageType}) {
     // String result = cleanPageLink(raw);
     debugPrint("- Cleaning");
     pageType ??= PageType.other;
 
-    // Fix the bolded text
-    raw = raw.replaceAll('<br>\r\n', '');
+    // Fix the line breaks
+    raw = raw.replaceAll('<br>', '');
+    raw = raw.replaceAll('<br/>', '');
 
     // Remove all the comments
     RegExp commentRE = RegExp(r'<!-*.*?-*>', dotAll: true);
     raw = raw.replaceAll(commentRE, '');
+
+    // Fix headings (##Heading -> ## Heading)
+    RegExp headingRE = RegExp(r'(#+)(?=\S)', dotAll: true);
+    raw = raw.replaceAllMapped(headingRE, (m) => '${m.group(1)} ');
 
     // Handle the specific cases
     switch (pageType) {
