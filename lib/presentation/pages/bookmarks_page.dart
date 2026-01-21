@@ -134,7 +134,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
           padding: const EdgeInsets.symmetric(vertical: 6),
           child: ListTile(
             title: Text(b.name, style: Theme.of(context).textTheme.bodyLarge),
-            subtitle: Text("- ${b.creationDate}"),
+            subtitle: Text("  ${b.creationDate}"),
             trailing: PopupMenuButton(
               itemBuilder: (menuContext) {
                 return [

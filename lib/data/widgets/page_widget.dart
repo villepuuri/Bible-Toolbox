@@ -10,9 +10,15 @@ enum PageType { home, bible, answers, catechism, concord, article, other }
 class PageWidget extends StatefulWidget {
   final ArticleData? page;
   final PageType pageType;
+  final bool showTitle;
 
-  const PageWidget({super.key, required this.page, PageType? pageType})
-    : pageType = pageType ?? PageType.other;
+  const PageWidget({
+    super.key,
+    required this.page,
+    PageType? pageType,
+    bool? showTitle,
+  }) : pageType = pageType ?? PageType.other,
+       showTitle = showTitle ?? true;
 
   @override
   State<PageWidget> createState() => _PageWidgetState();
@@ -22,18 +28,14 @@ class _PageWidgetState extends State<PageWidget> {
   @override
   Widget build(BuildContext context) {
     Widget titleWidget() {
-      return widget.pageType == PageType.home ||
-              widget.pageType == PageType.answers
-          ? Text(
-              widget.page!.title,
-              style: Theme.of(context).textTheme.titleMedium,
-            )
-          : ArticleTitleWidget(
+      return widget.showTitle
+          ? ArticleTitleWidget(
               article: widget.page!,
               bookmarkType: widget.pageType == PageType.concord
                   ? BookmarkType.concord
                   : null,
-            );
+            )
+          : const SizedBox();
     }
 
     return widget.page != null

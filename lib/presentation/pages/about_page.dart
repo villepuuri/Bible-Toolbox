@@ -25,8 +25,11 @@ class _AboutPageState extends State<AboutPage> {
     );
 
     return Scaffold(
-      appBar: MainAppBar(title: "Keitä me olemme?",), // todo: text
-      body: PageWidget(page: article),
+      appBar: MainAppBar(
+        title: article?.title ?? "",
+        showBookmarkButton: false,
+      ), // todo: text
+      body: PageWidget(page: article, showTitle: false,),
     );
   }
 }

@@ -15,40 +15,27 @@ class BiblePage extends StatefulWidget {
 }
 
 class _BiblePageState extends State<BiblePage> {
-  ArticleData? article;
+
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _loadData();
-  }
+  Widget build(BuildContext context) {
 
-  Future<void> _loadData() async {
-    // article = await LanguageHelper.getRandomBibleArticle(
-    //   context.read<LanguageProvider>().locale.languageCode,
-    // );
-    article = LanguageHelper.getArticleById(
+    ArticleData article = LanguageHelper.getArticleById(
       context.read<LanguageProvider>().locale.languageCode,
       22,
     );
 
-
-    if (!mounted) return;
-    setState(() {});
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {});
         },
       ),
-      appBar: MainAppBar(title: article?.title ?? ""),
+      appBar: MainAppBar(title: article.title, showBookmarkButton: false,),
       body: PageWidget(
         page: article,
         pageType: PageType.bible,
+        showTitle: false,
       ),
     );
   }

@@ -32,11 +32,11 @@ class _AnswersPageState extends State<AnswersPage> {
     );
 
     return Scaffold(
-      appBar: MainAppBar(title: "Vastaukset"),
+      appBar: MainAppBar(title: page?.title ?? "", showBookmarkButton: false,),
       floatingActionButton: FloatingActionButton(onPressed: () {
         LanguageHelper.getDoubles();
       }),
-      body: PageWidget(page: page, pageType: PageType.answers,)
+      body: PageWidget(page: page, pageType: PageType.answers, showTitle: false,)
     );
   }
 }

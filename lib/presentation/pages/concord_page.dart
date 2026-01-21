@@ -25,8 +25,16 @@ class _ConcordPageState extends State<ConcordPage> {
     );
 
     return Scaffold(
-      appBar: MainAppBar(title: "Tunnustuskirjat", showBookmarkButton: false,), // todo: text
-      body: PageWidget(page: article, pageType: PageType.concord,),
+      appBar: MainAppBar(
+        title: "",
+        showBookmarkButton: false,
+        showBottomLine: false,
+      ), // todo: text
+      body: PageWidget(
+        page: article,
+        pageType: PageType.concord,
+        showTitle: true,
+      ),
     );
   }
 }

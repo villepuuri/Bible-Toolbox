@@ -219,6 +219,7 @@ class _LanguagePageState extends State<LanguagePage> {
                 return languageTile(LanguageHelper.loadableLanguages[index]);
               }, childCount: LanguageHelper.loadableLanguages.length),
             ),
+            SliverToBoxAdapter(child: const SizedBox(height: 80,),)
           ],
         ),
       ),

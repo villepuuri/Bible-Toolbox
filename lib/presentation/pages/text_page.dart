@@ -79,6 +79,7 @@ class _TextPageState extends State<TextPage> {
               scrollable: scrollable,
               body: ApiTextCleaner.cleanText(article.body),
             ),
+            const SizedBox(height: 10,),
             SizedBox(width: 100, child: const Divider()),
             const SizedBox(height: 50),
           ],
@@ -106,7 +107,7 @@ class _TextPageState extends State<TextPage> {
       ),
 
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 32),
         child: articles.length > 1
             ? ScrollablePositionedList.builder(
                 itemCount: articles.length + 1,
@@ -126,7 +127,6 @@ class _TextPageState extends State<TextPage> {
                   SliverToBoxAdapter(
                     child: singleArticleWidget(
                       articles.first,
-                      scrollable: true,
                     ),
                   ),
                   SliverToBoxAdapter(child: const SizedBox(height: 60)),

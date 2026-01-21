@@ -25,8 +25,13 @@ class _CatechismPageState extends State<CatechismPage> {
     );
 
     return Scaffold(
-      appBar: MainAppBar(title: "Katekismus"), // todo: text
-      body: PageWidget(page: article, pageType: PageType.catechism,),
+      appBar: MainAppBar(
+        title: "",
+        showBottomLine: false,
+        showBookmarkButton: false,
+      ),
+      // todo: text
+      body: PageWidget(page: article, pageType: PageType.catechism),
     );
   }
 }

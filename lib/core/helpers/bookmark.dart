@@ -37,6 +37,7 @@ class Bookmark {
 
   BookmarkType get type => BookmarkType.values[typeId];
 
+  // todo: internalize this
   String get creationDate => DateFormat('d.M.yyyy').format(creationTime);
 
   @override

@@ -13,12 +13,14 @@ class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
   final bool useSmallAppBar;
   final bool showLanguageButton;
   final bool showBookmarkButton;
+  final bool showBottomLine;
 
   const MainAppBar({
     required this.title,
     this.useSmallAppBar = false,
     this.showLanguageButton = true,
     this.showBookmarkButton = true,
+    this.showBottomLine = true,
     super.key,
   });
 
@@ -102,7 +104,7 @@ class _MainAppBarState extends State<MainAppBar> {
       scrolledUnderElevation: 0,
 
       actions: [
-        widget.useSmallAppBar || widget.showBookmarkButton
+        widget.showBookmarkButton
             ? IconButton(
                 onPressed: onBookmarkPressed,
                 icon: BookmarkHelper.isPageBookmarked(widget.title)
@@ -141,14 +143,16 @@ class _MainAppBarState extends State<MainAppBar> {
               )
             : const SizedBox(),
       ],
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(2.0),
-        child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 16),
-          color: AppThemeData.lightGreen,
-          height: 2.0,
-        ),
-      ),
+      bottom: widget.showBottomLine
+          ? PreferredSize(
+              preferredSize: const Size.fromHeight(2.0),
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 16),
+                color: AppThemeData.lightGreen,
+                height: 2.0,
+              ),
+            )
+          : null,
     );
   }
 }
