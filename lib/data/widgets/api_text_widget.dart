@@ -51,7 +51,11 @@ class _ApiTextWidgetState extends State<ApiTextWidget> {
           p: Theme.of(context).textTheme.bodyMedium,
           h1: Theme.of(context).textTheme.headlineLarge,
           h1Padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+          h2: Theme.of(context).textTheme.headlineLarge,
           h3: Theme.of(context).textTheme.headlineMedium,
+          h4: Theme.of(context).textTheme.headlineMedium,
+          h5: Theme.of(context).textTheme.headlineSmall,
+          h6: Theme.of(context).textTheme.headlineSmall,
           a: Theme.of(context).textTheme.labelMedium,
           blockquote: Theme.of(
             context,

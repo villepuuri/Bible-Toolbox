@@ -54,7 +54,7 @@ class _ArticleTitleWidgetState extends State<ArticleTitleWidget> {
                       widget.article.title,
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 8),
                     if (widget.article.authors.isNotEmpty)
                       authorBox(author: widget.article.writerNames),
                     if (widget.article.translators.isNotEmpty)
