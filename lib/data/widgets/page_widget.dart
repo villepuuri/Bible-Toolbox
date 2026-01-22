@@ -27,15 +27,15 @@ class PageWidget extends StatefulWidget {
 class _PageWidgetState extends State<PageWidget> {
   @override
   Widget build(BuildContext context) {
-    Widget titleWidget() {
+    Widget? titleWidget() {
       return widget.showTitle
-          ? ArticleTitleWidget(
+          ? widget.pageType != PageType.home ? ArticleTitleWidget(
               article: widget.page!,
               bookmarkType: widget.pageType == PageType.concord
                   ? BookmarkType.concord
                   : null,
-            )
-          : const SizedBox();
+            ) : Text(widget.page!.title, style: Theme.of(context).textTheme.titleMedium,)
+          : null;
     }
 
     return widget.page != null

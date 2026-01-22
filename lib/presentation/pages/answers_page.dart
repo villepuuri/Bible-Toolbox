@@ -7,7 +7,6 @@ import 'package:bible_toolbox/core/helpers/language_helper.dart';
 import 'package:bible_toolbox/data/services/article_data.dart';
 import 'package:bible_toolbox/data/widgets/page_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/language_provider.dart';
@@ -33,9 +32,9 @@ class _AnswersPageState extends State<AnswersPage> {
 
     return Scaffold(
       appBar: MainAppBar(title: page?.title ?? "", showBookmarkButton: false,),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        LanguageHelper.getDoubles();
-      }),
+      // floatingActionButton: FloatingActionButton(onPressed: () {
+      //   LanguageHelper.getDoubles();
+      // }),
       body: PageWidget(page: page, pageType: PageType.answers, showTitle: false,)
     );
   }

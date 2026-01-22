@@ -13,8 +13,7 @@ Meta box
 }
 
 Language box
-key: "en"
-
+key: [String]"en"
 {
     'data': [List<Map<String, dynamic>>]
         [

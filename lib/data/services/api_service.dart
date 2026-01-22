@@ -8,12 +8,13 @@ class ApiService {
   static final String baseUrl = "https://www.bibletoolbox.net/d7/marty-api";
 
   /// Retrieves data from API for [language]
+  /// Returns false if data is already downloaded, true if succeeded
   static Future<bool> getDataForLanguage(
     LanguageClass language,
     Function? updateParent,
   ) async {
     // Check if the data is already downloaded
-    if (await BoxService.hiveBoxExists(language.code)) {
+    if (await BoxService.hiveBoxExists(language.code).catchError((e) => false)) {
       debugPrint('Data not downloaded, $language is already in the device!');
       return false;
     }
@@ -25,7 +26,11 @@ class ApiService {
     List<Map<String, dynamic>> languageApiData = await handleApiCalls(
       language,
       updateParent: updateParent,
-    );
+    ).catchError((e) {
+      debugPrint('Error while getting the api data: $e');
+      List<Map<String, dynamic>> returnList = [];
+      return returnList;
+    });
 
     await BoxService.saveLanguageData(
       language.code,
@@ -35,6 +40,9 @@ class ApiService {
     return true;
   }
 
+  /// Checks for updates and if necessary, updates articles for loaded
+  /// languages.
+  /// Returns true, if articles were updated, false if updates was not found
   static Future<bool> updateDataForLanguage(LanguageClass language) async {
     // Check if the language is loaded
     assert(
@@ -72,7 +80,9 @@ class ApiService {
       return false;
     }
 
-    List<Map<String, dynamic>> oldData = await BoxService.getAllArticles(
+    // Make sure the box is open
+    await BoxService.open(language.code);
+    List<Map<String, dynamic>> oldData = BoxService.getAllArticles(
       language.code,
     );
     for (final article in languageApiData) {
@@ -87,15 +97,14 @@ class ApiService {
     }
 
     // Save the updated data
-    await BoxService.saveLanguageData(
-      language.code,
-      oldData,
-      updateTime,
-    );
+    await BoxService.saveLanguageData(language.code, oldData, updateTime);
     return true;
   }
 
+  ///
   /// Handles the API calling for getting data
+  ///
+  /// Returns an empty list if data could not be retrieved
   static Future<List<Map<String, dynamic>>> handleApiCalls(
     LanguageClass language, {
     Function? updateParent,
@@ -113,7 +122,10 @@ class ApiService {
     List<Map<String, dynamic>> languageApiData = [];
 
     // Get the number of pages to go through
-    int pageNumber = await getMaxPageCount(url);
+    int pageNumber = await getMaxPageCount(url).catchError((e) {
+      debugPrint('Error while getting max page number: $e');
+      return -1;
+    });
 
     // Get the data from every page
     for (int i = 0; i <= pageNumber; i++) {
@@ -149,6 +161,9 @@ class ApiService {
     return languageApiData;
   }
 
+  ///
+  /// Returns the number of the pages for a specific url
+  ///
   static Future<int> getMaxPageCount(String url) async {
     final uri = Uri.parse("$url&limit=1");
     final response = await http

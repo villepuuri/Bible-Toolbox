@@ -35,35 +35,35 @@ class _HomePageState extends State<HomePage> {
         title: AppLocalizations.of(context)!.titleHomePage,
         showBookmarkButton: false,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          debugPrint('on pressed');
-          await showDialog(
-            context: context,
-            builder: (context) {
-              return SimpleDialog(
-                children: [
-                  ApiTextWidget(
-                    body: "# Heading 1\r\n"
-                        "## Heading 2\r\n"
-                        "### Heading 3\r\n"
-                        "#### Heading 4\r\n"
-                        "##### Heading 5\r\n"
-                        "###### Heading 6\r\n",
-                    pageType: PageType.article,
-                  ),
-                ],
-              );
-            },
-          );
-          // print(ExtractKeyInformation.getMainCategories('fi'));
-        },
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () async {
+      //     debugPrint('on pressed');
+      //     await showDialog(
+      //       context: context,
+      //       builder: (context) {
+      //         return SimpleDialog(
+      //           children: [
+      //             ApiTextWidget(
+      //               body: "# Heading 1\r\n"
+      //                   "## Heading 2\r\n"
+      //                   "### Heading 3\r\n"
+      //                   "#### Heading 4\r\n"
+      //                   "##### Heading 5\r\n"
+      //                   "###### Heading 6\r\n",
+      //               pageType: PageType.article,
+      //             ),
+      //           ],
+      //         );
+      //       },
+      //     );
+      //     // print(ExtractKeyInformation.getMainCategories('fi'));
+      //   },
+      // ),
       drawer: MainDrawer(),
       body: PageWidget(
         page: article,
         pageType: PageType.home,
-        showTitle: false,
+        showTitle: true,
       ),
     );
   }
