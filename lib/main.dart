@@ -1,23 +1,22 @@
-import 'package:bible_toolbox/core/helpers/bookmark.dart';
-import 'package:bible_toolbox/presentation/pages/about_page.dart';
-import 'package:bible_toolbox/presentation/pages/bible_page.dart';
-import 'package:bible_toolbox/presentation/pages/bookmarks_page.dart';
-import 'package:bible_toolbox/presentation/pages/catechism_page.dart';
-import 'package:bible_toolbox/presentation/pages/concord_page.dart';
-import 'package:bible_toolbox/presentation/pages/home_page.dart';
-import 'package:bible_toolbox/presentation/pages/answers_page.dart';
-import 'package:bible_toolbox/presentation/pages/language_page.dart';
-import 'package:bible_toolbox/presentation/pages/loading_page.dart';
-import 'package:bible_toolbox/presentation/pages/text_page.dart';
-import 'package:bible_toolbox/presentation/pages/welcome_page.dart';
-import 'package:bible_toolbox/providers/language_provider.dart';
-import 'package:flutter/material.dart';
+import 'package:bible_toolbox/features/bookmark/models/bookmark.dart';
+import 'package:bible_toolbox/features/bookmark/presentation/bookmarks_page.dart';
+import 'package:bible_toolbox/features/language/presentation/language_page.dart';
+import 'package:bible_toolbox/features/startup/presentation/loading_page.dart';
+import 'package:bible_toolbox/features/startup/presentation/welcome_page.dart';
+import 'package:bible_toolbox/features/language/providers/language_provider.dart';import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'core/helpers/box_service.dart';
+import 'core/services/boxes.dart';
 import 'core/theme.dart';
-import 'l10n/app_localizations.dart';
+import 'features/content/presentation/pages/about_page.dart';
+import 'features/content/presentation/pages/answers_page.dart';
+import 'features/content/presentation/pages/bible_page.dart';
+import 'features/content/presentation/pages/catechism_page.dart';
+import 'features/content/presentation/pages/concord_page.dart';
+import 'features/content/presentation/pages/home_page.dart';
+import 'features/content/presentation/pages/text_page.dart';
+import 'package:bible_toolbox/l10n/app_localizations.dart';
 
 void main() async {
   // Init the Hive memory

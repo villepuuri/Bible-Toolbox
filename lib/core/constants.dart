@@ -1,6 +1,19 @@
 import 'package:bible_toolbox/core/theme.dart';
 import 'package:flutter/material.dart';
 
+enum BookmarkType { answer, bible, catechism, concord, other }
+
+/// The different text types used to create the text blocks
+///       ["katekismus",
+///       "page",
+///       "raamattu",
+///       "vastauksia_etsiville",
+///       "uskon_abc"]
+enum ArticleType { catechism, page, bible, answers, faith, none }
+
+enum PageType { home, bible, answers, catechism, concord, article, other }
+
+
 class Constants {
   /* Icon constants */
   static IconData iconSelectedBookmark = Icons.bookmark;

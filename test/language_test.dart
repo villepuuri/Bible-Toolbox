@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:bible_toolbox/core/helpers/language_helper.dart';
+import 'package:bible_toolbox/features/language/service/language_helper.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 

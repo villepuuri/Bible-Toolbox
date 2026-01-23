@@ -29,15 +29,19 @@ nettiyhteyttä ja kirjainmerkkien asettamisen.
 ```
 lib/
 ├── core/           # Sovelluksen teemat, vakiot
-├── data/           # API, datan käsittely, luokat
+├── features/       # Sovelluksen osiot
+    ├── bookmark/   # Kirjainmerkkien osat
+    ├── content/    # Sovelluksen sisältö API-datasta
+    ├── language/   # Sovelluksen kielelliset osiot
+    └── startup/    # Sovelluksen aloitusosio
 ├── l10n/           # Sovelluksen käyttöön liittyvät tekstit
-├── presentation/   # UI (sivut, widgetit)
-├── providers/      # Sovelluksen kielen hallitsija
 └── main.dart       # Sovelluksen käynnistystiedosto
 
 assets/
 ├── btb_images/     # Sovelluksen käyttämät kuvat
 └── fonts/          # Sovelluksen käyttämät fontit
+
+test/               # Sovelluksen testit
 ```
 
 ## Avainkomponentit

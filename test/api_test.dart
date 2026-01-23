@@ -1,5 +1,5 @@
-import 'package:bible_toolbox/core/helpers/language_helper.dart';
-import 'package:bible_toolbox/data/services/api_service.dart';
+import 'package:bible_toolbox/features/content/data/api/api_service.dart';
+import 'package:bible_toolbox/features/language/service/language_helper.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /*
