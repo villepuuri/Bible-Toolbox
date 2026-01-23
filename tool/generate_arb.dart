@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
+
 /*
 * This file generates the .arb files based on the master_translations.json
 * Code to run this file: dart run tool/generate_arb.dart
@@ -45,6 +47,6 @@ void main() async {
     final arbFile = File('${outputDir.path}/app_$lang.arb');
     final arbContent = const JsonEncoder.withIndent('  ').convert(languages[lang]);
     await arbFile.writeAsString(arbContent);
-    print('✅ Generated ${arbFile.path}');
+    debugPrint('✅ Generated ${arbFile.path}');
   }
 }

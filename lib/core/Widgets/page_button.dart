@@ -2,8 +2,6 @@ import 'package:bible_toolbox/core/Widgets/simple_box.dart';
 import 'package:bible_toolbox/core/constants.dart';
 import 'package:flutter/material.dart';
 
-import '../theme.dart';
-
 class PageButton extends StatefulWidget {
   final String title;
   final String imagePath;

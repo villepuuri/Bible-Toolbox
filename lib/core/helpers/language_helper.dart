@@ -233,7 +233,6 @@ class LanguageHelper {
       }
     }
     debugPrint('Multiples');
-    print(multiples.keys);
-    print(keys);
+    multiples.keys.map((e) => debugPrint('Multiple: $e'));
   }
 }

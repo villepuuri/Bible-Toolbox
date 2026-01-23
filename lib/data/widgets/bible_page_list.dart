@@ -3,7 +3,6 @@ import 'package:bible_toolbox/data/widgets/api_text_widget.dart';
 import 'package:bible_toolbox/data/widgets/page_widget.dart';
 import 'package:flutter/material.dart';
 
-import '../../core/constants.dart';
 
 /// Turns raw markdown data from the Bible page to different links
 class BiblePageList extends StatelessWidget {
@@ -36,8 +35,8 @@ class BiblePageList extends StatelessWidget {
       block = block.replaceAll(blockNameRE, "").replaceAll("###", "");
 
       // If the block contains list of links
-      // if (block.contains('*   [')) {
-      if(false) {
+      if (block.contains('*   [')) {
+      // if(false) {
         debugPrint('   * has a list of links');
 
         // Separate links (starting with '*   ')
@@ -54,7 +53,7 @@ class BiblePageList extends StatelessWidget {
 
           // Get link url
           RegExp linkUrlRE = RegExp(r'\((.*?)\)');
-          String? linkUrl = linkUrlRE.firstMatch(link)?.group(1);
+          // String? linkUrl = linkUrlRE.firstMatch(link)?.group(1);
 
           // Cut links and brackets away
           link = link

@@ -1,7 +1,3 @@
-import 'dart:convert';
-
-import 'package:bible_toolbox/core/Widgets/extendable_headline.dart';
-import 'package:bible_toolbox/core/Widgets/link_headline.dart';
 import 'package:bible_toolbox/core/Widgets/main_app_bar.dart';
 import 'package:bible_toolbox/core/helpers/language_helper.dart';
 import 'package:bible_toolbox/data/services/article_data.dart';
