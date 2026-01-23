@@ -2,12 +2,15 @@
 
 Android-sovellus [Bible Toolbox](https://www.bibletoolbox.net/) nettisivusta.
 
+Sovellus on vielä keskeneräinen.
+
 ## Sisällysluettelo
 1. [Yleiskatsaus](#yleiskatsaus)
 1. [Järjestelmän yleiskatsaus](#järjestelmän-yleiskatsaus)
 1. [Projektin rakenne](#projektin-rakenne)
 1. [Avainkomponentit](#avainkomponentit)
 1. [Testaus](#testaus)
+1. [Kehitysvaiheet](#kehitysvaiheet)
 
 
 ## Yleiskatsaus
@@ -34,7 +37,7 @@ lib/
 
 assets/
 ├── btb_images/     # Sovelluksen käyttämät kuvat
-├── fonts/          # Sovelluksen käyttämät fontit
+└── fonts/          # Sovelluksen käyttämät fontit
 ```
 
 ## Avainkomponentit
@@ -159,16 +162,22 @@ Tämän jälkeen Markdownia näyttävän kirjaston tunnistettaessa koodilaatikko
 
 - Fonttimerkinnät
 ``` <FONT ...> ja </FONT> ``` poistettu.  
-- Boldaukset muutettu ```<b> [teksti] </b> => ** [teksti] ** ```-
+- Boldaukset muutettu ```<b> [teksti] </b> => ** [teksti] ** ```.
 - Rivinvaihdosmerkit ```<br> ja </br>``` poistettu.
 - HTML-kommentit ```<!-- [Kommentti] -->``` poistettu.
 - Otsikot muokattu ```#Otsikko => # Otsikko``` (välilyönti #-merkin jälkeen).
 
 
-
-## Running the App
-
 ## Testaus
 
-## Tunnetut ongelmat
+Joitain testausfunktioita on kehitetty API-haun testaamiseen ja oikeiden kielien varmistamiseen. Testejä lisätään tulevaisuudessa.
+
+Github Actions:n kautta testit ajetaan aina Gitin push ja pull komentoja käytettäessä.
+
+
+## Kehitysvaiheet
+- [ ] Raamattu-sivun rakentaminen
+- [ ] Vastaukset-sivun rakentaminen luotettavammin
+
+
 
