@@ -1,4 +1,5 @@
 import 'package:bible_toolbox/core/constants.dart';
+import 'package:bible_toolbox/core/services/result.dart';
 import 'package:bible_toolbox/features/content/data/models/article_data.dart';
 import 'package:bible_toolbox/features/language/service/language_helper.dart';
 import 'package:flutter/material.dart';
@@ -16,19 +17,27 @@ class AnswersPage extends StatefulWidget {
 }
 
 class _AnswersPageState extends State<AnswersPage> {
-  ArticleData? page;
+  Result<ArticleData?>? pageResult;
 
   @override
   Widget build(BuildContext context) {
-    page ??= LanguageHelper.getArticleById(
+    pageResult ??= LanguageHelper.getArticleById(
       context.read<LanguageProvider>().locale.languageCode,
       366,
     );
 
+    // todo: error page
+    if (pageResult!.isError) {
+      return Scaffold(body: Center(child: Text(pageResult!.error.toString())),);
+    }
+
     return Scaffold(
-      appBar: MainAppBar(title: page?.title ?? "", showBookmarkButton: false),
+      appBar: MainAppBar(
+        title: pageResult?.value?.title ?? "",
+        showBookmarkButton: false,
+      ),
       body: PageWidget(
-        page: page,
+        page: pageResult?.value,
         pageType: PageType.answers,
         showTitle: false,
       ),

@@ -1,3 +1,4 @@
+import 'package:bible_toolbox/core/services/result.dart';
 import 'package:bible_toolbox/core/widgets/main_app_bar.dart';
 import 'package:bible_toolbox/core/widgets/list_card.dart';
 import 'package:bible_toolbox/l10n/app_localizations.dart';
@@ -6,7 +7,7 @@ import 'package:bible_toolbox/features/language/providers/language_provider.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../core/services/box_service.dart';
+import '../../content/data/services/box_service.dart';
 import '../../../core/widgets/loading_progress_widget.dart';
 
 class LanguagePage extends StatefulWidget {
@@ -30,11 +31,11 @@ class _LanguagePageState extends State<LanguagePage> {
       if (loadedLanguageSizes.containsKey(language.code)) {
         continue;
       }
-      String sizeString = await BoxService.getHiveBoxSizeMB(language.code);
-      if (sizeString == "0") {
-        sizeString = "";
-      }
-      loadedLanguageSizes[language.code] = sizeString;
+      Result<String> sizeResult = await BoxService.getHiveBoxSizeMB(language.code);
+      String? sizeString;
+      if (sizeResult.isOk) sizeString = sizeResult.value;
+
+      loadedLanguageSizes[language.code] = sizeString ?? '';
     }
     debugPrint(' - The sizes of loaded languages are: $loadedLanguageSizes');
     if (useSetState) {

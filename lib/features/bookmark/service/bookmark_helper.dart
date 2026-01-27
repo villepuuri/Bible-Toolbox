@@ -1,10 +1,10 @@
 
 
 import 'package:bible_toolbox/features/content/data/models/article_data.dart';
+import 'package:bible_toolbox/features/content/data/services/boxes.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/constants.dart';
-import '../../../core/services/boxes.dart';
 import '../models/bookmark.dart';
 
 class BookmarkHelper {

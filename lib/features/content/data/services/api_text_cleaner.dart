@@ -165,11 +165,6 @@ class ApiTextCleaner {
       convertedInner = convertedInner.replaceAll('\r\n', '<br>');
 
       // Rebuild the block with replaced line breaks
-      debugPrint('*******');
-      debugPrint(inner);
-      debugPrint('*******');
-
-      // return '\r\n>$inner\r\n\r\n';
       return '\r\n>$convertedInner\r\n\r\n';
     });
   }

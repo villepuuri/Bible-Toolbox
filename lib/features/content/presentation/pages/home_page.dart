@@ -1,5 +1,6 @@
 
 import 'package:bible_toolbox/core/constants.dart';
+import 'package:bible_toolbox/core/services/result.dart';
 import 'package:bible_toolbox/core/widgets/main_app_bar.dart';
 import 'package:bible_toolbox/features/content/data/models/article_data.dart';
 import 'package:bible_toolbox/features/content/presentation/widgets/main_drawer.dart';
@@ -19,7 +20,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  ArticleData? article;
+  Result<ArticleData?>? articleResult;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,12 @@ class _HomePageState extends State<HomePage> {
     debugPrint('Current locale: ${lang.locale.languageCode}');
 
     // In the first build, update article and randomQuestionID
-    article ??= LanguageHelper.getArticleById(lang.locale.languageCode, 21);
+    articleResult ??= LanguageHelper.getArticleById(lang.locale.languageCode, 21);
+
+    // todo: Error message
+    if (articleResult!.isError) {
+      return Scaffold(body: Center(child: Text(articleResult!.error.toString())),);
+    }
 
     return Scaffold(
       appBar: MainAppBar(
@@ -36,7 +42,7 @@ class _HomePageState extends State<HomePage> {
       ),
       drawer: MainDrawer(),
       body: PageWidget(
-        page: article,
+        page: articleResult?.value,
         pageType: PageType.home,
         showTitle: true,
       ),

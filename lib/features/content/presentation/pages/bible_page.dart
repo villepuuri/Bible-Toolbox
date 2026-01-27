@@ -1,4 +1,5 @@
 import 'package:bible_toolbox/core/constants.dart';
+import 'package:bible_toolbox/core/services/result.dart';
 import 'package:bible_toolbox/features/content/data/models/article_data.dart';
 import 'package:bible_toolbox/features/language/service/language_helper.dart';
 import 'package:flutter/material.dart';
@@ -16,14 +17,18 @@ class BiblePage extends StatefulWidget {
 }
 
 class _BiblePageState extends State<BiblePage> {
-  ArticleData? article;
+  Result<ArticleData?>? articleResult;
 
   @override
   Widget build(BuildContext context) {
-    article ??= LanguageHelper.getArticleById(
+    articleResult ??= LanguageHelper.getArticleById(
       context.read<LanguageProvider>().locale.languageCode,
       22,
     );
+
+    if (articleResult!.isError) {
+      return Scaffold(body: Center(child: Text(articleResult!.error.toString())),);
+    }
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -32,11 +37,11 @@ class _BiblePageState extends State<BiblePage> {
         },
       ),
       appBar: MainAppBar(
-        title: article?.title ?? "",
+        title: articleResult?.value?.title ?? "",
         showBookmarkButton: false,
       ),
       body: PageWidget(
-        page: article,
+        page: articleResult?.value,
         pageType: PageType.bible,
         showTitle: false,
       ),

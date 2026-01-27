@@ -1,3 +1,4 @@
+import 'package:bible_toolbox/core/services/result.dart';
 import 'package:bible_toolbox/features/content/data/models/article_data.dart';
 import 'package:bible_toolbox/features/language/providers/language_provider.dart';
 import 'package:bible_toolbox/features/language/service/language_helper.dart';
@@ -15,21 +16,26 @@ class AboutPage extends StatefulWidget {
 }
 
 class _AboutPageState extends State<AboutPage> {
-  ArticleData? article;
+  Result<ArticleData?>? articleResult;
 
   @override
   Widget build(BuildContext context) {
-    article ??= LanguageHelper.getArticleById(
+    articleResult ??= LanguageHelper.getArticleById(
       context.read<LanguageProvider>().locale.languageCode,
       20,
     );
 
+    // todo: Error message
+    if (articleResult!.isError) {
+      return Scaffold(body: Center(child: Text(articleResult!.error.toString())),);
+    }
+
     return Scaffold(
       appBar: MainAppBar(
-        title: article?.title ?? "",
+        title: articleResult?.value?.title ?? "",
         showBookmarkButton: false,
       ), // todo: text
-      body: PageWidget(page: article, showTitle: false,),
+      body: PageWidget(page: articleResult?.value, showTitle: false,),
     );
   }
 }

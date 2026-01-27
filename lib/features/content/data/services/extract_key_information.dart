@@ -1,23 +1,29 @@
+import 'package:bible_toolbox/core/services/result.dart';
 import 'package:bible_toolbox/features/content/data/models/article_data.dart';
 import 'package:bible_toolbox/features/language/service/language_helper.dart';
 import 'package:flutter/material.dart';
-
 
 class ExtractKeyInformation {
   // todo: replace this with a better approach
   static Map<String, int> homePageIndices = {'fi': 21, 'en': 15};
 
   /// Get the main categories (Bible, Answers, Catechism, ...) for a specific language
-  static Map<String, Map<String, dynamic>> getMainCategories(String langCode) {
+  static Result<Map<String, Map<String, dynamic>>> getMainCategories(String langCode) {
     debugPrint('**********************************');
     debugPrint('  Extracting the main categories  ');
 
     int articleId = homePageIndices[langCode] ?? -1;
     if (articleId < 0) {
-      return {};
+      return Result.error(Exception("Id not provided"));
     }
 
-    ArticleData article = LanguageHelper.getArticleById(langCode, articleId);
+    Result<ArticleData> articleResult = LanguageHelper.getArticleById(
+      langCode,
+      articleId,
+    );
+    if (articleResult.isError) return Result.error(articleResult.error);
+
+    ArticleData article = articleResult.value;
 
     // Remove all the comments
     RegExp commentRE = RegExp(r'<!-*.*?-*>', dotAll: true);
@@ -28,9 +34,7 @@ class ExtractKeyInformation {
         .allMatches(data)
         .map((e) => e.group(0))
         .toList();
-    debugPrint(
-      ' - category length: ${elementRegExp.allMatches(data).length}',
-    );
+    debugPrint(' - category length: ${elementRegExp.allMatches(data).length}');
 
     Map<String, Map<String, dynamic>> categoryMap = {};
     for (final element in elements) {
@@ -71,6 +75,6 @@ class ExtractKeyInformation {
         'group2': labelMatch?.group(2) ?? "",
       };
     }
-    return categoryMap;
+    return Result.ok(categoryMap);
   }
 }

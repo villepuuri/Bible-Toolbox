@@ -7,8 +7,8 @@ import 'package:bible_toolbox/features/language/providers/language_provider.dart
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'core/services/boxes.dart';
 import 'core/theme.dart';
+import 'features/content/data/services/boxes.dart';
 import 'features/content/presentation/pages/about_page.dart';
 import 'features/content/presentation/pages/answers_page.dart';
 import 'features/content/presentation/pages/bible_page.dart';

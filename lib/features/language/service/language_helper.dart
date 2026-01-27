@@ -1,10 +1,11 @@
+import 'package:bible_toolbox/core/services/result.dart';
 import 'package:bible_toolbox/features/content/data/api/api_service.dart';
 import 'package:bible_toolbox/features/content/data/models/article_data.dart';
 import 'package:bible_toolbox/features/language/providers/language_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
-import '../../../core/services/box_service.dart';
+import '../../content/data/services/box_service.dart';
 
 class LanguageClass {
   final String displayName;
@@ -110,9 +111,14 @@ class LanguageHelper {
 
   static int languageCount = languages.length;
 
+  /// Return value should always have the size of at least 1
+  /// If error, returns an empty list
   static List<LanguageClass> get loadedLanguages {
-    List<String> codeList = BoxService.getInstalledLanguages();
-    return languages.where((l) => codeList.contains(l.code)).toList();
+    Result languageResult = BoxService.getInstalledLanguages();
+    if (languageResult.isError) return [];
+    return languages
+        .where((l) => languageResult.value.contains(l.code))
+        .toList();
   }
 
   /// Returns the languages, which have not been loaded on the device
@@ -131,9 +137,13 @@ class LanguageHelper {
     Function? updateParent,
   }) async {
     debugPrint('*** Loading the data of $language');
-    bool result = await ApiService.getDataForLanguage(language, updateParent);
+    Result result = await ApiService.getDataForLanguage(language, updateParent);
     debugPrint('   - Did the loading succeeded: $result');
-    return result;
+    if (result.isError) {
+      // todo: handle error
+      return false;
+    }
+    return result.value;
   }
 
   static Future<bool> removeLoadedLanguage(
@@ -171,69 +181,72 @@ class LanguageHelper {
     return true;
   }
 
-  /// Returns a random article with selected locale
-  static ArticleData getRandomBibleArticle(String languageCode) {
-    final articles = BoxService.getArticles(languageCode, 'raamattu');
-    articles.shuffle();
-    debugPrint(' - Length of Bible articles: ${articles.length}');
-    return ArticleData.fromJson(articles.first);
-  }
-
   /// Returns an article with a specific id
-  static ArticleData getArticleById(String languageCode, int id) {
-    final result = BoxService.getArticleById(languageCode, id);
-    return ArticleData.fromJson(result);
+  static Result<ArticleData> getArticleById(String languageCode, int id) {
+    try {
+      final result = BoxService.getArticleById(languageCode, id);
+      if (result.isError) return Result.error(result.error);
+      return Result.ok(ArticleData.fromJson(result.value));
+    } on TypeError catch (e) {
+      return Result.error(Exception(e.stackTrace));
+    } on FormatException catch (e) {
+      return Result.error(e);
+    } catch (e) {
+      return Result.error(e is Exception ? e : Exception(e.toString()));
+    }
   }
 
   /// Returns an article with a specific title
-  static ArticleData getArticleByTitle(String languageCode, String title) {
-    final result = BoxService.getArticleByTitle(languageCode, title);
-    return ArticleData.fromJson(result);
+  static Result<ArticleData> getArticleByTitle(
+    String languageCode,
+    String title,
+  ) {
+    try {
+      final result = BoxService.getArticleByTitle(languageCode, title);
+      if (result.isError) return Result.error(result.error);
+      return Result.ok(ArticleData.fromJson(result.value));
+    } on TypeError catch (e) {
+      return Result.error(Exception(e.stackTrace));
+    } on FormatException catch (e) {
+      return Result.error(e);
+    } catch (e) {
+      return Result.error(e is Exception ? e : Exception(e.toString()));
+    }
   }
 
   /// Returns an article with a specific title
-  static bool articleExists(String languageCode, {String? title, int? id}) {
+  static Result<bool> articleExists(String languageCode, {String? title, int? id}) {
     if (title != null) {
-      return BoxService.getArticleByTitle(languageCode, title).isNotEmpty;
+      Result result = BoxService.getArticleByTitle(languageCode, title);
+      if (result.isError) return Result.error(result.error);
+      return Result.ok(result.value.isNotEmpty);
     }
     if (id != null) {
-      return BoxService.getArticleById(languageCode, id).isNotEmpty;
+      Result result =  BoxService.getArticleById(languageCode, id);
+      if (result.isError) return Result.error(result.error);
+      return Result.ok(result.value.isNotEmpty);
     }
     assert(false, "You need to give either a title or an id");
-    return false;
+    return Result.error(Exception("Title or id was not provided"));
   }
 
-  static ArticleData getRandomQuestion(String languageCode) {
-    final questions = BoxService.getArticles(
-      languageCode,
-      'vastauksia_etsiville',
-    );
-    questions.shuffle();
-    return ArticleData.fromJson(questions.first);
-  }
-
-  static void getDoubles() {
-    final questions = BoxService.getArticles('fi', 'vastauksia_etsiville');
-    Map<String, int> allData = {};
-    Map<String, int> multiples = {};
-    List<String> keys = [];
-
-    for (final item in questions) {
-      String title = item['title'];
-      if (allData.keys.contains(title)) {
-        // contains
-        if (multiples.keys.contains(title)) {
-          int current = multiples[title] ?? 5;
-          multiples[title] = current + 1;
-        } else {
-          multiples[title] = 2;
-          keys.add(title);
-        }
-      } else {
-        allData[title] = 1;
-      }
+  static Result<ArticleData> getRandomQuestion(String languageCode) {
+    try {
+      final questionsResult = BoxService.getArticles(
+        languageCode,
+        'vastauksia_etsiville',
+      );
+      if (questionsResult.isError) return Result.error(questionsResult.error);
+      List<Map<String, dynamic>> questions = questionsResult.value;
+      questions.shuffle();
+      return Result.ok(ArticleData.fromJson(questionsResult.value.first));
+    } on TypeError catch (e) {
+      return Result.error(Exception(e.stackTrace));
+    } on FormatException catch (e) {
+      return Result.error(e);
+    } catch (e) {
+      return Result.error(e is Exception ? e : Exception(e.toString()));
     }
-    debugPrint('Multiples');
-    multiples.keys.map((e) => debugPrint('Multiple: $e'));
   }
+
 }

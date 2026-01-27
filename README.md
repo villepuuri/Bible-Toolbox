@@ -143,7 +143,7 @@ Näille sivuille tuli ulkoasuksi erilainen kuin nettisivuilla, joten ne tarvitsi
 =>
 
 ´´´
-[ID][ID_erottaja][Muokattava tekstiosuus]
+<ID><ID:n erottaja><Muokattava tekstiosuus>
 ´´´
 ~~~
 
@@ -180,8 +180,13 @@ Github Actions:n kautta testit ajetaan aina Gitin push ja pull komentoja käytet
 
 
 ## Kehitysvaiheet
-- [ ] Raamattu-sivun rakentaminen
-- [ ] Vastaukset-sivun rakentaminen luotettavammin
+- [x] Kielen vaihtaminen
+- [x] Kirjanmerkit 
+- [x] Tietoa meistä -sivu
+- [x] Katekismus-sivu
+- [ ] Tunnustuskirjat-sivu
+- [ ] Raamattu-sivu
+- [ ] Vastaukset-sivun rakentaminen paremmin
 
 
 

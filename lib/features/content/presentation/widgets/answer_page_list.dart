@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bible_toolbox/core/services/result.dart';
 import 'package:bible_toolbox/features/language/service/language_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -160,23 +161,30 @@ class _AnswerPageListState extends State<AnswerPageList> {
 
       // Go through the elements
       for (final category in dataMap!.values) {
-        String categoryTitle = LanguageHelper.getArticleById(
+        Result categoryResult = LanguageHelper.getArticleById(
           'fi',
           category["kategoria"]["fi"],
-        ).title;
+        );
+        if (categoryResult.isError) continue;
 
+        String categoryTitle = categoryResult.value.title;
         List<Widget> categoryList = [];
         List<int> idList = category["elementit"]["fi"].cast<int>();
 
         for (int element in idList) {
-          if (LanguageHelper.articleExists('fi', id: element)) {
-            ArticleData? article = LanguageHelper.getArticleById('fi', element);
+          Result existResult = LanguageHelper.articleExists('fi', id: element);
+          if (existResult.isOk && existResult.value) {
+            Result<ArticleData?> articleResult = LanguageHelper.getArticleById(
+              'fi',
+              element,
+            );
+            if (articleResult.isError) continue;
 
             categoryList.add(
               LinkHeadline(
-                text: article.title,
+                text: articleResult.value!.title,
                 onTap: () {
-                  debugPrint('User wants to open: ${article.title}');
+                  debugPrint('User wants to open: ${articleResult.value!.title}');
                   Navigator.pushNamed(
                     context,
                     '/showText',

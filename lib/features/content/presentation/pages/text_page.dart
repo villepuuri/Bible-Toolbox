@@ -1,4 +1,5 @@
 import 'package:bible_toolbox/core/constants.dart';
+import 'package:bible_toolbox/core/services/result.dart';
 import 'package:bible_toolbox/features/content/data/models/article_data.dart';
 import 'package:bible_toolbox/features/content/data/services/api_text_cleaner.dart';
 import 'package:bible_toolbox/features/content/presentation/widgets/api_text_widget.dart';
@@ -47,8 +48,12 @@ class _TextPageState extends State<TextPage> {
 
     List<ArticleData> articles = [];
     for (final id in idList) {
-      if (LanguageHelper.articleExists(languageCode, id: id)) {
-        articles.add(LanguageHelper.getArticleById(languageCode, id));
+      Result existResult = LanguageHelper.articleExists(languageCode, id: id);
+      if (existResult.isOk && existResult.value) {
+        Result articleResult = LanguageHelper.getArticleById(languageCode, id);
+        if (articleResult.isOk){
+          articles.add(articleResult.value);
+        }
       }
     }
 
@@ -131,7 +136,7 @@ class _TextPageState extends State<TextPage> {
             : CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(
-                    child: singleArticleWidget(articles.first),
+                    child: SizedBox(), // todo: add error message
                   ),
                   SliverToBoxAdapter(child: const SizedBox(height: 60)),
                 ],

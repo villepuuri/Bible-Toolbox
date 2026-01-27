@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:bible_toolbox/core/services/result.dart';
 import 'package:bible_toolbox/features/content/data/api/api_service.dart';
 import 'package:bible_toolbox/features/language/service/language_helper.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -9,36 +12,54 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Maximum page counts from different URLs', () {
-    test(' - 1', () async {
-      int pageCount = await ApiService.getMaxPageCount(
+    test('_1 (Fi pages)', () async {
+      Result pageCount = await ApiService.getMaxPageCount(
         'https://www.bibletoolbox.net/d7/marty-api/articles?lang=fi&type=raamattu',
       );
-      expect(pageCount, 2);
+      expect(pageCount.value, 2);
     });
 
-    test(' - 2', () async {
-      int pageCount = await ApiService.getMaxPageCount(
+    test('_2 (ar pages)', () async {
+      Result pageCount = await ApiService.getMaxPageCount(
         'https://www.bibletoolbox.net/d7/marty-api/articles?lang=ar&type=raamattu',
       );
-      expect(pageCount, 0);
+      expect(pageCount.value, 0);
+    });
+
+    test('_3 (Wrong url)', () async {
+      Result pageCount = await ApiService.getMaxPageCount(
+        'https://www.bibletoolbox.net/d7/marty-api/articles?lang=ei_toimi',
+      );
+      expect(pageCount.isError, true);
+      expect(pageCount.error.runtimeType, HttpException);
     });
   });
 
   group("API calls", () {
-    test("Basic call", () async {
+    test("_1 (Basic call)", () async {
       String langCode = 'fi';
-      List<Map<String, dynamic>> result = await ApiService.handleApiCalls(
+      Result result = await ApiService.handleApiCalls(
         LanguageHelper.languages.firstWhere((e) => e.code == langCode),
-        urlAddition: "&limit=4"
+        urlAddition: "&limit=4",
       );
-      result.shuffle();
-      expect(result.first['language'], langCode);
+      result.value.shuffle();
+      expect(result.value.first['language'], langCode);
     });
-    test("All articles", () async {
-      List<Map<String, dynamic>> result = await ApiService.handleApiCalls(
-          LanguageHelper.languages.firstWhere((e) => e.code == 'fi'),
+
+    test("_2 (All articles)", () async {
+      Result result = await ApiService.handleApiCalls(
+        LanguageHelper.languages.firstWhere((e) => e.code == 'fi'),
       );
-      expect(result.length, 324);
+      expect(result.value.length, 324);
+    });
+
+    test("_3 (Http fail)", () async {
+      Result result = await ApiService.handleApiCalls(
+        LanguageHelper.languages.firstWhere((e) => e.code == 'fi'),
+        urlAddition: '_',
+      );
+      expect(result.isError, true);
+      expect(result.error.runtimeType, HttpException);
     });
   });
 }

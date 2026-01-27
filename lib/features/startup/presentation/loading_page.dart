@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../core/services/box_service.dart';
+import '../../content/data/services/box_service.dart';
 import '../../../core/services/shared_preferences_keys.dart';
 
 

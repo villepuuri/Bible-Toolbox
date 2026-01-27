@@ -2,7 +2,7 @@ import 'package:bible_toolbox/features/language/service/language_helper.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../core/services/box_service.dart';
+import '../../content/data/services/box_service.dart';
 import '../../../core/services/shared_preferences_keys.dart';
 
 /// A provider to handle the selected language data

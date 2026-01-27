@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bible_toolbox/core/constants.dart';
+import 'package:bible_toolbox/core/services/result.dart';
 import 'package:bible_toolbox/features/bookmark/service/bookmark_helper.dart';
+import 'package:bible_toolbox/features/content/data/models/article_data.dart';
 import 'package:bible_toolbox/l10n/app_localizations.dart';
 import 'package:bible_toolbox/features/language/service/language_helper.dart';
 import 'package:bible_toolbox/core/theme.dart';
@@ -40,12 +42,17 @@ class _MainAppBarState extends State<MainAppBar> {
         // The page is in bookmarks
         await BookmarkHelper.deleteBookmark(title: widget.title);
       } else {
-        BookmarkHelper.addBookmark(
-          LanguageHelper.getArticleByTitle(
-            context.read<LanguageProvider>().locale.languageCode,
-            widget.title,
-          ),
-        ); // todo: fix this path
+        Result<ArticleData> articleResult = LanguageHelper.getArticleByTitle(
+          context.read<LanguageProvider>().locale.languageCode,
+          widget.title,
+        );
+        if (articleResult.isOk) {
+          BookmarkHelper.addBookmark(
+          articleResult.value
+        );
+        } else {
+          // todo: Add an error message
+        }
       }
       setState(() {});
     }

@@ -1,15 +1,16 @@
 import 'dart:convert';
 
+import 'package:bible_toolbox/core/services/result.dart';
 import 'package:bible_toolbox/core/widgets/main_app_bar.dart';
 import 'package:bible_toolbox/features/bookmark/models/bookmark.dart';
 import 'package:bible_toolbox/core/theme.dart';
+import 'package:bible_toolbox/features/content/data/services/boxes.dart';
 import 'package:bible_toolbox/features/content/presentation/widgets/extendable_headline.dart';
 import 'package:bible_toolbox/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../core/constants.dart';
-import '../../../core/services/boxes.dart';
 import '../../language/service/language_helper.dart';
 
 class BookmarksPage extends StatefulWidget {
@@ -108,10 +109,10 @@ class _BookmarksPageState extends State<BookmarksPage> {
             context.mounted) {
           // Get the articles in the same category
           List<int> idList = category.value["elementit"]['fi'].cast<int>();
-          String categoryTitle = LanguageHelper.getArticleById(
+          Result categoryResult = LanguageHelper.getArticleById(
             'fi',
             category.value["kategoria"]["fi"],
-          ).title;
+          );
           // Move to the text page
           Navigator.pushReplacementNamed(
             context,
@@ -119,7 +120,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
             arguments: {
               'idList': idList,
               'selectedID': pageId,
-              'headline': categoryTitle,
+              'headline': categoryResult.isOk ? categoryResult.value.title : "",
             },
           );
           break;

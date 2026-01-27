@@ -1,4 +1,5 @@
 import 'package:bible_toolbox/core/constants.dart';
+import 'package:bible_toolbox/core/services/result.dart';
 import 'package:bible_toolbox/features/language/service/language_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,14 +17,18 @@ class CatechismPage extends StatefulWidget {
 }
 
 class _CatechismPageState extends State<CatechismPage> {
-  ArticleData? article;
+  Result<ArticleData?>? articleResult;
 
   @override
   Widget build(BuildContext context) {
-    article ??= LanguageHelper.getArticleById(
+    articleResult ??= LanguageHelper.getArticleById(
       context.read<LanguageProvider>().locale.languageCode,
       23,
     );
+
+    if (articleResult!.isError) {
+      return Scaffold(body: Center(child: Text(articleResult!.error.toString())),);
+    }
 
     return Scaffold(
       appBar: MainAppBar(
@@ -32,7 +37,7 @@ class _CatechismPageState extends State<CatechismPage> {
         showBookmarkButton: false,
       ),
       // todo: text
-      body: PageWidget(page: article, pageType: PageType.catechism),
+      body: PageWidget(page: articleResult?.value, pageType: PageType.catechism),
     );
   }
 }

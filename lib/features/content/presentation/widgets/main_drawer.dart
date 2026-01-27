@@ -1,4 +1,5 @@
 import 'package:bible_toolbox/core/constants.dart';
+import 'package:bible_toolbox/core/services/result.dart';
 import 'package:bible_toolbox/core/theme.dart';
 import 'package:bible_toolbox/features/content/data/services/extract_key_information.dart';
 import 'package:bible_toolbox/l10n/app_localizations.dart';
@@ -84,6 +85,12 @@ class MainDrawer extends StatelessWidget {
       ],
     );
 
+    Result<Map<String, Map<String, dynamic>>> categoryResult = ExtractKeyInformation.getMainCategories(languageCode);
+    Map<String, Map<String, dynamic>> categories = {};
+    if (categoryResult.isOk) {
+      categories = categoryResult.value;
+    }
+
     return Drawer(
       backgroundColor: AppThemeData.white,
       child: Padding(
@@ -101,7 +108,7 @@ class MainDrawer extends StatelessWidget {
               //   routeName: '/home',
               // ),
               // drawLine(),
-              ExtractKeyInformation.getMainCategories(languageCode).entries
+              categories.entries
                   .map(
                     (entry) => drawerListTile(
                       entry.value["group1"],
