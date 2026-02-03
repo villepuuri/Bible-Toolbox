@@ -120,15 +120,29 @@ class AppThemeData {
 
   static final outlinedButtonTheme = OutlinedButtonThemeData(
     style: ButtonStyle(
-      backgroundColor: WidgetStateProperty.all(white),
+      minimumSize: const WidgetStatePropertyAll(Size(40, 40)),
       padding: WidgetStateProperty.all(
-        EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+        const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
       ),
+      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      backgroundColor: WidgetStateProperty.all(Colors.white),
+      foregroundColor: WidgetStateProperty.all(
+        black,
+      ),
+      textStyle: WidgetStatePropertyAll(
+        textTheme.bodyMedium,
+      ),
+
       side: WidgetStateProperty.all(
-        BorderSide(color: lightColorScheme.primary, width: 2),
+        BorderSide(
+          color: lightColorScheme.primary,
+          width: 2,
+        ),
       ),
       shape: WidgetStateProperty.all(
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
       ),
     ),
   );

@@ -5,7 +5,7 @@ import 'package:bible_toolbox/features/language/service/language_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'extendable_headline.dart';
+import '../../../../core/widgets/extendable_headline.dart';
 import 'link_headline.dart';
 import '../../data/models/article_data.dart';
 

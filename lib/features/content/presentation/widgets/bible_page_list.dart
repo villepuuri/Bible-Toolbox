@@ -1,21 +1,27 @@
 import 'package:bible_toolbox/core/constants.dart';
 import 'package:bible_toolbox/features/content/presentation/widgets/api_text_widget.dart';
-import 'package:bible_toolbox/features/content/presentation/widgets/extendable_headline.dart';
+import 'package:bible_toolbox/features/content/presentation/widgets/bible_page_book_widget.dart';
+import 'package:bible_toolbox/core/widgets/extendable_headline.dart';
 import 'package:flutter/material.dart';
 
 /// Turns raw markdown data from the Bible page to different links
-class BiblePageList extends StatelessWidget {
+class BiblePageList extends StatefulWidget {
   final String rawData;
 
   const BiblePageList({super.key, required this.rawData});
 
-  List<Widget> extractData() {
+  @override
+  State<BiblePageList> createState() => _BiblePageListState();
+}
+
+class _BiblePageListState extends State<BiblePageList> {
+  List<Widget> extractData(BuildContext context) {
     // Separate blocks (starting with ###)
     List<Widget> blockWidgets = [];
 
     RegExp blockRE = RegExp(r'(###.*?)(?=(###)|(<!)|$)', dotAll: true);
     List<String?> blocks = blockRE
-        .allMatches(rawData)
+        .allMatches(widget.rawData)
         .map((match) => match.group(1))
         .toList();
 
@@ -82,7 +88,7 @@ class BiblePageList extends StatelessWidget {
 
           debugPrint('${linkType == 2 ? '   ' : ''}$linkText');
 
-          rowWidgets.add(Text('> $linkText'));
+          rowWidgets.add(BiblePageBookWidget(chapterTitle: linkText));
         }
         // Cut links from the block
         block = block.replaceAll(linkRE, "");
@@ -106,8 +112,9 @@ class BiblePageList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    extractData();
-
-    return Column(children: extractData());
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: extractData(context),
+    );
   }
 }
